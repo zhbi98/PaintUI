@@ -54,5 +54,6 @@ extern void add_decimal_point(unsigned char point_position);
 extern void add_separator(unsigned char character);
 extern void read_display_part_string(unsigned char param_type);
 extern unsigned char read_cursor_position();
+extern void reset_cursor_position();
 
 #endif
