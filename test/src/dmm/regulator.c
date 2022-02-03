@@ -347,3 +347,9 @@ unsigned char read_cursor_position()
     // info("cursor index:%d", value_regulator.cursor_position - value_regulator.start_position);
     return value_regulator.cursor_position - value_regulator.start_position;
 }
+
+void reset_cursor_position()
+{
+    value_regulator.cursor_position = 0;
+    value_regulator.start_position = 0;
+}
