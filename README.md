@@ -21,7 +21,7 @@
 
 # 已实现样式
 
-![1](https://user-images.githubusercontent.com/49710448/152128096-245950bf-ab26-44ff-9bf7-12155cef1202.jpg)
+![1](https://user-images.githubusercontent.com/49710448/153782776-5ceab64f-4000-4c7f-8927-2d3ad74fa096.jpg)
 ![2](https://user-images.githubusercontent.com/49710448/152128279-b30a8adc-e20d-4030-8b2d-7441bf35a68f.jpg)
 
 # 免责申明
