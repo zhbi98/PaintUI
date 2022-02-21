@@ -38,11 +38,11 @@ void setting_level1_key_event(unsigned char key_event)
             set_equip_date(-1);
             set_apo_time(-1);
 
-            if (get_vpos_selected() == SETUP_COMP_MAX) {
+            if (get_param_number() == SETUP_COMP_MAX) {
                 set_value_type(SETUP_COMP_MAX);
                 value_ud_flip(-1);
             }
-            if (get_vpos_selected() == SETUP_COMP_MIN) {
+            if (get_param_number() == SETUP_COMP_MIN) {
                 set_value_type(SETUP_COMP_MIN);
                 value_ud_flip(-1);
             }
@@ -112,11 +112,11 @@ void setting_level1_key_event(unsigned char key_event)
         case NEXT_KEY_EVT:
             hpos_selected(1);
 
-            if (get_vpos_selected() == SETUP_COMP_MAX) {
+            if (get_param_number() == SETUP_COMP_MAX) {
                 set_value_type(SETUP_COMP_MAX);
                 digit_lr_move(1);
             }
-            if (get_vpos_selected() == SETUP_COMP_MIN) {
+            if (get_param_number() == SETUP_COMP_MIN) {
                 set_value_type(SETUP_COMP_MIN);
                 digit_lr_move(1);
             }
