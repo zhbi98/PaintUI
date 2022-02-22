@@ -206,8 +206,8 @@ void widget_size_init()
     widget[MEASURE_RULER_AREA].show             = true;
     widget[MEASURE_RULER_AREA].renew            = true;
     
-    widget[MEASURE_RANGE_STATUS_AREA].set_y     = 186;
-    widget[MEASURE_RANGE_STATUS_AREA].set_x     = 278;
+    widget[MEASURE_RANGE_STATUS_AREA].set_y     = 37;
+    widget[MEASURE_RANGE_STATUS_AREA].set_x     = 16;
     widget[MEASURE_RANGE_STATUS_AREA].width     = 40;
     widget[MEASURE_RANGE_STATUS_AREA].height    = 8;
     widget[MEASURE_RANGE_STATUS_AREA].show      = true;
