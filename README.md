@@ -22,7 +22,8 @@
 # 已实现样式
 
 ![1](https://user-images.githubusercontent.com/49710448/153782776-5ceab64f-4000-4c7f-8927-2d3ad74fa096.jpg)
-![2](https://user-images.githubusercontent.com/49710448/152128279-b30a8adc-e20d-4030-8b2d-7441bf35a68f.jpg)
+![2](https://user-images.githubusercontent.com/49710448/155092754-0f0aafc8-c47c-4015-8d28-565234074cde.jpg)
+
 
 # 免责申明
 
