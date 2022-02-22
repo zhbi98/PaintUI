@@ -292,9 +292,10 @@ void display_range_status_show(unsigned char * vm)
     if (((!widget[widget_num].renew) && (!widget[widget_num].auto_renew)) || (!widget[DISPLAY_TFT_AREA3].show))
         return;
 
-    display_solid_rect(widget[widget_num].set_y, widget[widget_num].set_x, widget[widget_num].width, widget[widget_num].height, BLACK, vm);
-    if (true)
+    if (false) {
+        display_solid_rect(widget[widget_num].set_y, widget[widget_num].set_x, widget[widget_num].width, widget[widget_num].height, BLACK, vm);
         display_widget_content(widget[widget_num].set_y, widget[widget_num].set_x, MANUAL_ALIGN, LAYOUT_R11, widget_num, "AUTO", TEMP_CONTENT, WHITE, UNSELECT, vm);
+    }
 }
 
 void display_area5_show(unsigned char * vm)
