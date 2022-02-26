@@ -38,22 +38,15 @@ void vpos_selected(char incr)
 {
     list.param_number += incr;
 
-    if (list.param_number < PARAM_DOCK_MAX)
-        page_selected(0);
-    else
-        page_selected(1);
-
-    if (list.param_number > PARAM_NUM_MAX - 1) {
+    if (list.param_number > PARAM_NUM_MAX - 1)
         list.param_number = 0;
-        page_selected(0);
-    }
-    if (list.param_number < 0) {
-        list.param_number = PARAM_NUM_MAX - 1; 
-        page_selected(1);
-    }
+    if (list.param_number < 0)
+        list.param_number = PARAM_NUM_MAX - 1;
 
+    page_selected(list.param_number / PARAM_DOCK_MAX);
     list.vpos = list.param_number % PARAM_DOCK_MAX;
     hpos_selected(0);
+    hpos_reset();
 }
 
 unsigned char get_vpos_selected()
@@ -64,6 +57,11 @@ unsigned char get_vpos_selected()
 unsigned char get_param_number()
 {
     return list.param_number;
+}
+
+void hpos_reset()
+{
+    list.hpos = 0;
 }
 
 void hpos_selected(char incr)
