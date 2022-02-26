@@ -94,6 +94,7 @@ extern void vpos_selected(char incr);
 extern unsigned char get_vpos_selected();
 extern unsigned char get_param_number();
 
+extern void hpos_reset();
 extern void hpos_selected(char incr);
 extern unsigned char get_hpos_selected();
 
