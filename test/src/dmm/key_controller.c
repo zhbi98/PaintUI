@@ -182,11 +182,17 @@ unsigned char get_lock_status(struct password_auth_t * auth)
 
 void read_password(struct password_auth_t * auth, unsigned char key)
 {
+    auth->lock_status = false;
+
     if (auth->lock_status == false) {
         for (unsigned char bits = 0; bits < auth->password_length - 1; bits++)
             auth->password_buf[bits] = auth->password_buf[bits + 1];
         auth->password_buf[auth->password_length - 1] = key;
     }
+    // info("w0:%c", auth->password_buf[0]);
+    // info("w1:%c", auth->password_buf[1]);
+    // info("w2:%c", auth->password_buf[2]);
+    // info("w3:%c", auth->password_buf[3]);
 
     if (pwd_auth(auth) == false) {
         auth->lock_status = false;
@@ -195,5 +201,15 @@ void read_password(struct password_auth_t * auth, unsigned char key)
 
     // password auth success
     memset(auth->password_buf, 0xff, auth->password_length);
+    // info("memset");
     auth->lock_status = true;
+}
+
+void unlock_doing(struct password_auth_t * auth)
+{
+    static unsigned char i = 0;
+
+    if (get_lock_status(&test_function_auth)) {
+        // info("Unlock success");
+    }
 }
