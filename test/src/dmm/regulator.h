@@ -51,6 +51,7 @@ extern void value_ud_flip(int incr);
 
 extern void read_display_number_of_digits(int start, int length);
 extern void add_decimal_point(unsigned char point_position);
+extern void add_negative_sign();
 extern void add_separator(unsigned char character);
 extern void read_display_part_string(unsigned char param_type);
 extern unsigned char read_cursor_position();
