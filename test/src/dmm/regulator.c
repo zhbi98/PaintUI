@@ -245,7 +245,7 @@ void add_decimal_point(unsigned char point_position)
     temp_char2 = value_regulator.display_buf[0][point_position];
     value_regulator.display_buf[0][point_position] = '.';
 
-    for(i = point_position + 1; i < 6; i++) {
+    for (i = point_position + 1; i < 6; i++) {
         temp_char1 = value_regulator.display_buf[0][i];
         value_regulator.display_buf[0][i] = temp_char2;
         temp_char2 = temp_char1;
@@ -254,6 +254,25 @@ void add_decimal_point(unsigned char point_position)
             break;
         }
     }
+}
+
+void add_negative_sign()
+{
+    int i;
+    char t1,t2;
+
+    t1 = value_regulator.display_buf[1][0];
+    value_regulator.display_buf[1][0] = '-';
+
+    for(i = 1; i < 20; i++) {
+        t2 = value_regulator.display_buf[1][i];
+        value_regulator.display_buf[1][i] = t1;
+        t1 = t2;
+        if (t1 == '\0')
+            break;
+    }
+    value_regulator.display_buf[1][i + 1] = '\0';
+    value_regulator.display_buf[1][20] = '\0';
 }
 
 void add_separator(unsigned char character)
@@ -300,6 +319,29 @@ void add_separator(unsigned char character)
             }
         }
         return;
+    }
+
+    for (i = point; i < 30; i++) {
+        if (value_regulator.display_buf[1][i] == '\0')
+            break;
+        count++;
+        if (count % 3 == 0) {
+            pt = &value_regulator.display_buf[1][i + 1];
+            if (*pt == '\0')
+                break;
+            strcpy(ch, pt);
+            *pt = '\0';
+            switch (character) {
+                case ',':
+                    strcat(value_regulator.display_buf[1], ",");
+                    break;
+                case ' ':
+                    strcat(value_regulator.display_buf[1], " ");
+                    break;
+            }
+            strcat(value_regulator.display_buf[1], ch);
+            i++;
+        }
     }
 }
 
