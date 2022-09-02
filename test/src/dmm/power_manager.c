@@ -104,6 +104,10 @@ unsigned char read_battery_power()
 
     // (Ref v) * (Adc Current / Adc Full) * PROPORTION
     voltage = (int)(VREF * power_manager.out_put_data * PROPORTION / ADC_MAX);
+    
+    if (voltage <= BATTERY_VOLTAGE_MIN)
+        voltage = BATTERY_VOLTAGE_MIN;
+
     capacity = (int)((voltage - BATTERY_VOLTAGE_MIN) * 100 / (BATTERY_VOLTAGE_MAX - BATTERY_VOLTAGE_MIN));
 
     #if 0
