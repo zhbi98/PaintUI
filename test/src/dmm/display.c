@@ -297,6 +297,7 @@ void display_battery(unsigned int y, unsigned int x, unsigned int width, unsigne
     if (power >= (width - 5))
         power = width - 5;
 
+    // Recharge status
     if (status == true)
         fg = GREEN;
 
