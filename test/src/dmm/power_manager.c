@@ -124,3 +124,122 @@ unsigned char read_battery_power()
 
     return capacity;
 }
+
+#if 0 /** Auto power off tips demo */
+#define CONTROLLER_WAIT 10 //  10(s)
+#define TIPS_INTERVAL  300 // 300(s)
+
+struct lp_controller_t {
+    unsigned char wait;
+    unsigned int interval;
+    unsigned char times;
+    unsigned char tips;
+    unsigned char power;
+};
+
+struct lp_controller_t lp_controller = {
+    .wait     = SECOND_TO_TICKS(CONTROLLER_WAIT),
+    .interval = SECOND_TO_TICKS(TIPS_INTERVAL),
+    .times    = 5,
+    .tips     = false,
+    .power    = 0,
+};
+
+void power_handler_wait_timing()
+{
+    if (lp_controller.wait > 0)
+        lp_controller.wait--;
+}
+
+void tips_interval_timing()
+{
+    if (lp_controller.interval > 0)
+        lp_controller.interval--;
+
+    if ((lp_controller.interval <= 0) && (lp_controller.times > 0)) {
+        lp_controller.times--;
+        lp_controller.tips = false;
+        lp_controller.interval = SECOND_TO_TICKS(TIPS_INTERVAL);
+    }
+
+#if 0
+    info("interval:%d", lp_controller.interval);
+    info("times   :%d", lp_controller.times);
+    info("power   :%d", read_battery_power());
+#endif
+}
+
+unsigned char power_low_handler_active()
+{
+    if ((lp_controller.wait <= 0) && (lp_controller.power <= 28))
+        return true;
+    return false;
+}
+
+void active_power_tips()
+{
+    if (lp_controller.power <= 18)
+        active_tips(
+            &message_tips[POWER_10_WRN], 
+            lp_controller.interval
+        );
+    if (lp_controller.power <= 23)
+        active_tips(
+            &message_tips[POWER_15_WRN], 
+            lp_controller.interval
+        );
+    if (lp_controller.power <= 28)
+        active_tips(
+            &message_tips[POWER_20_WRN], 
+            lp_controller.interval
+        );
+}
+
+void inactive_power_tips()
+{
+    inactive_tips(&message_tips[POWER_20_WRN]);
+    inactive_tips(&message_tips[POWER_15_WRN]);
+    inactive_tips(&message_tips[POWER_10_WRN]);
+}
+
+void active_power_off()
+{
+    if (lp_controller.times <= 0)
+        if (lp_controller.power < 18)
+            goto power_off;
+    else if (lp_controller.power < 15)
+        goto power_off;
+
+power_off:
+    active_power_tips();
+    sleep_ms(1000);
+    power_off_duration_sound(true);
+    power_down();
+}
+
+void power_low_handler()
+{
+    lp_controller.power = read_battery_power();
+
+    power_handler_wait_timing();
+
+    if (!power_low_handler_active()) {
+        lp_controller.times = 5;
+        if (lp_controller.tips == true) {
+            inactive_power_tips();
+            lp_controller.tips = false;
+        }
+        return;
+    }
+
+    tips_interval_timing();
+    if (lp_controller.tips == false) {
+        active_power_tips();
+        lp_controller.tips = true;
+    }
+
+#ifndef KEIL_DEBUG
+    active_power_off();
+#endif
+}
+#endif /** Auto power off tips demo */
