@@ -195,6 +195,14 @@ void active_power_tips()
         );
 }
 
+void active_power_off_tips()
+{
+    active_tips(
+        &message_tips[POWER_LOW_AUTO_OFF], 
+        lp_controller.interval
+    );
+}
+
 void inactive_power_tips()
 {
     inactive_tips(&message_tips[POWER_20_WRN]);
@@ -204,6 +212,8 @@ void inactive_power_tips()
 
 void active_power_off()
 {
+    static unsigned char wait_off = 0;
+
     if ((lp_controller.times <= 0) && (lp_controller.power < 18))
         goto power_off;
     else if (lp_controller.power < 15)
@@ -212,10 +222,16 @@ void active_power_off()
         return;
 
 power_off:
-    active_power_tips();
-    sleep_ms(1000);
-    power_off_duration_sound(true);
-    power_down();
+    active_power_off_tips();
+
+    if (wait_off == 0)
+        wait_off = SECOND_TO_TICKS(CONTROLLER_WAIT);
+    wait_off--;
+
+    if (wait_off == 0) {
+        power_off_duration_sound(true);
+        power_down();
+    }
 }
 
 void power_low_handler()
@@ -243,4 +259,5 @@ void power_low_handler()
     active_power_off();
 #endif
 }
+
 #endif /** Auto power off tips demo */
