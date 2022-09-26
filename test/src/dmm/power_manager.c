@@ -204,11 +204,12 @@ void inactive_power_tips()
 
 void active_power_off()
 {
-    if (lp_controller.times <= 0)
-        if (lp_controller.power < 18)
-            goto power_off;
+    if ((lp_controller.times <= 0) && (lp_controller.power < 18))
+        goto power_off;
     else if (lp_controller.power < 15)
         goto power_off;
+    else
+        return;
 
 power_off:
     active_power_tips();
