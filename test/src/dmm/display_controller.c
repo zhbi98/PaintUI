@@ -5,18 +5,18 @@ struct module_t widget[WIDGET_NUM_MAX];
 struct menubar_t menubar;
 
 const key_event_interface * key_event_controller[FUNCTION_TYPE_MAX][MENUBAR_LEVEL_MAX] = {
-    {voltage_level1_key_event,           0},
-    {setting_level1_key_event,           0},
+    {voltage_level1_key_event,        NULL},
+    {setting_level1_key_event,        NULL},
 };
 
 const key_event_interface * key_event_enable[FUNCTION_TYPE_MAX][MENUBAR_LEVEL_MAX] = {
-    {voltage_level1_key_event_enable,    0},
-    {setting_level1_key_event_enable,    0},
+    {voltage_level1_key_event_enable, NULL},
+    {setting_level1_key_event_enable, NULL},
 };
 
 const menu_content_interface * display_menu_content[FUNCTION_TYPE_MAX][MENUBAR_LEVEL_MAX] = {
-    {voltage_level1_menu,                0},
-    {setting_level1_menu,                0},
+    {voltage_level1_menu,             NULL},
+    {setting_level1_menu,             NULL},
 };
 
 const display_show_interface * display_widget_show[] = {
