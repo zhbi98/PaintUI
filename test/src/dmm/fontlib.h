@@ -5,11 +5,11 @@
 #include <stdio.h>
 
 struct font_data_t {
-    const unsigned char width;
-    const unsigned char height;
+    const unsigned char     width;
+    const unsigned char    height;
     const unsigned char base_char;
 
-    const unsigned char * fontdata;
+    const unsigned char *  fontdata;
     const unsigned char * widthdata;
 };
 
@@ -19,11 +19,11 @@ struct font_index_t {
 };
 
 enum font_size_type {
-    FONT_12X16,
-    FONT_32X51,
-    FONT_20X20,
-    FONT_14X14,
-    FONT_SIZE_ALL
+    FONT_12X16    = 0,
+    FONT_32X51    = 1,
+    FONT_20X20    = 2,
+    FONT_14X14    = 3,
+    FONT_SIZE_ALL = 4,
 };
 
 enum language_type {
@@ -31,10 +31,6 @@ enum language_type {
     LANGUAGE_CHINESE = 1,
     LANGUAGE_JAPAN   = 2,
 };
-
-extern const unsigned char fontdata_cn12x12_3byte[];
-extern const unsigned char fontdata_cn20x20_2byte[];
-extern const unsigned char fontdata_cn20x20_3byte[];
 
 extern const unsigned char fontdata_en12x16[];
 extern const unsigned char fontdata_en32x51[];
@@ -46,15 +42,19 @@ extern const unsigned char widthdata_en32x51[];
 extern const unsigned char widthdata_en20x20[];
 extern const unsigned char widthdata_en14x14[];
 
+extern const unsigned char fontdata_cn20x20[];
+extern const unsigned char fontdata_jp12x12[];
+extern const unsigned char fontdata_jp20x20[];
+
 extern const struct font_data_t en_font[];
 extern const struct font_data_t cn_font[];
 extern const struct font_data_t jp_font[];
 
 extern struct font_data_t read_font_data(unsigned char font_type, unsigned char font_size);
 
-extern const unsigned char fontdata_cn12x12_3byte_index[];
-extern const unsigned char fontdata_cn20x20_2byte_index[];
-extern const unsigned char fontdata_cn20x20_3byte_index[];
+extern const unsigned char fontdata_cn20x20_index[];
+extern const unsigned char fontdata_jp12x12_index[];
+extern const unsigned char fontdata_jp20x20_index[];
 
 extern const struct font_index_t en_index[];
 extern const struct font_index_t cn_index[];
