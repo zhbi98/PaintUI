@@ -1701,22 +1701,22 @@ struct font_data_t read_font_data(unsigned char font_type, unsigned char font_si
 const struct font_index_t en_index[FONT_SIZE_ALL] = {
     {
         .index_buf = NULL,
-        .buf_size = 0 * 1,
+        .buf_size = 0 * EN_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 1,
+        .buf_size = 0 * EN_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 1,
+        .buf_size = 0 * EN_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 1,
+        .buf_size = 0 * EN_BYTE,
     },
 };
 
@@ -1724,22 +1724,22 @@ const struct font_index_t en_index[FONT_SIZE_ALL] = {
 const struct font_index_t cn_index[FONT_SIZE_ALL] = {
     {
         .index_buf = NULL,
-        .buf_size = 0 * 2,
+        .buf_size = 0 * CN_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 2,
+        .buf_size = 0 * CN_BYTE,
     },
 
     {
         .index_buf = fontdata_cn20x20_index,
-        .buf_size = 1 * 2,
+        .buf_size = 1 * CN_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 2,
+        .buf_size = 0 * CN_BYTE,
     },
 };
 
@@ -1747,22 +1747,22 @@ const struct font_index_t cn_index[FONT_SIZE_ALL] = {
 const struct font_index_t jp_index[FONT_SIZE_ALL] = {
     {
         .index_buf = fontdata_jp12x12_index,
-        .buf_size = 4 * 3,
+        .buf_size = 4 * JP_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 3,
+        .buf_size = 0 * JP_BYTE,
     },
 
     {
         .index_buf = fontdata_jp20x20_index,
-        .buf_size = 2 * 3,
+        .buf_size = 2 * JP_BYTE,
     },
 
     {
         .index_buf = NULL,
-        .buf_size = 0 * 3,
+        .buf_size = 0 * JP_BYTE,
     },
 };
 
