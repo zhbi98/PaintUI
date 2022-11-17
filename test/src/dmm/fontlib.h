@@ -32,6 +32,12 @@ enum language_type {
     LANGUAGE_JAPAN   = 2,
 };
 
+enum utf_byte_length {
+    EN_BYTE = 1,
+    CN_BYTE = 2,
+    JP_BYTE = 3,
+};
+
 extern const unsigned char fontdata_en12x16[];
 extern const unsigned char fontdata_en32x51[];
 extern const unsigned char fontdata_en20x20[];
