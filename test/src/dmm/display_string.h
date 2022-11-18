@@ -42,11 +42,14 @@ enum content_selected {
 static int font_valid_width(int width, int height, unsigned char start_char, unsigned char character, const unsigned char * fontlib);
 extern void read_font_valid_width(unsigned char font_size, unsigned char finish_character);
 extern void display_character(int y, int x, int width, int height, unsigned int fg, unsigned int bg, unsigned char start_char, unsigned char character, const unsigned char * fontlib, unsigned char * vm);
+extern unsigned int find_ascii_character(unsigned char character, unsigned char * index_buf);
 extern void display_string(int y, int x, unsigned int fg, unsigned int bg, const unsigned char * string, unsigned char * vm);
 extern void display_val(unsigned int y, unsigned int x, unsigned int fg, unsigned int bg, unsigned char * vm, unsigned char * format, ...);
 
 extern unsigned char check_gbk_size(unsigned char character);
+extern unsigned char gbk_1byte_fontdata(unsigned char byte);
 extern unsigned short gbk_2byte_fontdata(unsigned char byte1, unsigned char byte2);
+extern unsigned int find_gbk_1byte_character(unsigned char character, unsigned char * index_buf);
 extern unsigned int find_gbk_2byte_character(unsigned short character, unsigned char * index_buf);
 
 extern void display_gbk_cn_string(unsigned int y, unsigned int x, unsigned int fg, unsigned int bg, unsigned char font_size, unsigned char * string, unsigned char * vm);

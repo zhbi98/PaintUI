@@ -120,10 +120,22 @@ void display_character(int y, int x, int width, int height, unsigned int fg, uns
     }
 }
 
+unsigned int find_ascii_character(unsigned char character, unsigned char * index_buf)
+{
+    unsigned int index = 0;
+
+    // printf("byte: %xH", character);
+    while ((index_buf[index] != character) && (index < 256))
+        index += 1;
+    // printf("font index: %d", index);
+    return index / 1;
+}
+
 void display_string(int y, int x, unsigned int fg, unsigned int bg, const unsigned char * string, unsigned char * vm)
 {
     // Multi-language mixed display is not supported
-    unsigned char bits  = 0;
+    unsigned char bits = 0;
+    unsigned int index = 0;
 
     while (string[bits] != '\0') {
         /**
@@ -134,7 +146,8 @@ void display_string(int y, int x, unsigned int fg, unsigned int bg, const unsign
          * bits++;
          */
 
-        display_character(y, x, en_font[FONT_N1_PT].width, en_font[FONT_N1_PT].height, fg, bg, en_font[FONT_N1_PT].base_char, string[bits], en_font[FONT_N1_PT].fontdata, vm);
+        index = find_ascii_character(string[bits], (unsigned char *)/*fontdata_2byte_index*/en_index[FONT_N1_PT].index_buf);
+        display_character(y, x, en_font[FONT_N1_PT].width, en_font[FONT_N1_PT].height, fg, bg, en_font[FONT_N1_PT].base_char, /*string[bits]*/index, en_font[FONT_N1_PT].fontdata, vm);
         /**
          * Real time dynamic calculation font width:
          * ---------------------------------------------
@@ -173,12 +186,28 @@ unsigned char check_gbk_size(unsigned char character)
     return 255;
 }
 
+unsigned char gbk_1byte_fontdata(unsigned char byte)
+{
+    return byte;
+}
+
 unsigned short gbk_2byte_fontdata(unsigned char byte1, unsigned char byte2)
 {
     unsigned short data;
 
     data = (byte1 << 8) | byte2;
     return data;
+}
+
+unsigned int find_gbk_1byte_character(unsigned char character, unsigned char * index_buf)
+{
+    unsigned int index = 0;
+
+    // printf("byte: %xH", character);
+    while ((gbk_2byte_fontdata(index_buf[index], index_buf[index + 1]) != character) && (index < 256))
+        index += 1;
+    // printf("font index: %d", index);
+    return index / 1;
 }
 
 unsigned int find_gbk_2byte_character(unsigned short character, unsigned char * index_buf)
@@ -206,8 +235,9 @@ void display_gbk_cn_string(unsigned int y, unsigned int x, unsigned int fg, unsi
             bits += 2;
         } else {
             // English
+            index = find_gbk_1byte_character(gbk_1byte_fontdata(string[bits]), (unsigned char *)/*fontdata_2byte_index*/en_index[font_size].index_buf);
             display_character(y, x, en_font[font_size].width, en_font[font_size].height, fg, bg, en_font[font_size].base_char, string[bits], en_font[font_size].fontdata, vm);
-            x = x + font_valid_width(en_font[font_size].width, en_font[font_size].height, en_font[font_size].base_char, string[bits], en_font[font_size].fontdata);
+            x = x + font_valid_width(en_font[font_size].width, en_font[font_size].height, en_font[font_size].base_char, /*string[bits]*/ index, en_font[font_size].fontdata);
             bits++;
         }
     }
