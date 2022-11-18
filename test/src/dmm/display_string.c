@@ -125,7 +125,7 @@ unsigned int find_ascii_character(unsigned char character, unsigned char * index
     unsigned int index = 0;
 
     // printf("byte: %xH", character);
-    while ((index_buf[index] != character) && (index < 256))
+    while ((index_buf[index] != character) && (index < 1024))
         index += 1;
     // printf("font index: %d", index);
     return index / 1;
@@ -215,7 +215,7 @@ unsigned int find_gbk_2byte_character(unsigned short character, unsigned char * 
     unsigned int index = 0;
 
     // printf("byte: %xH", character);
-    while ((gbk_2byte_fontdata(index_buf[index], index_buf[index + 1]) != character) && (index < 256))
+    while ((gbk_2byte_fontdata(index_buf[index], index_buf[index + 1]) != character) && (index < 1024))
         index += 2;
     // printf("font index: %d", index);
     return index / 2;
@@ -311,7 +311,7 @@ unsigned int find_utf8_1byte_character(unsigned char character, unsigned char * 
     unsigned int index = 0;
 
     // printf("byte: %xH", character);
-    while ((utf8_1byte_fontdata(index_buf[index]) != character) && (index < 256))
+    while ((utf8_1byte_fontdata(index_buf[index]) != character) && (index < 1024))
         index += 1;
     // printf("font index: %d", index);
     return index / 1;
@@ -322,7 +322,7 @@ unsigned int find_utf8_2byte_character(unsigned short character, unsigned char *
     unsigned int index = 0;
 
     // printf("byte: %xH", character);
-    while ((utf8_2byte_fontdata(index_buf[index], index_buf[index + 1]) != character) && (index < 256))
+    while ((utf8_2byte_fontdata(index_buf[index], index_buf[index + 1]) != character) && (index < 1024))
         index += 2;
     // printf("font index: %d", index);
     return index / 2;
@@ -333,7 +333,7 @@ unsigned int find_utf8_3byte_character(unsigned int character, unsigned char * i
     unsigned int index = 0;
 
     // printf("byte: %xH", character);
-    while ((utf8_3byte_fontdata(index_buf[index], index_buf[index + 1], index_buf[index + 2]) != character) && (index < 256))
+    while ((utf8_3byte_fontdata(index_buf[index], index_buf[index + 1], index_buf[index + 2]) != character) && (index < 1024))
         index += 3;
     // printf("font index: %d", index);
     return index / 3;
