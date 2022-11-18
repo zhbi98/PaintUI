@@ -53,8 +53,10 @@ extern void display_gbk_cn_string(unsigned int y, unsigned int x, unsigned int f
 
 extern unsigned char check_utf8_size(const unsigned char * string, unsigned char bits);
 extern unsigned int unicode_to_utf8(unsigned int letter_uni);
+extern unsigned char utf8_1byte_fontdata(unsigned char byte);
 extern unsigned short utf8_2byte_fontdata(unsigned char byte1, unsigned char byte2);
 extern unsigned int utf8_3byte_fontdata(unsigned char byte1, unsigned char byte2, unsigned char byte3);
+extern unsigned int find_utf8_1byte_character(unsigned char character, unsigned char * index_buf);
 extern unsigned int find_utf8_2byte_character(unsigned short character, unsigned char * index_buf);
 extern unsigned int find_utf8_3byte_character(unsigned int character, unsigned char * index_buf);
 
@@ -68,15 +70,11 @@ extern void display_string_auto_place(unsigned int y, unsigned int x, unsigned c
 extern void display_widget_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm);
 extern void display_mark_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm);
 extern void display_measure_value_unit_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm);
+extern void display_measure_value_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm);
 
 extern void display_character_selected_digit(int y, int x, int width, int height, unsigned int fg, unsigned int bg, unsigned char start_char, unsigned char character, const unsigned char * fontlib, unsigned char * vm);
 extern void display_cn_string_selected_digit(unsigned int y, unsigned int x, unsigned int fg, unsigned int bg, unsigned char font_size, unsigned char * string, unsigned char selected_digit, unsigned char * vm);
 extern void display_string_auto_place_selected_digit(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, unsigned char color, unsigned char font_size, unsigned char * string, unsigned char select, unsigned char selected_digit, unsigned char * vm);
 extern void display_main_measure_data_unit_content_selected_digit(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char selected_digit, unsigned char * vm);
-
-extern void display_character_dmm(int y, int x, int width, int height, unsigned int fg, unsigned int bg, unsigned char start_char, unsigned char character, const unsigned char * fontlib, unsigned char * vm);
-extern void display_cn_string_dmm(unsigned int y, unsigned int x, unsigned int fg, unsigned int bg, unsigned char font_size, unsigned char * string, unsigned char * vm);
-extern void display_string_auto_place_dmm(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, unsigned char color, unsigned char font_size, unsigned char * string, unsigned char select, unsigned char * vm);
-extern void display_measure_value_content_dmm(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm);
 
 #endif

@@ -60,6 +60,11 @@ extern const struct font_data_t jp_font[];
 
 extern struct font_data_t read_font_data(unsigned char font_type, unsigned char font_size);
 
+extern const unsigned char fontdata_en_N1_index[];
+extern const unsigned char fontdata_en_N2_index[];
+extern const unsigned char fontdata_en_N3_index[];
+extern const unsigned char fontdata_en_N4_index[];
+
 extern const unsigned char fontdata_cn_N3_index[];
 
 extern const unsigned char fontdata_jp_N1_index[];

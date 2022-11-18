@@ -219,7 +219,7 @@ void display_measure_value_show(unsigned char * vm)
     sprintf(measure_string, "%06.2f", measure_value);
 
     display_solid_rect(widget[widget_num].set_y, widget[widget_num].set_x, widget[widget_num].width, widget[widget_num].height, BLACK, vm);
-    display_measure_value_content_dmm(86, 0, RIGHT_ALIGN, LAYOUT_R11, widget_num, measure_string, TEMP_CONTENT, WHITE, UNSELECT, vm);
+    display_measure_value_content(86, 0, RIGHT_ALIGN, LAYOUT_R11, widget_num, measure_string, TEMP_CONTENT, WHITE, UNSELECT, vm);
 
     display_tips(26, 0, 320, WHITE, DARK_BLUE, FONT_N2_PT, &message_tips[0], vm);
     tips_timing(&message_tips[0]);
