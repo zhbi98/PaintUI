@@ -75,7 +75,7 @@ void read_font_valid_width(unsigned char font_size, unsigned char finish_charact
     unsigned char font_width = 0;
 
     // example:
-    // read_font_valid_width(FONT_14X14, 'z');
+    // read_font_valid_width(FONT_N2_PT, 'z');
     for (unsigned int character = en_font[font_size].base_char; character <= finish_character; character++) {
         font_width = font_valid_width(en_font[font_size].width, en_font[font_size].height, en_font[font_size].base_char, character, en_font[font_size].fontdata);
         printf("character:[%c] font width:%d,\n", character, font_width);
@@ -134,13 +134,13 @@ void display_string(int y, int x, unsigned int fg, unsigned int bg, const unsign
          * bits++;
          */
 
-        display_character(y, x, en_font[FONT_12X16].width, en_font[FONT_12X16].height, fg, bg, en_font[FONT_12X16].base_char, string[bits], en_font[FONT_12X16].fontdata, vm);
+        display_character(y, x, en_font[FONT_N1_PT].width, en_font[FONT_N1_PT].height, fg, bg, en_font[FONT_N1_PT].base_char, string[bits], en_font[FONT_N1_PT].fontdata, vm);
         /**
          * Real time dynamic calculation font width:
          * ---------------------------------------------
-         * x = x + font_valid_width(en_font[FONT_12X16].width, en_font[FONT_12X16].height, en_font[FONT_12X16].base_char, string[bits], en_font[FONT_12X16].fontdata);
+         * x = x + font_valid_width(en_font[FONT_N1_PT].width, en_font[FONT_N1_PT].height, en_font[FONT_N1_PT].base_char, string[bits], en_font[FONT_N1_PT].fontdata);
          */
-        x = x + en_font[FONT_12X16].widthdata[string[bits] - en_font[FONT_12X16].base_char];
+        x = x + en_font[FONT_N1_PT].widthdata[string[bits] - en_font[FONT_N1_PT].base_char];
         bits++;
     }
 }
@@ -350,7 +350,7 @@ void display_cn_val(unsigned int y, unsigned int x, unsigned int fg, unsigned in
     
     va_end(parameter_pointer);
 
-    display_cn_string(y, x, fg, bg, FONT_12X16, value, vm);
+    display_cn_string(y, x, fg, bg, FONT_N1_PT, value, vm);
 }
 
 unsigned int string_valid_width(unsigned char font_size, unsigned char * string)
@@ -495,10 +495,10 @@ void display_string_auto_place(unsigned int y, unsigned int x, unsigned char ali
 void display_widget_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm)
 {
     if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_12X16, 
+        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N1_PT, 
             string, select, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_12X16, 
+        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N1_PT, 
             (unsigned char *)menu_content[string_num], select, vm);
     }
 }
@@ -506,10 +506,10 @@ void display_widget_content(unsigned int y, unsigned int x, unsigned char align,
 void display_mark_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm)
 {
     if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_14X14, 
+        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N2_PT, 
             string, select, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_14X14, 
+        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N2_PT, 
             (unsigned char *)menu_content[string_num], select, vm);
     }
 }
@@ -517,10 +517,10 @@ void display_mark_content(unsigned int y, unsigned int x, unsigned char align, u
 void display_measure_value_unit_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm)
 {
     if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_20X20, 
+        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N3_PT, 
             string, select, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_20X20, 
+        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N3_PT, 
             (unsigned char *)menu_content[string_num], select, vm);
     }
 }
@@ -703,10 +703,10 @@ void display_string_auto_place_selected_digit(unsigned int y, unsigned int x, un
 void display_main_measure_data_unit_content_selected_digit(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char selected_digit, unsigned char * vm)
 {
     if (string_num == TEMP_CONTENT) {
-        display_string_auto_place_selected_digit(y, x, align, row, widget_num, color, FONT_14X14, 
+        display_string_auto_place_selected_digit(y, x, align, row, widget_num, color, FONT_N2_PT, 
             string, select, selected_digit, vm);
     } else {
-        display_string_auto_place_selected_digit(y, x, align, row, widget_num, color, FONT_14X14, 
+        display_string_auto_place_selected_digit(y, x, align, row, widget_num, color, FONT_N2_PT, 
             (unsigned char *)menu_content[string_num], select, selected_digit, vm);
     }
 }
@@ -943,10 +943,10 @@ void display_string_auto_place_dmm(unsigned int y, unsigned int x, unsigned char
 void display_measure_value_content_dmm(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm)
 {
     if (string_num == TEMP_CONTENT) {
-        display_string_auto_place_dmm(y, x, align, row, widget_num, color, FONT_32X51, 
+        display_string_auto_place_dmm(y, x, align, row, widget_num, color, FONT_N4_PT, 
             (unsigned char *)string, select, vm);
     } else {
-        display_string_auto_place_dmm(y, x, align, row, widget_num, color, FONT_32X51, 
+        display_string_auto_place_dmm(y, x, align, row, widget_num, color, FONT_N4_PT, 
             (unsigned char *)menu_content[string_num], select, vm);
     }
 }
