@@ -379,13 +379,13 @@ void display_cn_string(unsigned int y, unsigned int x, unsigned int fg, unsigned
         if (utf8_size == 2) {
             // Two bytes character (example: russian)
             index = find_utf8_2byte_character(utf8_2byte_fontdata(string[bits], string[bits + 1]), (unsigned char *)/*fontdata_2byte_index*/cn_index[font_size].index_buf);
-            display_character(y + 1, x, cn_font[font_size].width, cn_font[font_size].height, fg, bg, cn_font[font_size].base_char, index, cn_font[font_size].fontdata, vm);
+            display_character(y, x, cn_font[font_size].width, cn_font[font_size].height, fg, bg, cn_font[font_size].base_char, index, cn_font[font_size].fontdata, vm);
             x = x + cn_font[font_size].width;
             bits += 2;
         } else if (utf8_size == 3) {
             // Three bytes character (example: Simplified chinese)
             index = find_utf8_3byte_character(utf8_3byte_fontdata(string[bits], string[bits + 1], string[bits + 2]), (unsigned char *)/*fontdata_3byte_index*/jp_index[font_size].index_buf);
-            display_character(y + 1, x, jp_font[font_size].width, jp_font[font_size].height, fg, bg, jp_font[font_size].base_char, index, jp_font[font_size].fontdata, vm);
+            display_character(y, x, jp_font[font_size].width, jp_font[font_size].height, fg, bg, jp_font[font_size].base_char, index, jp_font[font_size].fontdata, vm);
             x = x + jp_font[font_size].width;
             bits += 3;
         } else {
