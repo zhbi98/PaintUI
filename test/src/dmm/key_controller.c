@@ -219,29 +219,29 @@ void unlock_doing(struct password_auth_t * auth)
 
 #define PWD_LEN_MAX 16U
 
-typedef void (*pwdHande)();
+typedef void (*PwdHande_TypeDef)();
 
 typedef struct {
     const unsigned char authData[PWD_LEN_MAX];
     const unsigned char authLen;
+    const PwdHande_TypeDef authHande;
+    unsigned char authState;
     unsigned char inData[PWD_LEN_MAX];
     unsigned char inLen;
-    unsigned char authState;
-    pwdHande hande;
 } PassWordAuth_TypeDef;
 
 PassWordAuth_TypeDef auth1 = {
     .authData  = {1, 2, 3, 4, 5, 6},
     .authLen   = 6,
+    .authHande = auth1Event,
     .authState = false,
-    .hande     = auth1Event,
 };
 
 PassWordAuth_TypeDef auth2 = {
     .authData  = {1, 2, 3, 4, 5, 6},
     .authLen   = 6,
+    .authHande = auth2Event,
     .authState = false,
-    .hande     = auth2Event,
 };
 
 void pwdNormalized(PassWordAuth_TypeDef * auth)
@@ -293,7 +293,7 @@ void pwdRead(PassWordAuth_TypeDef * auth, unsigned char pwd)
     }
 
     if (auth->authState == true) {
-        auth->hande();
+        auth->authHande();
         auth->authState = false;
     }
 }
