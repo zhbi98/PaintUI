@@ -213,3 +213,108 @@ void unlock_doing(struct password_auth_t * auth)
         // info("Unlock success");
     }
 }
+
+#if 0
+#include <string.h>
+
+#define PWD_LEN_MAX 16U
+
+typedef void (*pwdHande)();
+
+typedef struct {
+    const unsigned char authData[PWD_LEN_MAX];
+    const unsigned char authLen;
+    unsigned char inData[PWD_LEN_MAX];
+    unsigned char inLen;
+    unsigned char authState;
+    pwdHande hande;
+} PassWordAuth_TypeDef;
+
+PassWordAuth_TypeDef auth1 = {
+    .authData  = {1, 2, 3, 4, 5, 6},
+    .authLen   = 6,
+    .authState = false,
+    .hande     = auth1Event,
+};
+
+PassWordAuth_TypeDef auth2 = {
+    .authData  = {1, 2, 3, 4, 5, 6},
+    .authLen   = 6,
+    .authState = false,
+    .hande     = auth2Event,
+};
+
+void pwdNormalized(PassWordAuth_TypeDef * auth)
+{
+    unsigned char i = 0;
+
+    for (i = 0; i < auth->authLen - 1; i++) {
+        auth->inData[i] = auth->inData[i + 1];
+    }
+}
+
+void pwdCache(PassWordAuth_TypeDef * auth, unsigned char pwd)
+{
+    auth->inData[auth->authLen - 1] = pwd;
+    auth->inLen++;
+}
+
+void pwdClean(PassWordAuth_TypeDef * auth)
+{
+    memset(auth->inData, 0x00, PWD_LEN_MAX);
+    auth->inLen = 0;
+}
+
+unsigned char pwdAuth(PassWordAuth_TypeDef * auth)
+{
+    unsigned char i = 0;
+
+    if (auth->inLen != auth->authLen)
+        return false;
+
+    for (i = 0; i < auth->authLen; i++) {
+        if (auth->inData[i] != auth->authData[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void pwdRead(PassWordAuth_TypeDef * auth, unsigned char pwd)
+{
+    if (auth->inLen < PWD_LEN_MAX) {
+        pwdNormalized(auth);
+        pwdCache(auth, pwd);
+    }
+
+    if ((auth->inLen == auth->authLen) || (auth->inLen >= PWD_LEN_MAX)) {
+        auth->authState = pwdAuth(auth);
+        pwdClean(auth);
+    }
+
+    if (auth->authState == true) {
+        auth->hande();
+        auth->authState = false;
+    }
+}
+
+void auth1Event()
+{
+
+}
+
+void auth2Event()
+{
+
+}
+
+/**
+ * Example:
+ * 
+ * PassWordAuth_TypeDef auth1;
+ * PassWordAuth_TypeDef auth2;
+ * 
+ * pwdRead(&auth1, buttonNum);
+ * pwdRead(&auth2, buttonNum);
+ */
+#endif
