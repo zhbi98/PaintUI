@@ -461,102 +461,102 @@ unsigned int string_valid_height(unsigned char font_size, unsigned char * string
 
 void display_string_auto_place(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, unsigned char color, unsigned char font_size, unsigned char * string, unsigned char select, unsigned char * vm)
 {
-    unsigned char str_length = 0;
-    unsigned char str_height = 0;
+    uint32_t offset_y = 0, offset_x = 0;
+    uint32_t last_y = 0, last_x = 0;
 
-    unsigned int widget_y = widget[widget_num].set_y;
-    unsigned int widget_x = widget[widget_num].set_x;
-    unsigned int widget_w = widget[widget_num].width;
-    unsigned int widget_h = widget[widget_num].height;
+    uint16_t str_length = string_valid_width(font_size, string);
+    uint16_t str_height = string_valid_height(font_size, string);
 
-    unsigned int offset_y, offset_x;
-    unsigned int last_y, last_x;
-
-    str_length = string_valid_width(font_size, string);
-    str_height = string_valid_height(font_size, string);
+    uint32_t widget_w = widget[widget_num].width;
+    uint32_t widget_h = widget[widget_num].height;
 
     /**
-     * +---------------+---------------------------+
-     * | align = 0     | yourself set string x,    |
-     * | align = 1     | menu string auto center   |
-     * | align = 2     | menu string auto left     |
-     * | align = 3     | menu string auto right    |
-     * +---------------+---------------------------+
-     * | place row = 0 | only 1 display at center  |
-     * | place row = 1 | only 2 display at line 1  |
-     * | place row = 2 | only 2 display at line 2  |
-     * | place row = 3 | only 3 display at line 1  |
-     * | place row = 4 | only 3 display at line 2  |
-     * | place row = 5 | only 3 display at line 3  |
-     * | place row = 6 | only 4 display at line 1  |
-     * | place row = 7 | only 4 display at line 2  |
-     * | place row = 8 | only 4 display at line 3  |
-     * | place row = 9 | only 4 display at line 4  |
-     * +---------------+---------------------------+
+     * Place row = 0 only 1 string display on center.
+     * Place row = 1 only 2 string display on line 1.
+     * Place row = 2 only 2 string display on line 2.
+     * Place row = 3 only 3 string display on line 1.
+     * Place row = 4 only 3 string display on line 2.
+     * Place row = 5 only 3 string display on line 3.
+     * Place row = 6 only 4 string display on line 1.
+     * Place row = 7 only 4 string display on line 2.
+     * Place row = 8 only 4 string display on line 3.
+     * Place row = 9 only 4 string display on line 4.
      */
-    if (align == MANUAL_ALIGN) {
-        last_y = y;
-        last_x = x;
-    } else {
-        switch (align) {
-            case CENTER_ALIGN:
-                offset_x = abs(widget_w - str_length) / 2;
-                break;
-            case LEFT_ALIGN:
-                // (+3) left side stay 3 piexls
-                offset_x = 0 + (3); 
-                break;
-            case RIGHT_ALIGN:
-                // (-2) right side stay 2 piexls
-                offset_x = abs(widget_w - str_length) / 2 * 2 - (2);
-                break;
-        }
+    switch (row) {
+    case LAYOUT_R11:
+        offset_y = (widget_h - str_height) / 2;
+        break;
+    case LAYOUT_R21:
+        /*(+1) use to fine tuning the STRING_L2_1 offset_y*/
+        offset_y = ((widget_h / 2 - str_height) / 2) + (1);
+        break;
+    case LAYOUT_R22:
+        /*(-1) use to fine tuning the STRING_L2_2 offset_y*/
+        offset_y = ((widget_h / 2 - str_height) / 2) + (widget_h / 2) - (1);
+        break;
+    case LAYOUT_R31:
+        offset_y = ((widget_h / 3 - str_height) / 2);
+        break;
+    case LAYOUT_R32:
+        offset_y = (widget_h - str_height) / 2;
+        break;
+    case LAYOUT_R33:
+        offset_y = ((widget_h / 3 - str_height) / 2) + (widget_h / 3) * 2;
+        break;
+    case LAYOUT_R41:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 0;
+        break;
+    case LAYOUT_R42:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 1;
+        break;
+    case LAYOUT_R43:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 2;
+        break;
+    case LAYOUT_R44:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 3;
+        break;
+    }
 
-        switch (row) {
-            case LAYOUT_R11:
-                offset_y = (widget_h - str_height) / 2;
-                break;
-            case LAYOUT_R21:
-                // (+1) use to fine tuning the STRING_L2_1 offset_y
-                offset_y = ((widget_h / 2 - str_height) / 2) + (1);
-                break;
-            case LAYOUT_R22:
-                // (-1) use to fine tuning the STRING_L2_2 offset_y
-                offset_y = ((widget_h / 2 - str_height) / 2) + (widget_h / 2) - (1);
-                break;
-            case LAYOUT_R31:
-                offset_y = ((widget_h / 3 - str_height) / 2);
-                break;
-            case LAYOUT_R32:
-                offset_y = (widget_h - str_height) / 2;
-                break;
-            case LAYOUT_R33:
-                offset_y = ((widget_h / 3 - str_height) / 2) + (widget_h / 3) * 2;
-                break;
-            case LAYOUT_R41:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 0;
-                break;
-            case LAYOUT_R42:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 1;
-                break;
-            case LAYOUT_R43:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 2;
-                break;
-            case LAYOUT_R44:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 3;
-                break;
-        }
+    /**
+     * align = 0 String position x
+     * align = 1 String auto center
+     * align = 2 String auto left 
+     * align = 3 String auto right
+     */
+    switch (align) {
+    case CENTER_ALIGN:
+        offset_x = abs(widget_w - str_length) / 2;
+        break;
+    case LEFT_ALIGN:
+        /*(+3) left side stay 3 piexls*/
+        offset_x = 0 + (3); 
+        break;
+    case RIGHT_ALIGN:
+        /*(-2) right side stay 2 piexls*/
+        offset_x = abs(widget_w - str_length) / 2 * 2 - (2);
+        break;
+    }
 
+    uint32_t widget_y = widget[widget_num].set_y;
+    uint32_t widget_x = widget[widget_num].set_x;
+
+    if (align != MANUAL_ALIGN) {
         last_y = widget_y + offset_y;
         last_x = widget_x + offset_x;
+    } else {
+        last_y = y;
+        last_x = x;
     }
 
     if (select) {
-        // display_solid_rect(last_y, last_x, str_length, str_height, WHITE, vm);
-        display_bevel_rect(last_y, last_x, str_length, str_height, WHITE, 1, vm);
         color = BLACK;
+        display_bevel_rect(last_y, last_x, 
+            str_length, str_height, WHITE, 1, vm);
     }
-    display_cn_string(last_y, last_x, color, 0, font_size, string, vm);
+
+    display_cn_string(last_y, last_x, 
+        color, 0, font_size, 
+        string, vm);
 }
 
 void display_widget_content(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char * vm)
@@ -681,101 +681,101 @@ void display_cn_string_selected_digit(unsigned int y, unsigned int x, unsigned i
 
 void display_string_auto_place_selected_digit(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, unsigned char color, unsigned char font_size, unsigned char * string, unsigned char select, unsigned char selected_digit, unsigned char * vm)
 {
-    unsigned char str_length = 0;
-    unsigned char str_height = 0;
+    uint32_t offset_y = 0, offset_x = 0;
+    uint32_t last_y = 0, last_x = 0;
 
-    unsigned int widget_y = widget[widget_num].set_y;
-    unsigned int widget_x = widget[widget_num].set_x;
-    unsigned int widget_w = widget[widget_num].width;
-    unsigned int widget_h = widget[widget_num].height;
+    uint16_t str_length = string_valid_width(font_size, string);
+    uint16_t str_height = string_valid_height(font_size, string);
 
-    unsigned int offset_y, offset_x;
-    unsigned int last_y, last_x;
-
-    str_length = string_valid_width(font_size, string);
-    str_height = string_valid_height(font_size, string);
+    uint32_t widget_w = widget[widget_num].width;
+    uint32_t widget_h = widget[widget_num].height;
 
     /**
-     * +---------------+---------------------------+
-     * | align = 0     | yourself set string x,    |
-     * | align = 1     | menu string auto center   |
-     * | align = 2     | menu string auto left     |
-     * | align = 3     | menu string auto right    |
-     * +---------------+---------------------------+
-     * | place row = 0 | only 1 display at center  |
-     * | place row = 1 | only 2 display at line 1  |
-     * | place row = 2 | only 2 display at line 2  |
-     * | place row = 3 | only 3 display at line 1  |
-     * | place row = 4 | only 3 display at line 2  |
-     * | place row = 5 | only 3 display at line 3  |
-     * | place row = 6 | only 4 display at line 1  |
-     * | place row = 7 | only 4 display at line 2  |
-     * | place row = 8 | only 4 display at line 3  |
-     * | place row = 9 | only 4 display at line 4  |
-     * +---------------+---------------------------+
+     * Place row = 0 only 1 string display on center.
+     * Place row = 1 only 2 string display on line 1.
+     * Place row = 2 only 2 string display on line 2.
+     * Place row = 3 only 3 string display on line 1.
+     * Place row = 4 only 3 string display on line 2.
+     * Place row = 5 only 3 string display on line 3.
+     * Place row = 6 only 4 string display on line 1.
+     * Place row = 7 only 4 string display on line 2.
+     * Place row = 8 only 4 string display on line 3.
+     * Place row = 9 only 4 string display on line 4.
      */
-    if (align == MANUAL_ALIGN) {
-        last_y = y;
-        last_x = x;
-    } else {
-        switch (align) {
-            case CENTER_ALIGN:
-                offset_x = abs(widget_w - str_length) / 2;
-                break;
-            case LEFT_ALIGN:
-                // (+3) left side stay 3 piexls
-                offset_x = 0 + (3); 
-                break;
-            case RIGHT_ALIGN:
-                // (-2) right side stay 2 piexls
-                offset_x = abs(widget_w - str_length) / 2 * 2 - (2);
-                break;
-        }
+    switch (row) {
+    case LAYOUT_R11:
+        offset_y = (widget_h - str_height) / 2;
+        break;
+    case LAYOUT_R21:
+        /*(+1) use to fine tuning the STRING_L2_1 offset_y*/
+        offset_y = ((widget_h / 2 - str_height) / 2) + (1);
+        break;
+    case LAYOUT_R22:
+        /*(-1) use to fine tuning the STRING_L2_2 offset_y*/
+        offset_y = ((widget_h / 2 - str_height) / 2) + (widget_h / 2) - (1);
+        break;
+    case LAYOUT_R31:
+        offset_y = ((widget_h / 3 - str_height) / 2);
+        break;
+    case LAYOUT_R32:
+        offset_y = (widget_h - str_height) / 2;
+        break;
+    case LAYOUT_R33:
+        offset_y = ((widget_h / 3 - str_height) / 2) + (widget_h / 3) * 2;
+        break;
+    case LAYOUT_R41:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 0;
+        break;
+    case LAYOUT_R42:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 1;
+        break;
+    case LAYOUT_R43:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 2;
+        break;
+    case LAYOUT_R44:
+        offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 3;
+        break;
+    }
 
-        switch (row) {
-            case LAYOUT_R11:
-                offset_y = (widget_h - str_height) / 2;
-                break;
-            case LAYOUT_R21:
-                // (+1) use to fine tuning the STRING_L2_1 offset_y
-                offset_y = ((widget_h / 2 - str_height) / 2) + (1);
-                break;
-            case LAYOUT_R22:
-                // (-1) use to fine tuning the STRING_L2_2 offset_y
-                offset_y = ((widget_h / 2 - str_height) / 2) + (widget_h / 2) - (1);
-                break;
-            case LAYOUT_R31:
-                offset_y = ((widget_h / 3 - str_height) / 2);
-                break;
-            case LAYOUT_R32:
-                offset_y = (widget_h - str_height) / 2;
-                break;
-            case LAYOUT_R33:
-                offset_y = ((widget_h / 3 - str_height) / 2) + (widget_h / 3) * 2;
-                break;
-            case LAYOUT_R41:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 0;
-                break;
-            case LAYOUT_R42:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 1;
-                break;
-            case LAYOUT_R43:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 2;
-                break;
-            case LAYOUT_R44:
-                offset_y = ((widget_h / 4 - str_height) / 2) + (widget_h / 4) * 3;
-                break;
-        }
+    /**
+     * align = 0 String position x
+     * align = 1 String auto center
+     * align = 2 String auto left 
+     * align = 3 String auto right
+     */
+    switch (align) {
+    case CENTER_ALIGN:
+        offset_x = abs(widget_w - str_length) / 2;
+        break;
+    case LEFT_ALIGN:
+        /*(+3) left side stay 3 piexls*/
+        offset_x = 0 + (3); 
+        break;
+    case RIGHT_ALIGN:
+        /*(-2) right side stay 2 piexls*/
+        offset_x = abs(widget_w - str_length) / 2 * 2 - (2);
+        break;
+    }
 
+    uint32_t widget_y = widget[widget_num].set_y;
+    uint32_t widget_x = widget[widget_num].set_x;
+
+    if (align != MANUAL_ALIGN) {
         last_y = widget_y + offset_y;
         last_x = widget_x + offset_x;
+    } else {
+        last_y = y;
+        last_x = x;
     }
 
     if (select) {
-        display_solid_rect(last_y, last_x, str_length, str_height, WHITE, vm);
         color = BLACK;
+        display_bevel_rect(last_y, last_x, 
+            str_length, str_height, WHITE, 1, vm);
     }
-    display_cn_string_selected_digit(last_y, last_x, color, 0, font_size, string, selected_digit, vm);
+
+    display_cn_string_selected_digit(last_y, last_x, 
+        color, 0, font_size, string, selected_digit, vm);
 }
 
 void display_main_measure_data_unit_content_selected_digit(unsigned int y, unsigned int x, unsigned char align, unsigned char row, unsigned int widget_num, const unsigned char * string, unsigned int string_num, unsigned char color, unsigned char select, unsigned char selected_digit, unsigned char * vm)
