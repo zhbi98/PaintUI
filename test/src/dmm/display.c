@@ -84,19 +84,15 @@ void display_line(unsigned int y1, unsigned int x1, unsigned int y2, unsigned in
     row = y1;
     col = x1;
 
-    if (dx > 0)
-        increment_x = 1;
-    else if (dx == 0)
-        increment_x = 0;
+    if (dx > 0) increment_x = 1;
+    else if (dx == 0) increment_x = 0;
     else {
         increment_x = -1;
         dx = - dx;
     }
 
-    if (dy > 0)
-        increment_y = 1;
-    else if (dy == 0)
-        increment_y = 0;
+    if (dy > 0) increment_y = 1;
+    else if (dy == 0) increment_y = 0;
     else {
         increment_y = - 1;
         dy = -dy;
@@ -109,12 +105,15 @@ void display_line(unsigned int y1, unsigned int x1, unsigned int y2, unsigned in
 
     for (i = 0; i <= distance + 1; i++) {
         display_pixel(row, col, color, vm);
+
         xerr += dx;
         yerr += dy;
+
         if (xerr > distance) {
             xerr -= distance;
             col += increment_x;
         }
+
         if (yerr > distance) {
             yerr -= distance;
             row += increment_y;
