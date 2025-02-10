@@ -210,6 +210,73 @@ void display_hollow_triangle(unsigned int y, unsigned int x, unsigned int width,
     display_line(y + height, x + width, y + height, x, color, vm);
 }
 
+void _display_circle(uint16_t y, uint16_t x, uint16_t r, uint16_t color, uint8_t * vm)
+{
+    /**Bresenham 画圆算法*/
+    int16_t a = 0, b = r;
+    int16_t d = 3 - (r << 1); /**算法决策参数*/
+
+    /**如果圆在屏幕可见区域外，直接退出*/
+    if ((x - r < 0) || (x + r > TFT_WIDTH) || 
+        (y - r < 0) || (y + r > TFT_HEIGHT)) 
+        return;
+
+    /**开始画圆*/
+    while (a <= b) {
+        display_pixel(y - a, x - b, color, vm);
+        display_pixel(y - a, x + b, color, vm);
+        display_pixel(y + b, x - a, color, vm);
+        display_pixel(y - a, x - b, color, vm);
+        display_pixel(y - b, x - a, color, vm);
+        display_pixel(y + a, x + b, color, vm);
+        display_pixel(y - b, x + a, color, vm);
+        display_pixel(y + b, x + a, color, vm);
+        display_pixel(y + a, x - b, color, vm);
+        a++;
+
+        if (d < 0) d += 4 * a + 6;
+        else {
+            d += 10 + 4 * (a - b);
+            b--;
+        }
+
+        display_pixel(y + b, x + a, color, vm);
+    }
+}
+
+void display_circle(uint16_t y, uint16_t x, uint16_t r, uint16_t color, uint8_t * vm)
+{
+    /**Bresenham 画圆算法*/
+    int16_t a = 0, b = r;
+    int16_t d = 3 - (r << 1);
+
+    while (a <= b) {
+        int16_t i = a, p = b;
+        while (i > 0) {
+            display_pixel(y - i, x + b, color, vm);
+            display_pixel(y + b, x - i, color, vm);
+            i--;
+        }
+        while (p > 0) {
+            display_pixel(y - p, x - a, color, vm);
+            display_pixel(y - a, x - p, color, vm);
+            display_pixel(y - p, x + a, color, vm);
+            display_pixel(y + a, x - p, color, vm);
+            display_pixel(y + p, x + a, color, vm);
+            display_pixel(y + a, x + p, color, vm);
+            p--;
+        }
+        a++;
+        /**Bresenham 画圆算法*/
+        if (d < 0) d += 4 * a + 6;
+        else {
+            d += 10 + 4 * (a - b);
+            b--;
+        }
+    }
+    display_pixel(y, x, color, vm); /**圆心坐标*/
+}
+
 void display_bookmark(int y, unsigned int x, unsigned int width, unsigned int height, unsigned int color, unsigned char radian, unsigned char * vm)
 {
     unsigned char i, j;
