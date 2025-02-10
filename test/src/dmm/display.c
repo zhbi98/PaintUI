@@ -98,10 +98,8 @@ void display_line(unsigned int y1, unsigned int x1, unsigned int y2, unsigned in
         dy = -dy;
     }
 
-    if (dx > dy)
-        distance = dx;
-    else
-        distance = dy;
+    if (dx > dy) distance = dx;
+    else distance = dy;
 
     for (i = 0; i <= distance + 1; i++) {
         display_pixel(row, col, color, vm);
