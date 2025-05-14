@@ -3,7 +3,6 @@
 #define __TIMERS_H__
 
 #include "stm32f4xx.h"
-#include "nvic.h"
 
 #define CURRENT_TIMER              TIM6
 #define CURRENT_TIMER_CLOCK        RCC_APB1Periph_TIM6

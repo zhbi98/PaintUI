@@ -619,11 +619,6 @@
               <FilePath>..\hal\src\mpu6050.c</FilePath>
             </File>
             <File>
-              <FileName>nvic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\hal\src\nvic.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\hal\src\stm32f4xx_it.c</FilePath>

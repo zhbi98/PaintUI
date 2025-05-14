@@ -129,10 +129,10 @@ void setting_level1_key_event(unsigned char key_event)
 
 void setting_level1_key_event_enable(unsigned char key_event)
 {
-    widget[F1_MENUBAR_AREA].show   = true;
-    widget[F2_MENUBAR_AREA].show   = true;
-    widget[F3_MENUBAR_AREA].show   = true;
-    widget[F4_MENUBAR_AREA].show   = true;
-    widget[PREV_MENUBAR_AREA].show = true;
-    widget[NEXT_MENUBAR_AREA].show = true;
+    _Area[F1_MENUBAR_AREA].valid   = true;
+    _Area[F2_MENUBAR_AREA].valid   = true;
+    _Area[F3_MENUBAR_AREA].valid   = true;
+    _Area[F4_MENUBAR_AREA].valid   = true;
+    _Area[PREV_MENUBAR_AREA].valid = true;
+    _Area[NEXT_MENUBAR_AREA].valid = true;
 }

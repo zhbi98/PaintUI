@@ -467,8 +467,8 @@ void display_string_auto_place(unsigned int y, unsigned int x, unsigned char ali
     uint16_t str_length = string_valid_width(font_size, string);
     uint16_t str_height = string_valid_height(font_size, string);
 
-    uint32_t widget_w = widget[widget_num].width;
-    uint32_t widget_h = widget[widget_num].height;
+    uint32_t widget_w = _Area[widget_num].width;
+    uint32_t widget_h = _Area[widget_num].height;
 
     /**
      * Place row = 0 only 1 string display on center.
@@ -537,8 +537,8 @@ void display_string_auto_place(unsigned int y, unsigned int x, unsigned char ali
         break;
     }
 
-    uint32_t widget_y = widget[widget_num].set_y;
-    uint32_t widget_x = widget[widget_num].set_x;
+    uint32_t widget_y = _Area[widget_num].set_y;
+    uint32_t widget_x = _Area[widget_num].set_x;
 
     if (align != MANUAL_ALIGN) {
         last_y = widget_y + offset_y;
@@ -687,8 +687,8 @@ void display_string_auto_place_selected_digit(unsigned int y, unsigned int x, un
     uint16_t str_length = string_valid_width(font_size, string);
     uint16_t str_height = string_valid_height(font_size, string);
 
-    uint32_t widget_w = widget[widget_num].width;
-    uint32_t widget_h = widget[widget_num].height;
+    uint32_t widget_w = _Area[widget_num].width;
+    uint32_t widget_h = _Area[widget_num].height;
 
     /**
      * Place row = 0 only 1 string display on center.
@@ -757,8 +757,8 @@ void display_string_auto_place_selected_digit(unsigned int y, unsigned int x, un
         break;
     }
 
-    uint32_t widget_y = widget[widget_num].set_y;
-    uint32_t widget_x = widget[widget_num].set_x;
+    uint32_t widget_y = _Area[widget_num].set_y;
+    uint32_t widget_x = _Area[widget_num].set_x;
 
     if (align != MANUAL_ALIGN) {
         last_y = widget_y + offset_y;

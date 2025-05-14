@@ -6,19 +6,19 @@ void key_event_doing()
     static unsigned char release = true;
     unsigned char event = read_key_event();
 
-    if ((widget[F1_MENUBAR_AREA].show == true) && (F1_KEY_STATUS() == 1)){
+    if ((_Area[F1_MENUBAR_AREA].valid == true) && (F1_KEY_STATUS() == 1)){
         menubar_pressed(F1_KEY_EVT);
         release = true;
     }
-    if ((widget[F2_MENUBAR_AREA].show == true) && (F2_KEY_STATUS() == 0)){
+    if ((_Area[F2_MENUBAR_AREA].valid == true) && (F2_KEY_STATUS() == 0)){
         menubar_pressed(F2_KEY_EVT);
         release = true;
     }
-    if ((widget[F3_MENUBAR_AREA].show == true) && (F3_KEY_STATUS() == 0)){
+    if ((_Area[F3_MENUBAR_AREA].valid == true) && (F3_KEY_STATUS() == 0)){
         menubar_pressed(F3_KEY_EVT);
         release = true;
     }
-    if ((widget[F4_MENUBAR_AREA].show == true) && (F4_KEY_STATUS() == 0)){
+    if ((_Area[F4_MENUBAR_AREA].valid == true) && (F4_KEY_STATUS() == 0)){
         menubar_pressed(F4_KEY_EVT);
         release = true;
     }
@@ -51,8 +51,8 @@ void key_event_doing()
 
     switch (event) {
         case F1_KEY_EVT:
-            if (widget[DISPLAY_TFT_AREA5].show) {
-                if (widget[F1_MENUBAR_AREA].show) {
+            if (_Area[DISPLAY_TFT_AREA5].valid) {
+                if (_Area[F1_MENUBAR_AREA].valid) {
                     menubar_flush_enable();
 
                     // key released to display the effect
@@ -67,8 +67,8 @@ void key_event_doing()
             break;
 
         case F2_KEY_EVT:
-            if (widget[DISPLAY_TFT_AREA5].show) {
-                if (widget[F2_MENUBAR_AREA].show) {
+            if (_Area[DISPLAY_TFT_AREA5].valid) {
+                if (_Area[F2_MENUBAR_AREA].valid) {
                     menubar_flush_enable();
                     
                     // key released to display the effect
@@ -83,8 +83,8 @@ void key_event_doing()
             break;
 
         case F3_KEY_EVT:
-            if (widget[DISPLAY_TFT_AREA5].show) {
-                if (widget[F3_MENUBAR_AREA].show) {
+            if (_Area[DISPLAY_TFT_AREA5].valid) {
+                if (_Area[F3_MENUBAR_AREA].valid) {
                     menubar_flush_enable();
                     
                     // key released to display the effect
@@ -99,8 +99,8 @@ void key_event_doing()
             break;
 
         case F4_KEY_EVT:
-            if (widget[DISPLAY_TFT_AREA5].show) {
-                if (widget[F4_MENUBAR_AREA].show) {
+            if (_Area[DISPLAY_TFT_AREA5].valid) {
+                if (_Area[F4_MENUBAR_AREA].valid) {
                     menubar_flush_enable();
 
                     // key released to display the effect
@@ -115,8 +115,8 @@ void key_event_doing()
             break;
 
         case PREV_KEY_EVT:
-            if (widget[DISPLAY_TFT_AREA5].show) {
-                if (widget[F4_MENUBAR_AREA].show) {
+            if (_Area[DISPLAY_TFT_AREA5].valid) {
+                if (_Area[F4_MENUBAR_AREA].valid) {
                     menubar_flush_enable();
 
                     // key released to display the effect
@@ -131,8 +131,8 @@ void key_event_doing()
             break;
 
         case NEXT_KEY_EVT:
-            if (widget[DISPLAY_TFT_AREA5].show) {
-                if (widget[F4_MENUBAR_AREA].show) {
+            if (_Area[DISPLAY_TFT_AREA5].valid) {
+                if (_Area[F4_MENUBAR_AREA].valid) {
                     menubar_flush_enable();
 
                     // key released to display the effect

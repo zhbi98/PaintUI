@@ -329,59 +329,59 @@ void voltage_level1_key_event_enable(unsigned char key_event)
 
     if (voltage_measure.type == VOLTAGE_DC) {
         if (page == VOLTAGE_LEFT) {
-            widget[F1_MENUBAR_AREA].show   = true;
-            widget[F2_MENUBAR_AREA].show   = true;
-            widget[F3_MENUBAR_AREA].show   = true;
-            widget[F4_MENUBAR_AREA].show   = true;
-            widget[PREV_MENUBAR_AREA].show = true;
-            widget[NEXT_MENUBAR_AREA].show = true;
+            _Area[F1_MENUBAR_AREA].valid   = true;
+            _Area[F2_MENUBAR_AREA].valid   = true;
+            _Area[F3_MENUBAR_AREA].valid   = true;
+            _Area[F4_MENUBAR_AREA].valid   = true;
+            _Area[PREV_MENUBAR_AREA].valid = true;
+            _Area[NEXT_MENUBAR_AREA].valid = true;
         }
 
         if (page == VOLTAGE_CENTER) {
-            widget[F1_MENUBAR_AREA].show   = true;
-            widget[F2_MENUBAR_AREA].show   = true;
-            widget[F3_MENUBAR_AREA].show   = true;
-            widget[F4_MENUBAR_AREA].show   = true;
-            widget[PREV_MENUBAR_AREA].show = true;
-            widget[NEXT_MENUBAR_AREA].show = true;
+            _Area[F1_MENUBAR_AREA].valid   = true;
+            _Area[F2_MENUBAR_AREA].valid   = true;
+            _Area[F3_MENUBAR_AREA].valid   = true;
+            _Area[F4_MENUBAR_AREA].valid   = true;
+            _Area[PREV_MENUBAR_AREA].valid = true;
+            _Area[NEXT_MENUBAR_AREA].valid = true;
         }
 
         if (page == VOLTAGE_RIGHT) {
-            widget[F1_MENUBAR_AREA].show   = true;
-            widget[F2_MENUBAR_AREA].show   = true;
-            widget[F3_MENUBAR_AREA].show   = true;
-            widget[F4_MENUBAR_AREA].show   = true;
-            widget[PREV_MENUBAR_AREA].show = true;
-            widget[NEXT_MENUBAR_AREA].show = true;
+            _Area[F1_MENUBAR_AREA].valid   = true;
+            _Area[F2_MENUBAR_AREA].valid   = true;
+            _Area[F3_MENUBAR_AREA].valid   = true;
+            _Area[F4_MENUBAR_AREA].valid   = true;
+            _Area[PREV_MENUBAR_AREA].valid = true;
+            _Area[NEXT_MENUBAR_AREA].valid = true;
         }
     }
 
     if (voltage_measure.type == VOLTAGE_AC) {
         if (page == VOLTAGE_LEFT) {
-            widget[F1_MENUBAR_AREA].show   = true;
-            widget[F2_MENUBAR_AREA].show   = true;
-            widget[F3_MENUBAR_AREA].show   = true;
-            widget[F4_MENUBAR_AREA].show   = true;
-            widget[PREV_MENUBAR_AREA].show = true;
-            widget[NEXT_MENUBAR_AREA].show = true;
+            _Area[F1_MENUBAR_AREA].valid   = true;
+            _Area[F2_MENUBAR_AREA].valid   = true;
+            _Area[F3_MENUBAR_AREA].valid   = true;
+            _Area[F4_MENUBAR_AREA].valid   = true;
+            _Area[PREV_MENUBAR_AREA].valid = true;
+            _Area[NEXT_MENUBAR_AREA].valid = true;
         }
 
         if (page == VOLTAGE_CENTER) {
-            widget[F1_MENUBAR_AREA].show   = true;
-            widget[F2_MENUBAR_AREA].show   = true;
-            widget[F3_MENUBAR_AREA].show   = true;
-            widget[F4_MENUBAR_AREA].show   = true;
-            widget[PREV_MENUBAR_AREA].show = true;
-            widget[NEXT_MENUBAR_AREA].show = true;
+            _Area[F1_MENUBAR_AREA].valid   = true;
+            _Area[F2_MENUBAR_AREA].valid   = true;
+            _Area[F3_MENUBAR_AREA].valid   = true;
+            _Area[F4_MENUBAR_AREA].valid   = true;
+            _Area[PREV_MENUBAR_AREA].valid = true;
+            _Area[NEXT_MENUBAR_AREA].valid = true;
         }
 
         if (page == VOLTAGE_RIGHT) {
-            widget[F1_MENUBAR_AREA].show   = true;
-            widget[F2_MENUBAR_AREA].show   = true;
-            widget[F3_MENUBAR_AREA].show   = true;
-            widget[F4_MENUBAR_AREA].show   = true;
-            widget[PREV_MENUBAR_AREA].show = true;
-            widget[NEXT_MENUBAR_AREA].show = true;
+            _Area[F1_MENUBAR_AREA].valid   = true;
+            _Area[F2_MENUBAR_AREA].valid   = true;
+            _Area[F3_MENUBAR_AREA].valid   = true;
+            _Area[F4_MENUBAR_AREA].valid   = true;
+            _Area[PREV_MENUBAR_AREA].valid = true;
+            _Area[NEXT_MENUBAR_AREA].valid = true;
         }
     }
 }

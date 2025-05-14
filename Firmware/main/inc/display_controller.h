@@ -3,45 +3,44 @@
 #define __DISPLAY_CONTROLLER_H__
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "ili9341a.h"
 
 #include "voltage_v.h"
 #include "display_show.h"
 
-#define FUNCTION_TYPE_MAX 16U
-#define MENUBAR_LEVEL_MAX  2U
+#define FUNC_TYPE_MAX 16U
+#define DEPTH_MAX  2U
 #define WIDGET_NUM_MAX    40U
 
 // This is tft region and write data driver interface
 #define TFT_REGION_SETTING_DRV ili9341_display_region
 #define TFT_WRITE_DATA_DRV     ili9341_write_data
 
-struct module_t {
-    unsigned int set_x;
-    unsigned int set_y;
-    unsigned int width;
-    unsigned int height;
+/**
+ * Device display Area
+ */
+typedef struct {
+    uint16_t set_x;
+    uint16_t set_y;
+    uint16_t width;
+    uint16_t height;
+    bool valid;
+    bool refer;
+    bool pressed;
+} dev_area_t;
 
-    unsigned char show;
-    unsigned char renew;
-    unsigned char auto_renew;
-    unsigned char pressed;
-};
-
-struct menubar_t {
-    // What function is displayed
-    // in the current menu
-    unsigned char menu_function;
-    // Which level of the menu of each function
-    // is currently located
-    unsigned char menu_level[FUNCTION_TYPE_MAX];
-    // Which menu level of which function was pressed
-    unsigned char menu_selected[FUNCTION_TYPE_MAX][MENUBAR_LEVEL_MAX];
-    // Which page of that function is currently on
-    unsigned char menu_page[FUNCTION_TYPE_MAX];
-    unsigned char pressed;
-};
+/**
+ * Device display Area
+ */
+typedef struct {
+    uint8_t _func;
+    uint8_t func;
+    uint8_t _depth[FUNC_TYPE_MAX];
+    uint8_t pressed[FUNC_TYPE_MAX][DEPTH_MAX];
+    uint8_t page[FUNC_TYPE_MAX];
+} dev_actbar_t;
 
 enum widget_number {
     DISPLAY_TFT_AREA1,
@@ -88,92 +87,92 @@ enum widget_number {
     SETTING_LIST_AREA,
 };
 
-typedef void key_event_interface(unsigned char key);
-typedef void menu_content_interface(unsigned char key_event, unsigned char * vm);
-typedef void display_show_interface(unsigned char * vm);
+typedef void key_event_interface(uint8_t key);
+typedef void menu_content_interface(uint8_t key_event, uint8_t * vm);
+typedef void display_show_interface(uint8_t * vm);
 
-typedef void (* tft_region_setting)(unsigned int y, unsigned int x, unsigned int width, unsigned int height);
-typedef void (* tft_write_data)(unsigned int data);
+typedef void (* tft_region_setting)(uint32_t y, uint32_t x, uint32_t width, uint32_t height);
+typedef void (* tft_write_data)(uint32_t data);
 
-extern const key_event_interface * key_event_controller[][MENUBAR_LEVEL_MAX];
-extern const key_event_interface * key_event_enable[][MENUBAR_LEVEL_MAX];
-extern const menu_content_interface * display_menu_content[][MENUBAR_LEVEL_MAX];
+extern const key_event_interface * key_event_controller[][DEPTH_MAX];
+extern const key_event_interface * key_event_enable[][DEPTH_MAX];
+extern const menu_content_interface * display_menu_content[][DEPTH_MAX];
 extern const display_show_interface * display_widget_show[];
 
-extern struct module_t widget[];
-extern struct menubar_t menubar;
+extern dev_area_t _Area[];
+extern dev_actbar_t menubar;
 
 extern void widget_size_init();
 
-extern void set_menubar_function(unsigned char function);
-extern unsigned char read_menubar_function();
+extern void set_menubar_function(uint8_t function);
+extern uint8_t read_menubar_function();
 
-extern void set_menubar_level(unsigned char level);
-extern unsigned char read_menu_level();
+extern void set_menubar_level(uint8_t level);
+extern uint8_t read_menu_level();
 
-extern void set_menubar_page(unsigned char page);
-extern unsigned char read_menubar_page();
+extern void set_menubar_page(uint8_t page);
+extern uint8_t read_menubar_page();
 
-extern void set_menubar_pressed(unsigned char menu_num);
-extern unsigned char read_pressed_menubar();
+extern void set_menubar_pressed(uint8_t menu_num);
+extern uint8_t read_pressed_menubar();
 
-extern void function_key_event(unsigned char key_event);
-extern void function_key_event_enable(unsigned char key);
+extern void function_key_event(uint8_t key_event);
+extern void function_key_event_enable(uint8_t key);
 
-extern void display_menubar_content(unsigned char key_event, unsigned char * vm);
-extern void menubar_pressed(unsigned char key_event);
+extern void display_menubar_content(uint8_t key_event, uint8_t * vm);
+extern void menubar_pressed(uint8_t key_event);
 
-extern void display_area1_flush(unsigned char * vm);
+extern void display_area1_flush(uint8_t * vm);
 extern void display_area1_flush_enable();
-extern void display_battery_flush(unsigned char * vm);
+extern void display_battery_flush(uint8_t * vm);
 extern void battery_flush_enable();
-extern void display_bluetooth_flush(unsigned char * vm);
-extern void display_power_off_timer_flush(unsigned char * vm);
-extern void display_trumpet_flush(unsigned char * vm);
-extern void display_lighting_flush(unsigned char * vm);
-extern void display_real_time_flush(unsigned char * vm);
+extern void display_bluetooth_flush(uint8_t * vm);
+extern void display_power_off_timer_flush(uint8_t * vm);
+extern void display_trumpet_flush(uint8_t * vm);
+extern void display_lighting_flush(uint8_t * vm);
+extern void display_real_time_flush(uint8_t * vm);
 
-extern void display_area2_flush(unsigned char * vm);
+extern void display_area2_flush(uint8_t * vm);
 extern void display_area2_flush_enable();
-extern void display_measure_value_mode_flush(unsigned char * vm);
-extern void display_recording_flush(unsigned char * vm);
-extern void display_hold_flush(unsigned char * vm);
-extern void display_relative_value_flush(unsigned char * vm);
+extern void display_measure_value_mode_flush(uint8_t * vm);
+extern void display_recording_flush(uint8_t * vm);
+extern void display_hold_flush(uint8_t * vm);
+extern void display_relative_value_flush(uint8_t * vm);
 
-extern void display_area3_flush(unsigned char * vm);
+extern void display_area3_flush(uint8_t * vm);
 extern void display_area3_flush_enable();
-extern void display_measure_value_flush(unsigned char * vm);
-extern void display_measure_value_unit_flush(unsigned char * vm);
+extern void display_measure_value_flush(uint8_t * vm);
+extern void display_measure_value_unit_flush(uint8_t * vm);
 extern void measure_value_flush_enable();
 
-extern void display_area4_flush(unsigned char * vm);
+extern void display_area4_flush(uint8_t * vm);
 extern void display_area4_flush_enable();
-extern void display_measure_lo_flush(unsigned char * vm);
-extern void display_measure_loz_flush(unsigned char * vm);
-extern void display_measure_ruler_flush(unsigned char * vm);
-extern void display_measure_range_status_flush(unsigned char * vm);
+extern void display_measure_lo_flush(uint8_t * vm);
+extern void display_measure_loz_flush(uint8_t * vm);
+extern void display_measure_ruler_flush(uint8_t * vm);
+extern void display_measure_range_status_flush(uint8_t * vm);
 
-extern void display_area5_flush(unsigned char * vm);
+extern void display_area5_flush(uint8_t * vm);
 extern void display_area5_flush_enable();
-extern void display_f1_menubar_flush(unsigned char * vm);
-extern void display_f2_menubar_flush(unsigned char * vm);
-extern void display_f3_menubar_flush(unsigned char * vm);
-extern void display_f4_menubar_flush(unsigned char * vm);
-extern void display_prev_menubar_flush(unsigned char * vm);
-extern void display_next_menubar_flush(unsigned char * vm);
+extern void display_f1_menubar_flush(uint8_t * vm);
+extern void display_f2_menubar_flush(uint8_t * vm);
+extern void display_f3_menubar_flush(uint8_t * vm);
+extern void display_f4_menubar_flush(uint8_t * vm);
+extern void display_prev_menubar_flush(uint8_t * vm);
+extern void display_next_menubar_flush(uint8_t * vm);
 extern void menubar_flush_enable();
-static void measure_interface(unsigned char * vm);
+static void measure_interface(uint8_t * vm);
 
-extern void display_setting_area2_flush(unsigned char * vm);
+extern void display_setting_area2_flush(uint8_t * vm);
 extern void display_setting_area2_flush_enable();
-extern void display_setting_list_flush(unsigned char * vm);
-static void setting_interface(unsigned char * vm);
+extern void display_setting_list_flush(uint8_t * vm);
+static void setting_interface(uint8_t * vm);
 
-extern void display_flush(unsigned char * vm);
+extern void display_flush(uint8_t * vm);
 
 // This related to tft driver
-extern void tft_clear(unsigned char color);
-extern void tft_flush_area(unsigned char area_num, unsigned char * vm);
-extern void tft_flush(unsigned char * vm);
+extern void tft_clear(uint8_t color);
+extern void tft_flush_area(uint8_t area_num, uint8_t * vm);
+extern void tft_flush(uint8_t * vm);
 
 #endif

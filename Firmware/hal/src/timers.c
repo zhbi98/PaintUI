@@ -54,7 +54,15 @@ void timers_model_init(uint32_t times, uint32_t prescaler)
 
 void timers_init(uint32_t times, uint32_t prescaler)
 {
-    nvic_init(NVIC_PriorityGroup_0, CURRENT_TIMER_IRQN, 0, 3);
+    NVIC_InitTypeDef nvic_init = {0};
+
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    nvic_init.NVIC_IRQChannel = CURRENT_TIMER_IRQN;
+    nvic_init.NVIC_IRQChannelPreemptionPriority = 0;
+    nvic_init.NVIC_IRQChannelSubPriority = 3;
+    nvic_init.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&nvic_init);
+
     timers_model_init(times, prescaler);
 }
 
