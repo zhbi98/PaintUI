@@ -84,38 +84,38 @@ unsigned char read_key_event()
         case 0x7f:
             k = F1_KEY_EVT;
             // key pressed to display the effect
-            if (_Area[F1_MENUBAR_AREA].valid)
-                menubar_pressed(F1_KEY_EVT);
+            if (_Area[DMM_F1_BTN].valid)
+                actbar_btn_pressed(F1_KEY_EVT);
             break;
         case 0xbf:
             k = F2_KEY_EVT;
             // key pressed to display the effect
-            if (_Area[F2_MENUBAR_AREA].valid)
-                menubar_pressed(F2_KEY_EVT);
+            if (_Area[DMM_F2_BTN].valid)
+                actbar_btn_pressed(F2_KEY_EVT);
             break;
         case 0xdf:
             k = F3_KEY_EVT;
             // key pressed to display the effect
-            if (_Area[F3_MENUBAR_AREA].valid)
-                menubar_pressed(F3_KEY_EVT);
+            if (_Area[DMM_F3_BTN].valid)
+                actbar_btn_pressed(F3_KEY_EVT);
             break;
         case 0xef:
             k = F4_KEY_EVT;
             // key pressed to display the effect
-            if (_Area[F4_MENUBAR_AREA].valid)
-                menubar_pressed(F4_KEY_EVT);
+            if (_Area[DMM_F4_BTN].valid)
+                actbar_btn_pressed(F4_KEY_EVT);
             break;
         case 0x00:
             k = PREV_KEY_EVT;
             // key pressed to display the effect
-            if (_Area[PREV_MENUBAR_AREA].valid)
-                menubar_pressed(PREV_KEY_EVT);
+            if (_Area[DMM_PREV_BTN].valid)
+                actbar_btn_pressed(PREV_KEY_EVT);
             break;
         case 0x01:
             k = NEXT_KEY_EVT;
             // key pressed to display the effect
-            if (_Area[NEXT_MENUBAR_AREA].valid)
-                menubar_pressed(NEXT_KEY_EVT);
+            if (_Area[DMM_NEXT_BTN].valid)
+                actbar_btn_pressed(NEXT_KEY_EVT);
             break;
         default:
             k = RELEASE;

@@ -278,7 +278,7 @@ unsigned char * get_day()
 unsigned char * get_real_time()
 {
     /**
-     * if (read_menubar_function() != DMM_SETTING) {
+     * if (act_bar_get_func() != DMM_SETTING) {
      *     equip.time.hour   = get_rtc_hour();
      *     equip.time.minute = get_rtc_minute();
      *     equip.time.second = get_rtc_second();
@@ -286,7 +286,7 @@ unsigned char * get_real_time()
      *     equip.date.month  = get_rtc_month();
      *     equip.date.day    = get_rtc_day();
      * } else if (
-     *     (read_menubar_function() == DMM_SETTING) && (
+     *     (act_bar_get_func() == DMM_SETTING) && (
      *     (get_param_number() != SETUP_RTC_TIME) && 
      *     (get_param_number() != SETUP_RTC_DATE))
      * ) {

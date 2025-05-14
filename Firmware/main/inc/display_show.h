@@ -17,41 +17,34 @@
 
 extern struct status_logo_pool_t logo_pool;
 
-extern void get_status_logo_active();
-
-extern void display_area1_show(unsigned char * vm);
-extern void display_battery_show(unsigned char * vm);
-extern void display_buletooth_show(unsigned char * vm);
-extern void display_power_off_timer_show(unsigned char * vm);
-extern void display_trumpet_show(unsigned char * vm);
-extern void display_lighting_show(unsigned char * vm);
-extern void display_real_time_show(unsigned char * vm);
-
-extern void display_area2_show(unsigned char * vm);
-extern void display_measure_mode_show(unsigned char * vm);
-extern void display_recording_show(unsigned char * vm);
-extern void display_hold_show(unsigned char * vm);
-extern void display_relative_value_show(unsigned char * vm);
-
-extern void display_area3_show(unsigned char * vm);
-extern void display_measure_value_show(unsigned char * vm);
-extern void display_measure_value_unit_show(unsigned char * vm);
-
-extern void display_area4_show(unsigned char * vm);
-extern void display_measure_lo_show(unsigned char * vm);
-extern void display_measure_loz_show(unsigned char * vm);
-extern void display_measure_ruler_show(unsigned char * vm);
-extern void display_range_status_show(unsigned char * vm);
-
-extern void display_area5_show(unsigned char * vm);
-extern void display_f1_menubar_area_show(unsigned char * vm);
-extern void display_f2_menubar_area_show(unsigned char * vm);
-extern void display_f3_menubar_area_show(unsigned char * vm);
-extern void display_f4_menubar_area_show(unsigned char * vm);
-extern void display_prev_menubar_area_show(unsigned char * vm);
-extern void display_next_menubar_area_show(unsigned char * vm);
-
-extern void display_setting_area2_show(unsigned char * vm);
-extern void display_setting_list_show(unsigned char * vm);
+void dev_topbar_cont_refer(uint8_t * vm);
+void dev_battery_refer(uint8_t * vm);
+void dev_buletooth_refer(uint8_t * vm);
+void dev_poff_tim_refer(uint8_t * vm);
+void dev_trumpet_refer(uint8_t * vm);
+void dev_lighting_refer(uint8_t * vm);
+void dev_realtim_refer(uint8_t * vm);
+void dmm_zone_cont_refer(uint8_t * vm);
+void dmm_mea_mod_refer(uint8_t * vm);
+void dmm_rec_refer(uint8_t * vm);
+void dmm_hold_state_refer(uint8_t * vm);
+void dmm_rel_val_refer(uint8_t * vm);
+void dmm_ret_cont_refer(uint8_t * vm);
+void dmm_ret_val_refer(uint8_t * vm);
+void dmm_ret_unit_refer(uint8_t * vm);
+void dmm_bcht_cont_refer(uint8_t * vm);
+void dmm_mea_lpf_refer(uint8_t * vm);
+void dmm_loz_state_refer(uint8_t * vm);
+void dmm_bcht_refer(uint8_t * vm);
+void dmm_run_state_refer(uint8_t * vm);
+void dmm_actbar_cont_fefer(uint8_t * vm);
+void dmm_f1_btn_refer(uint8_t * vm);
+void dmm_f2_btn_refer(uint8_t * vm);
+void dmm_f3_btn_refer(uint8_t * vm);
+void dmm_f4_btn_refer(uint8_t * vm);
+void dmm_prev_btn_refer(uint8_t * vm);
+void dmm_next_btn_refer(uint8_t * vm);
+void ctl_tabv_cont_refer(uint8_t * vm);
+void ctl_tabv_refer(uint8_t * vm);
 
 #endif

@@ -1,903 +1,828 @@
 
 #include "display_controller.h"
 
-dev_area_t _Area[WIDGET_NUM_MAX];
-dev_actbar_t menubar;
-
-const key_event_interface * key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {voltage_level1_key_event,        NULL},
-    {setting_level1_key_event,        NULL},
+/*Activity DMM*/
+const key_event_interface * dmm_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {voltage_level1_key_event, NULL},
 };
 
-const key_event_interface * key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
+const key_event_interface * dmm_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
     {voltage_level1_key_event_enable, NULL},
+};
+
+const menu_content_interface * dmm_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {voltage_level1_menu, NULL},
+};
+
+/*Activity CTL*/
+const key_event_interface * ctl_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {setting_level1_key_event, NULL},
+};
+
+const key_event_interface * ctl_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
     {setting_level1_key_event_enable, NULL},
 };
 
-const menu_content_interface * display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {voltage_level1_menu,             NULL},
-    {setting_level1_menu,             NULL},
+const menu_content_interface * ctl_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {setting_level1_menu, NULL},
 };
 
-const display_show_interface * display_widget_show[] = {
-    display_area1_show,
-    display_area2_show,
-    display_area3_show,
-    display_area4_show,
-    display_area5_show,
-    display_setting_area2_show,
+dev_area_t _Area[_Area_NUM_MAX] = {0};
+dev_actbar_t _dmm_actbar = {0};
+dev_actbar_t _ctl_actbar = {0};
 
-    display_battery_show,
-    display_buletooth_show,
-    display_power_off_timer_show,
-    display_trumpet_show,
-    display_lighting_show,
-    display_real_time_show,
-
-    display_measure_mode_show,
-    display_recording_show,
-    display_hold_show,
-    display_relative_value_show,
-
-    display_measure_value_show,
-    display_measure_value_unit_show,
-
-    display_measure_lo_show,
-    display_measure_loz_show,
-    display_measure_ruler_show,
-    display_range_status_show,
-
-    display_f1_menubar_area_show,
-    display_f2_menubar_area_show,
-    display_f3_menubar_area_show,
-    display_f4_menubar_area_show,
-    display_prev_menubar_area_show,
-    display_next_menubar_area_show,
-
-    display_setting_list_show,
-};
-
-void widget_size_init()
+void _Area_init()
 {
-    _Area[DISPLAY_TFT_AREA1].set_y             = 0;
-    _Area[DISPLAY_TFT_AREA1].set_x             = 0;
-    _Area[DISPLAY_TFT_AREA1].width             = 320;
-    _Area[DISPLAY_TFT_AREA1].height            = 24;
-    _Area[DISPLAY_TFT_AREA1].valid              = true;
-    _Area[DISPLAY_TFT_AREA1].refer             = true;
+    _Area[DEV_TOPBAR_CONT].set_y = 0;
+    _Area[DEV_TOPBAR_CONT].set_x = 0;
+    _Area[DEV_TOPBAR_CONT].width = 320;
+    _Area[DEV_TOPBAR_CONT].height = 24;
+    _Area[DEV_TOPBAR_CONT].valid = true;
+    _Area[DEV_TOPBAR_CONT].refer = true;
+
+    _Area[DEV_BAT].set_y = 4;
+    _Area[DEV_BAT].set_x = 12;
+    _Area[DEV_BAT].width = 23;
+    _Area[DEV_BAT].height = 13;
+    _Area[DEV_BAT].valid = true;
+    _Area[DEV_BAT].refer = true;
     
-    _Area[DISPLAY_TFT_AREA2].set_y             = 24;
-    _Area[DISPLAY_TFT_AREA2].set_x             = 0;
-    _Area[DISPLAY_TFT_AREA2].width             = 320;
-    _Area[DISPLAY_TFT_AREA2].height            = 54;
-    _Area[DISPLAY_TFT_AREA2].valid              = true;
-    _Area[DISPLAY_TFT_AREA2].refer             = true;
+    _Area[DEV_BLE].set_y = 3;
+    _Area[DEV_BLE].set_x = 43;
+    _Area[DEV_BLE].width = 16;
+    _Area[DEV_BLE].height = 16;
+    _Area[DEV_BLE].valid = true;
+    _Area[DEV_BLE].refer = true;
     
-    _Area[DISPLAY_TFT_AREA3].set_y             = 78;
-    _Area[DISPLAY_TFT_AREA3].set_x             = 0;
-    _Area[DISPLAY_TFT_AREA3].width             = 320;
-    _Area[DISPLAY_TFT_AREA3].height            = 84;
-    _Area[DISPLAY_TFT_AREA3].valid              = true;
-    _Area[DISPLAY_TFT_AREA3].refer             = true;
+    _Area[DEV_POFF_TIM].set_y = 3;
+    _Area[DEV_POFF_TIM].set_x = 67;
+    _Area[DEV_POFF_TIM].width = 16;
+    _Area[DEV_POFF_TIM].height = 16;
+    _Area[DEV_POFF_TIM].valid = true;
+    _Area[DEV_POFF_TIM].refer = true;
     
-    _Area[DISPLAY_TFT_AREA4].set_y             = 162;
-    _Area[DISPLAY_TFT_AREA4].set_x             = 0;
-    _Area[DISPLAY_TFT_AREA4].width             = 320;
-    _Area[DISPLAY_TFT_AREA4].height            = 53;
-    _Area[DISPLAY_TFT_AREA4].valid              = true;
-    _Area[DISPLAY_TFT_AREA4].refer             = true;
+    _Area[DEV_TRUMPET].set_y = 3;
+    _Area[DEV_TRUMPET].set_x = 91;
+    _Area[DEV_TRUMPET].width = 16;
+    _Area[DEV_TRUMPET].height = 16;
+    _Area[DEV_TRUMPET].valid = true;
+    _Area[DEV_TRUMPET].refer = true;
     
-    _Area[DISPLAY_TFT_AREA5].set_y             = 215;
-    _Area[DISPLAY_TFT_AREA5].set_x             = 0;
-    _Area[DISPLAY_TFT_AREA5].width             = 320;
-    _Area[DISPLAY_TFT_AREA5].height            = 24;
-    _Area[DISPLAY_TFT_AREA5].valid              = true;
-    _Area[DISPLAY_TFT_AREA5].refer             = true;
+    _Area[DEV_LIGHTING].set_y = 3;
+    _Area[DEV_LIGHTING].set_x = 115;
+    _Area[DEV_LIGHTING].width = 16;
+    _Area[DEV_LIGHTING].height = 16;
+    _Area[DEV_LIGHTING].valid = true;
+    _Area[DEV_LIGHTING].refer = true;
     
-    _Area[DISPLAY_SETTING_AREA2].set_y         = 24;
-    _Area[DISPLAY_SETTING_AREA2].set_x         = 0;
-    _Area[DISPLAY_SETTING_AREA2].width         = 320;
-    _Area[DISPLAY_SETTING_AREA2].height        = 191;
-    _Area[DISPLAY_SETTING_AREA2].valid          = true;
-    _Area[DISPLAY_SETTING_AREA2].refer         = true;
+    _Area[DEV_REAL_TIM].set_y = 5;
+    _Area[DEV_REAL_TIM].set_x = 194;
+    _Area[DEV_REAL_TIM].width = 123;
+    _Area[DEV_REAL_TIM].height = 12;
+    _Area[DEV_REAL_TIM].valid = true;
+    _Area[DEV_REAL_TIM].refer = true;
+
+    _Area[DMM_ZONE_CONT].set_y = 24;
+    _Area[DMM_ZONE_CONT].set_x = 0;
+    _Area[DMM_ZONE_CONT].width = 320;
+    _Area[DMM_ZONE_CONT].height = 54;
+    _Area[DMM_ZONE_CONT].valid = true;
+    _Area[DMM_ZONE_CONT].refer = true;
+
+    _Area[DMM_RUN_STATE].set_y = 37;
+    _Area[DMM_RUN_STATE].set_x = 16;
+    _Area[DMM_RUN_STATE].width = 40;
+    _Area[DMM_RUN_STATE].height = 20;
+    _Area[DMM_RUN_STATE].valid = true;
+    _Area[DMM_RUN_STATE].refer = true;
     
-    _Area[DISPLAY_BATTERY_AREA].set_y          = 4;
-    _Area[DISPLAY_BATTERY_AREA].set_x          = 12;
-    _Area[DISPLAY_BATTERY_AREA].width          = 23;
-    _Area[DISPLAY_BATTERY_AREA].height         = 13;
-    _Area[DISPLAY_BATTERY_AREA].valid           = true;
-    _Area[DISPLAY_BATTERY_AREA].refer          = true;
+    _Area[DMM_REC].set_y = 35;
+    _Area[DMM_REC].set_x = 157;
+    _Area[DMM_REC].width = 99;
+    _Area[DMM_REC].height = 18;
+    _Area[DMM_REC].valid = true;
+    _Area[DMM_REC].refer = true;
     
-    _Area[DISPLAY_BLUETOOTH_AREA].set_y        = 3;
-    _Area[DISPLAY_BLUETOOTH_AREA].set_x        = 43;
-    _Area[DISPLAY_BLUETOOTH_AREA].width        = 16;
-    _Area[DISPLAY_BLUETOOTH_AREA].height       = 16;
-    _Area[DISPLAY_BLUETOOTH_AREA].valid         = true;
-    _Area[DISPLAY_BLUETOOTH_AREA].refer        = true;
+    _Area[DMM_HOLD].set_y = 35;
+    _Area[DMM_HOLD].set_x = 259;
+    _Area[DMM_HOLD].width = 47;
+    _Area[DMM_HOLD].height = 18;
+    _Area[DMM_HOLD].valid = true;
+    _Area[DMM_HOLD].refer = true;
     
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].set_y  = 3;
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].set_x  = 67;
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].width  = 16;
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].height = 16;
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].valid   = true;
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].refer  = true;
+    _Area[DMM_REL_VAL].set_y = 58;
+    _Area[DMM_REL_VAL].set_x = 182;
+    _Area[DMM_REL_VAL].width = 124;
+    _Area[DMM_REL_VAL].height = 23;
+    _Area[DMM_REL_VAL].valid = true;
+    _Area[DMM_REL_VAL].refer = true;
+
+    _Area[DMM_RET_CONT].set_y = 78;
+    _Area[DMM_RET_CONT].set_x = 0;
+    _Area[DMM_RET_CONT].width = 320;
+    _Area[DMM_RET_CONT].height = 84;
+    _Area[DMM_RET_CONT].valid = true;
+    _Area[DMM_RET_CONT].refer = true;
+
+    _Area[DMM_RET_VAL].set_y = 83;
+    _Area[DMM_RET_VAL].set_x = 15;
+    _Area[DMM_RET_VAL].width = 250;
+    _Area[DMM_RET_VAL].height = 70;
+    _Area[DMM_RET_VAL].valid = true;
+    _Area[DMM_RET_VAL].refer = true;
     
-    _Area[DISPLAY_TRUMPET_AREA].set_y          = 3;
-    _Area[DISPLAY_TRUMPET_AREA].set_x          = 91;
-    _Area[DISPLAY_TRUMPET_AREA].width          = 16;
-    _Area[DISPLAY_TRUMPET_AREA].height         = 16;
-    _Area[DISPLAY_TRUMPET_AREA].valid           = true;
-    _Area[DISPLAY_TRUMPET_AREA].refer          = true;
+    _Area[DMM_RET_UNIT].set_y = 130;
+    _Area[DMM_RET_UNIT].set_x = 266;
+    _Area[DMM_RET_UNIT].width = 42;
+    _Area[DMM_RET_UNIT].height = 19;
+    _Area[DMM_RET_UNIT].valid = true;
+    _Area[DMM_RET_UNIT].refer = true;
     
-    _Area[DISPLAY_LIGHTING_AREA].set_y         = 3;
-    _Area[DISPLAY_LIGHTING_AREA].set_x         = 115;
-    _Area[DISPLAY_LIGHTING_AREA].width         = 16;
-    _Area[DISPLAY_LIGHTING_AREA].height        = 16;
-    _Area[DISPLAY_LIGHTING_AREA].valid          = true;
-    _Area[DISPLAY_LIGHTING_AREA].refer         = true;
+    _Area[DMM_MEA_LPF].set_y = 189;
+    _Area[DMM_MEA_LPF].set_x = 5;
+    _Area[DMM_MEA_LPF].width = 32;
+    _Area[DMM_MEA_LPF].height = 15;
+    _Area[DMM_MEA_LPF].valid = true;
+    _Area[DMM_MEA_LPF].refer = true;
     
-    _Area[DISPLAY_REAL_TIME_AREA].set_y        = 5;
-    _Area[DISPLAY_REAL_TIME_AREA].set_x        = 194;
-    _Area[DISPLAY_REAL_TIME_AREA].width        = 123;
-    _Area[DISPLAY_REAL_TIME_AREA].height       = 12;
-    _Area[DISPLAY_REAL_TIME_AREA].valid         = true;
-    _Area[DISPLAY_REAL_TIME_AREA].refer        = true;
+    _Area[DMM_LOZ].set_y = 189;
+    _Area[DMM_LOZ].set_x = 293;
+    _Area[DMM_LOZ].width = 32;
+    _Area[DMM_LOZ].height = 12;
+    _Area[DMM_LOZ].valid = true;
+    _Area[DMM_LOZ].refer = true;
+
+    _Area[DMM_BCHT_CONT].set_y = 162;
+    _Area[DMM_BCHT_CONT].set_x = 0;
+    _Area[DMM_BCHT_CONT].width = 320;
+    _Area[DMM_BCHT_CONT].height = 53;
+    _Area[DMM_BCHT_CONT].valid = true;
+    _Area[DMM_BCHT_CONT].refer = true;
+
+    _Area[DMM_BCHT].set_y = 170;
+    _Area[DMM_BCHT].set_x = 29;
+    _Area[DMM_BCHT].width = 240;
+    _Area[DMM_BCHT].height = 20;
+    _Area[DMM_BCHT].valid = true;
+    _Area[DMM_BCHT].refer = true;
     
-    _Area[MEASURE_VALUE_MODE_AREA].set_y       = 37;
-    _Area[MEASURE_VALUE_MODE_AREA].set_x       = 16;
-    _Area[MEASURE_VALUE_MODE_AREA].width       = 40;
-    _Area[MEASURE_VALUE_MODE_AREA].height      = 20;
-    _Area[MEASURE_VALUE_MODE_AREA].valid        = true;
-    _Area[MEASURE_VALUE_MODE_AREA].refer       = true;
+    _Area[DMM_RANGE_STATUS].set_y = 37;
+    _Area[DMM_RANGE_STATUS].set_x = 16;
+    _Area[DMM_RANGE_STATUS].width = 40;
+    _Area[DMM_RANGE_STATUS].height = 8;
+    _Area[DMM_RANGE_STATUS].valid = true;
+    _Area[DMM_RANGE_STATUS].refer = true;
+
+    _Area[DMM_ACTBAR_CONT].set_y = 215;
+    _Area[DMM_ACTBAR_CONT].set_x = 0;
+    _Area[DMM_ACTBAR_CONT].width = 320;
+    _Area[DMM_ACTBAR_CONT].height = 24;
+    _Area[DMM_ACTBAR_CONT].valid = true;
+    _Area[DMM_ACTBAR_CONT].refer = true;
+
+    _Area[DMM_F1_BTN].set_y = 215;
+    _Area[DMM_F1_BTN].set_x = 21;
+    _Area[DMM_F1_BTN].width = 68;
+    _Area[DMM_F1_BTN].height = 24;
+    _Area[DMM_F1_BTN].valid = true;
+    _Area[DMM_F1_BTN].refer = true;
     
-    _Area[DISPLAY_RECORDING_AREA].set_y        = 35;
-    _Area[DISPLAY_RECORDING_AREA].set_x        = 157;
-    _Area[DISPLAY_RECORDING_AREA].width        = 99;
-    _Area[DISPLAY_RECORDING_AREA].height       = 18;
-    _Area[DISPLAY_RECORDING_AREA].valid         = true;
-    _Area[DISPLAY_RECORDING_AREA].refer        = true;
+    _Area[DMM_F2_BTN].set_y = 215;
+    _Area[DMM_F2_BTN].set_x = 91;
+    _Area[DMM_F2_BTN].width = 68;
+    _Area[DMM_F2_BTN].height = 24;
+    _Area[DMM_F2_BTN].valid = true;
+    _Area[DMM_F2_BTN].refer = true;
     
-    _Area[DISPLAY_HOLD_AREA].set_y             = 35;
-    _Area[DISPLAY_HOLD_AREA].set_x             = 259;
-    _Area[DISPLAY_HOLD_AREA].width             = 47;
-    _Area[DISPLAY_HOLD_AREA].height            = 18;
-    _Area[DISPLAY_HOLD_AREA].valid              = true;
-    _Area[DISPLAY_HOLD_AREA].refer             = true;
+    _Area[DMM_F3_BTN].set_y = 215;
+    _Area[DMM_F3_BTN].set_x = 161;
+    _Area[DMM_F3_BTN].width = 68;
+    _Area[DMM_F3_BTN].height = 24;
+    _Area[DMM_F3_BTN].valid = true;
+    _Area[DMM_F3_BTN].refer = true;
     
-    _Area[MEASURE_RELATIVE_VALUE_AREA].set_y   = 58;
-    _Area[MEASURE_RELATIVE_VALUE_AREA].set_x   = 182;
-    _Area[MEASURE_RELATIVE_VALUE_AREA].width   = 124;
-    _Area[MEASURE_RELATIVE_VALUE_AREA].height  = 23;
-    _Area[MEASURE_RELATIVE_VALUE_AREA].valid    = true;
-    _Area[MEASURE_RELATIVE_VALUE_AREA].refer   = true;
+    _Area[DMM_F4_BTN].set_y = 215;
+    _Area[DMM_F4_BTN].set_x = 231;
+    _Area[DMM_F4_BTN].width = 68;
+    _Area[DMM_F4_BTN].height = 24;
+    _Area[DMM_F4_BTN].valid = true;
+    _Area[DMM_F4_BTN].refer = true;
     
-    _Area[MEASURE_VALUE_AREA].set_y            = 83;
-    _Area[MEASURE_VALUE_AREA].set_x            = 15;
-    _Area[MEASURE_VALUE_AREA].width            = 250;
-    _Area[MEASURE_VALUE_AREA].height           = 70;
-    _Area[MEASURE_VALUE_AREA].valid             = true;
-    _Area[MEASURE_VALUE_AREA].refer            = true;
+    _Area[DMM_PREV_BTN].set_y = 215;
+    _Area[DMM_PREV_BTN].set_x = 0;
+    _Area[DMM_PREV_BTN].width = 19;
+    _Area[DMM_PREV_BTN].height = 24;
+    _Area[DMM_PREV_BTN].valid = true;
+    _Area[DMM_PREV_BTN].refer = true;
     
-    _Area[MEASURE_VALUE_UNIT_AREA].set_y       = 130;
-    _Area[MEASURE_VALUE_UNIT_AREA].set_x       = 266;
-    _Area[MEASURE_VALUE_UNIT_AREA].width       = 42;
-    _Area[MEASURE_VALUE_UNIT_AREA].height      = 19;
-    _Area[MEASURE_VALUE_UNIT_AREA].valid        = true;
-    _Area[MEASURE_VALUE_UNIT_AREA].refer       = true;
+    _Area[DMM_NEXT_BTN].set_y = 215;
+    _Area[DMM_NEXT_BTN].set_x = 301;
+    _Area[DMM_NEXT_BTN].width = 19;
+    _Area[DMM_NEXT_BTN].height = 24;
+    _Area[DMM_NEXT_BTN].valid = true;
+    _Area[DMM_NEXT_BTN].refer = true;
+
+    _Area[CTL_TABV_CONT].set_y = 24;
+    _Area[CTL_TABV_CONT].set_x = 0;
+    _Area[CTL_TABV_CONT].width = 320;
+    _Area[CTL_TABV_CONT].height = 191;
+    _Area[CTL_TABV_CONT].valid = true;
+    _Area[CTL_TABV_CONT].refer = true;
+
+    _Area[CTL_TABV].set_y = 33;
+    _Area[CTL_TABV].set_x = 3;
+    _Area[CTL_TABV].width = 157;
+    _Area[CTL_TABV].height = 17;
+    _Area[CTL_TABV].valid = true;
+    _Area[CTL_TABV].refer = true;
+
+    _Area[CTL_ACTBAR_CONT].set_y = 215;
+    _Area[CTL_ACTBAR_CONT].set_x = 0;
+    _Area[CTL_ACTBAR_CONT].width = 320;
+    _Area[CTL_ACTBAR_CONT].height = 24;
+    _Area[CTL_ACTBAR_CONT].valid = true;
+    _Area[CTL_ACTBAR_CONT].refer = true;
+
+    _Area[CTL_F1_BTN].set_y = 215;
+    _Area[CTL_F1_BTN].set_x = 21;
+    _Area[CTL_F1_BTN].width = 68;
+    _Area[CTL_F1_BTN].height = 24;
+    _Area[CTL_F1_BTN].valid = true;
+    _Area[CTL_F1_BTN].refer = true;
     
-    _Area[MEASURE_LO_AREA].set_y               = 189;
-    _Area[MEASURE_LO_AREA].set_x               = 5;
-    _Area[MEASURE_LO_AREA].width               = 32;
-    _Area[MEASURE_LO_AREA].height              = 15;
-    _Area[MEASURE_LO_AREA].valid                = true;
-    _Area[MEASURE_LO_AREA].refer               = true;
+    _Area[CTL_F2_BTN].set_y = 215;
+    _Area[CTL_F2_BTN].set_x = 91;
+    _Area[CTL_F2_BTN].width = 68;
+    _Area[CTL_F2_BTN].height = 24;
+    _Area[CTL_F2_BTN].valid = true;
+    _Area[CTL_F2_BTN].refer = true;
     
-    _Area[MEASURE_LOZ_AREA].set_y              = 189;
-    _Area[MEASURE_LOZ_AREA].set_x              = 293;
-    _Area[MEASURE_LOZ_AREA].width              = 32;
-    _Area[MEASURE_LOZ_AREA].height             = 12;
-    _Area[MEASURE_LOZ_AREA].valid               = true;
-    _Area[MEASURE_LOZ_AREA].refer              = true;
+    _Area[CTL_F3_BTN].set_y = 215;
+    _Area[CTL_F3_BTN].set_x = 161;
+    _Area[CTL_F3_BTN].width = 68;
+    _Area[CTL_F3_BTN].height = 24;
+    _Area[CTL_F3_BTN].valid = true;
+    _Area[CTL_F3_BTN].refer = true;
     
-    _Area[MEASURE_RULER_AREA].set_y            = 170;
-    _Area[MEASURE_RULER_AREA].set_x            = 29;
-    _Area[MEASURE_RULER_AREA].width            = 240;
-    _Area[MEASURE_RULER_AREA].height           = 20;
-    _Area[MEASURE_RULER_AREA].valid             = true;
-    _Area[MEASURE_RULER_AREA].refer            = true;
+    _Area[CTL_F4_BTN].set_y = 215;
+    _Area[CTL_F4_BTN].set_x = 231;
+    _Area[CTL_F4_BTN].width = 68;
+    _Area[CTL_F4_BTN].height = 24;
+    _Area[CTL_F4_BTN].valid = true;
+    _Area[CTL_F4_BTN].refer = true;
     
-    _Area[MEASURE_RANGE_STATUS_AREA].set_y     = 37;
-    _Area[MEASURE_RANGE_STATUS_AREA].set_x     = 16;
-    _Area[MEASURE_RANGE_STATUS_AREA].width     = 40;
-    _Area[MEASURE_RANGE_STATUS_AREA].height    = 8;
-    _Area[MEASURE_RANGE_STATUS_AREA].valid      = true;
-    _Area[MEASURE_RANGE_STATUS_AREA].refer     = true;
+    _Area[CTL_PREV_BTN].set_y = 215;
+    _Area[CTL_PREV_BTN].set_x = 0;
+    _Area[CTL_PREV_BTN].width = 19;
+    _Area[CTL_PREV_BTN].height = 24;
+    _Area[CTL_PREV_BTN].valid = true;
+    _Area[CTL_PREV_BTN].refer = true;
     
-    _Area[F1_MENUBAR_AREA].set_y               = 215;
-    _Area[F1_MENUBAR_AREA].set_x               = 21;
-    _Area[F1_MENUBAR_AREA].width               = 68;
-    _Area[F1_MENUBAR_AREA].height              = 24;
-    _Area[F1_MENUBAR_AREA].valid                = true;
-    _Area[F1_MENUBAR_AREA].refer               = true;
-    
-    _Area[F2_MENUBAR_AREA].set_y               = 215;
-    _Area[F2_MENUBAR_AREA].set_x               = 91;
-    _Area[F2_MENUBAR_AREA].width               = 68;
-    _Area[F2_MENUBAR_AREA].height              = 24;
-    _Area[F2_MENUBAR_AREA].valid                = true;
-    _Area[F2_MENUBAR_AREA].refer               = true;
-    
-    _Area[F3_MENUBAR_AREA].set_y               = 215;
-    _Area[F3_MENUBAR_AREA].set_x               = 161;
-    _Area[F3_MENUBAR_AREA].width               = 68;
-    _Area[F3_MENUBAR_AREA].height              = 24;
-    _Area[F3_MENUBAR_AREA].valid                = true;
-    _Area[F3_MENUBAR_AREA].refer               = true;
-    
-    _Area[F4_MENUBAR_AREA].set_y               = 215;
-    _Area[F4_MENUBAR_AREA].set_x               = 231;
-    _Area[F4_MENUBAR_AREA].width               = 68;
-    _Area[F4_MENUBAR_AREA].height              = 24;
-    _Area[F4_MENUBAR_AREA].valid                = true;
-    _Area[F4_MENUBAR_AREA].refer               = true;
-    
-    _Area[PREV_MENUBAR_AREA].set_y             = 215;
-    _Area[PREV_MENUBAR_AREA].set_x             = 0;
-    _Area[PREV_MENUBAR_AREA].width             = 19;
-    _Area[PREV_MENUBAR_AREA].height            = 24;
-    _Area[PREV_MENUBAR_AREA].valid              = true;
-    _Area[PREV_MENUBAR_AREA].refer             = true;
-    
-    _Area[NEXT_MENUBAR_AREA].set_y             = 215;
-    _Area[NEXT_MENUBAR_AREA].set_x             = 301;
-    _Area[NEXT_MENUBAR_AREA].width             = 19;
-    _Area[NEXT_MENUBAR_AREA].height            = 24;
-    _Area[NEXT_MENUBAR_AREA].valid              = true;
-    _Area[NEXT_MENUBAR_AREA].refer             = true;
-    
-    _Area[SETTING_LIST_AREA].set_y             = 33;
-    _Area[SETTING_LIST_AREA].set_x             = 3;
-    _Area[SETTING_LIST_AREA].width             = 157;
-    _Area[SETTING_LIST_AREA].height            = 17;
-    _Area[SETTING_LIST_AREA].valid              = true;
-    _Area[SETTING_LIST_AREA].refer             = true;
+    _Area[CTL_NEXT_BTN].set_y = 215;
+    _Area[CTL_NEXT_BTN].set_x = 301;
+    _Area[CTL_NEXT_BTN].width = 19;
+    _Area[CTL_NEXT_BTN].height = 24;
+    _Area[CTL_NEXT_BTN].valid = true;
+    _Area[CTL_NEXT_BTN].refer = true;
 }
 
-void set_menubar_function(uint8_t function)
+nt_activity_t activity = {
+    .last_act = 0xFF,
+    .cur_act = 0xFF,
+};
+
+void load_activity(uint8_t _activity)
 {
-    menubar.func = function;
+    /*if (activity.last_act != activity.cur_act)
+        activity.last_act = activity.cur_act;
+    activity.cur_act = _activity;*/
+
+    /*This makes it easy to 
+    mount custom content*/
+    switch(_activity) {
+    case NT_ACT_DMM:
+        if (activity.last_act != activity.cur_act)
+            activity.last_act = activity.cur_act;
+        activity.cur_act = NT_ACT_DMM;
+        break;
+
+    case NT_ACT_CTL:
+        if (activity.last_act != activity.cur_act)
+            activity.last_act = activity.cur_act;
+        activity.cur_act = NT_ACT_CTL;
+        break;
+    }
+}
+
+uint8_t read_cur_activity()
+{
+    return activity.cur_act;
+}
+
+uint8_t read_last_activity()
+{
+    return activity.last_act;
+}
+
+void act_bar_set_func(uint8_t function)
+{
+    _dmm_actbar.func = function;
     // F1_KEY_EVT placeholder parameter
-    function_key_event_enable(F1_KEY_EVT);
+    dmm_function_key_event_enable(F1_KEY_EVT);
 }
 
-uint8_t read_menubar_function()
+uint8_t act_bar_get_func()
 {
-    return menubar.func;
+    return _dmm_actbar.func;
 }
 
-void set_menubar_level(uint8_t level)
+void act_bar_set_depth(uint8_t level)
 {
-    uint8_t function = read_menubar_function();
+    uint8_t function = act_bar_get_func();
 
-    menubar._depth[function] = level;
+    _dmm_actbar._depth[function] = level;
 }
 
-uint8_t read_menubar_level()
+uint8_t act_bar_get_depth()
 {
-    uint8_t function = read_menubar_function();
+    uint8_t function = act_bar_get_func();
 
-    return menubar._depth[function];
+    return _dmm_actbar._depth[function];
 }
 
-void set_menubar_page(uint8_t page)
+void act_bar_set_page(uint8_t page)
 {
-    uint8_t function = read_menubar_function();
+    uint8_t function = act_bar_get_func();
 
-    menubar.page[function] = page;
+    _dmm_actbar.page[function] = page;
 }
 
-uint8_t read_menubar_page()
+uint8_t act_bar_get_page()
 {
-    uint8_t function = read_menubar_function();
+    uint8_t function = act_bar_get_func();
 
-    return menubar.page[function];
+    return _dmm_actbar.page[function];
 }
 
-void set_menubar_pressed(uint8_t menu_num)
+void act_bar_set_pressed(uint8_t menu_num)
 {
-    uint8_t function = read_menubar_function();
-    uint8_t level = read_menubar_level();
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
 
-    menubar.pressed[function][level] = menu_num;
+    _dmm_actbar.pressed[function][level] = menu_num;
 }
 
-uint8_t read_pressed_menubar()
+uint8_t act_bar_get_pressed()
 {
-    uint8_t function = read_menubar_function();
-    uint8_t level = read_menubar_level();
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
 
-    return menubar.pressed[function][level];
+    return _dmm_actbar.pressed[function][level];
 }
 
-void function_key_event(uint8_t key_event)
+/*Activity DMM*/
+void dmm_function_key_event(uint8_t key_event)
 {
-    uint8_t function = read_menubar_function();
-    uint8_t level = read_menubar_level();
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
 
-    (*key_event_controller[function][level])(key_event);
+    (*dmm_key_event_controller[function][level])(key_event);
 }
 
-void function_key_event_enable(uint8_t key)
+void dmm_function_key_event_enable(uint8_t key)
 {
-    uint8_t function = read_menubar_function();
-    uint8_t level = read_menubar_level();
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
 
-    (*key_event_enable[function][level])(key);
+    (*dmm_key_event_enable[function][level])(key);
 }
 
-void display_menubar_content(uint8_t key_event, uint8_t * vm)
+void dmm_display_actbar_content(uint8_t key_event, uint8_t * vm)
 {
-    uint8_t function = read_menubar_function();
-    uint8_t level = read_menubar_level();
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
 
-    (*display_menu_content[function][level])(key_event, vm);
+    (*dmm_display_menu_content[function][level])(key_event, vm);
 }
 
-void menubar_pressed(uint8_t key_event)
+/*Activity CTL*/
+void ctl_function_key_event(uint8_t key_event)
 {
-    if (!_Area[DISPLAY_TFT_AREA5].valid)
-        return;
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
+
+    (*ctl_key_event_controller[function][level])(key_event);
+}
+
+void ctl_function_key_event_enable(uint8_t key)
+{
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
+
+    (*ctl_key_event_enable[function][level])(key);
+}
+
+void ctl_display_actbar_content(uint8_t key_event, uint8_t * vm)
+{
+    uint8_t function = act_bar_get_func();
+    uint8_t level = act_bar_get_depth();
+
+    (*ctl_display_menu_content[function][level])(key_event, vm);
+}
+
+void actbar_btn_pressed(uint8_t key_event)
+{
+    if (!_Area[DMM_ACTBAR_CONT].valid) return;
 
     switch (key_event) {
-        case F1_KEY_EVT:
-            _Area[F1_MENUBAR_AREA].pressed   = true;
-            _Area[F2_MENUBAR_AREA].pressed   = false;
-            _Area[F3_MENUBAR_AREA].pressed   = false;
-            _Area[F4_MENUBAR_AREA].pressed   = false;
-            _Area[PREV_MENUBAR_AREA].pressed = false;
-            _Area[NEXT_MENUBAR_AREA].pressed = false;
-            menubar_flush_enable();
-            break;
+    case F1_KEY_EVT:
+        _Area[DMM_F1_BTN].pressed = true;
+        _Area[DMM_F2_BTN].pressed = false;
+        _Area[DMM_F3_BTN].pressed = false;
+        _Area[DMM_F4_BTN].pressed = false;
+        _Area[DMM_PREV_BTN].pressed = false;
+        _Area[DMM_NEXT_BTN].pressed = false;
+        dmm_actbar_cont_flush_enable();
+        break;
 
-        case F2_KEY_EVT:
-            _Area[F1_MENUBAR_AREA].pressed   = false;
-            _Area[F2_MENUBAR_AREA].pressed   = true;
-            _Area[F3_MENUBAR_AREA].pressed   = false;
-            _Area[F4_MENUBAR_AREA].pressed   = false;
-            _Area[PREV_MENUBAR_AREA].pressed = false;
-            _Area[NEXT_MENUBAR_AREA].pressed = false;
-            menubar_flush_enable();
-            break;
+    case F2_KEY_EVT:
+        _Area[DMM_F1_BTN].pressed = false;
+        _Area[DMM_F2_BTN].pressed = true;
+        _Area[DMM_F3_BTN].pressed = false;
+        _Area[DMM_F4_BTN].pressed = false;
+        _Area[DMM_PREV_BTN].pressed = false;
+        _Area[DMM_NEXT_BTN].pressed = false;
+        dmm_actbar_cont_flush_enable();
+        break;
 
-        case F3_KEY_EVT:
-            _Area[F1_MENUBAR_AREA].pressed   = false;
-            _Area[F2_MENUBAR_AREA].pressed   = false;
-            _Area[F3_MENUBAR_AREA].pressed   = true;
-            _Area[F4_MENUBAR_AREA].pressed   = false;
-            _Area[PREV_MENUBAR_AREA].pressed = false;
-            _Area[NEXT_MENUBAR_AREA].pressed = false;
-            menubar_flush_enable();
-            break;
+    case F3_KEY_EVT:
+        _Area[DMM_F1_BTN].pressed = false;
+        _Area[DMM_F2_BTN].pressed = false;
+        _Area[DMM_F3_BTN].pressed = true;
+        _Area[DMM_F4_BTN].pressed = false;
+        _Area[DMM_PREV_BTN].pressed = false;
+        _Area[DMM_NEXT_BTN].pressed = false;
+        dmm_actbar_cont_flush_enable();
+        break;
 
-        case F4_KEY_EVT:
-            _Area[F1_MENUBAR_AREA].pressed   = false;
-            _Area[F2_MENUBAR_AREA].pressed   = false;
-            _Area[F3_MENUBAR_AREA].pressed   = false;
-            _Area[F4_MENUBAR_AREA].pressed   = true;
-            _Area[PREV_MENUBAR_AREA].pressed = false;
-            _Area[NEXT_MENUBAR_AREA].pressed = false;
-            menubar_flush_enable();
-            break;
+    case F4_KEY_EVT:
+        _Area[DMM_F1_BTN].pressed = false;
+        _Area[DMM_F2_BTN].pressed = false;
+        _Area[DMM_F3_BTN].pressed = false;
+        _Area[DMM_F4_BTN].pressed = true;
+        _Area[DMM_PREV_BTN].pressed = false;
+        _Area[DMM_NEXT_BTN].pressed = false;
+        dmm_actbar_cont_flush_enable();
+        break;
 
-        case PREV_KEY_EVT:
-            _Area[F1_MENUBAR_AREA].pressed   = false;
-            _Area[F2_MENUBAR_AREA].pressed   = false;
-            _Area[F3_MENUBAR_AREA].pressed   = false;
-            _Area[F4_MENUBAR_AREA].pressed   = false;
-            _Area[PREV_MENUBAR_AREA].pressed = true;
-            _Area[NEXT_MENUBAR_AREA].pressed = false;
-            menubar_flush_enable();
-            break;
+    case PREV_KEY_EVT:
+        _Area[DMM_F1_BTN].pressed = false;
+        _Area[DMM_F2_BTN].pressed = false;
+        _Area[DMM_F3_BTN].pressed = false;
+        _Area[DMM_F4_BTN].pressed = false;
+        _Area[DMM_PREV_BTN].pressed = true;
+        _Area[DMM_NEXT_BTN].pressed = false;
+        dmm_actbar_cont_flush_enable();
+        break;
 
-        case NEXT_KEY_EVT:
-            _Area[F1_MENUBAR_AREA].pressed   = false;
-            _Area[F2_MENUBAR_AREA].pressed   = false;
-            _Area[F3_MENUBAR_AREA].pressed   = false;
-            _Area[F4_MENUBAR_AREA].pressed   = false;
-            _Area[PREV_MENUBAR_AREA].pressed = false;
-            _Area[NEXT_MENUBAR_AREA].pressed = true;
-            menubar_flush_enable();
-            break;
+    case NEXT_KEY_EVT:
+        _Area[DMM_F1_BTN].pressed = false;
+        _Area[DMM_F2_BTN].pressed = false;
+        _Area[DMM_F3_BTN].pressed = false;
+        _Area[DMM_F4_BTN].pressed = false;
+        _Area[DMM_PREV_BTN].pressed = false;
+        _Area[DMM_NEXT_BTN].pressed = true;
+        dmm_actbar_cont_flush_enable();
+        break;
 
-        case RELEASE:
-            function_key_event_enable(F1_KEY_EVT);
-            _Area[F1_MENUBAR_AREA].pressed   = false;
-            _Area[F2_MENUBAR_AREA].pressed   = false;
-            _Area[F3_MENUBAR_AREA].pressed   = false;
-            _Area[F4_MENUBAR_AREA].pressed   = false;
-            _Area[PREV_MENUBAR_AREA].pressed = false;
-            _Area[NEXT_MENUBAR_AREA].pressed = false;
-            menubar_flush_enable();
-            break;
+    case RELEASE:
+        dmm_function_key_event_enable(F1_KEY_EVT);
+        _Area[DMM_F1_BTN].pressed = false;
+        _Area[DMM_F2_BTN].pressed = false;
+        _Area[DMM_F3_BTN].pressed = false;
+        _Area[DMM_F4_BTN].pressed = false;
+        _Area[DMM_PREV_BTN].pressed = false;
+        _Area[DMM_NEXT_BTN].pressed = false;
+        dmm_actbar_cont_flush_enable();
+        break;
     }
 }
 
-void display_area1_flush(uint8_t * vm)
+void dev_topbar_flush(uint8_t * vm)
 {
-    display_widget_show[DISPLAY_TFT_AREA1](vm);
+    dev_topbar_cont_refer(vm);
 
-    if (_Area[DISPLAY_TFT_AREA1].refer) {
-        _Area[DISPLAY_BATTERY_AREA].refer = true;
-        _Area[DISPLAY_BLUETOOTH_AREA].refer = true;
-        _Area[DISPLAY_POWER_OFF_TIMER_AREA].refer = true;
-        _Area[DISPLAY_TRUMPET_AREA].refer = true;
-        _Area[DISPLAY_LIGHTING_AREA].refer = true;
-        _Area[DISPLAY_REAL_TIME_AREA].refer = true;
+    if (_Area[DEV_TOPBAR_CONT].refer) {
+        _Area[DEV_BAT].refer = true;
+        _Area[DEV_BLE].refer = true;
+        _Area[DEV_POFF_TIM].refer = true;
+        _Area[DEV_TRUMPET].refer = true;
+        _Area[DEV_LIGHTING].refer = true;
+        _Area[DEV_REAL_TIM].refer = true;
     }
 
-    display_battery_flush(vm);
-    display_bluetooth_flush(vm);
-    display_power_off_timer_flush(vm);
-    display_trumpet_flush(vm);
-    display_lighting_flush(vm);
-    display_real_time_flush(vm);
+    dev_battery_refer(vm);
+    _Area[DEV_BAT].refer = false;
 
-    _Area[DISPLAY_BATTERY_AREA].refer = false;
-    _Area[DISPLAY_BLUETOOTH_AREA].refer = false;
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].refer = false;
-    _Area[DISPLAY_TRUMPET_AREA].refer = false;
-    _Area[DISPLAY_LIGHTING_AREA].refer = false;
-    _Area[DISPLAY_REAL_TIME_AREA].refer = false;
+    dev_buletooth_refer(vm);
+    _Area[DEV_BLE].refer = false;
+
+    dev_poff_tim_refer(vm);
+    _Area[DEV_POFF_TIM].refer = false;
+
+    dev_trumpet_refer(vm);
+    _Area[DEV_TRUMPET].refer = false;
+
+    dev_lighting_refer(vm);
+    _Area[DEV_LIGHTING].refer = false;
+
+    dev_realtim_refer(vm);
+    _Area[DEV_REAL_TIM].refer = false;
 }
 
-void display_area1_flush_enable()
+void dev_topbar_cont_flush_enable()
 {
-    if (_Area[DISPLAY_TFT_AREA1].valid)
-        _Area[DISPLAY_TFT_AREA1].refer = true;
+    if (_Area[DEV_TOPBAR_CONT].valid)
+        _Area[DEV_TOPBAR_CONT].refer = true;
 }
 
-void display_battery_flush(uint8_t * vm)
+void dmm_zone_flush(uint8_t * vm)
 {
-    display_widget_show[DISPLAY_BATTERY_AREA](vm);
-    _Area[DISPLAY_BATTERY_AREA].refer = false;
-}
+    dmm_zone_cont_refer(vm);
 
-void battery_flush_enable()
-{
-    if (_Area[DISPLAY_TFT_AREA1].valid)
-        _Area[DISPLAY_BATTERY_AREA].refer = true;
-}
-
-void display_bluetooth_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_BLUETOOTH_AREA](vm);
-    _Area[DISPLAY_BLUETOOTH_AREA].refer = false;
-}
-
-void display_power_off_timer_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_POWER_OFF_TIMER_AREA](vm);
-    _Area[DISPLAY_POWER_OFF_TIMER_AREA].refer = false;
-}
-
-void display_trumpet_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_TRUMPET_AREA](vm);
-    _Area[DISPLAY_TRUMPET_AREA].refer = false;
-}
-
-void display_lighting_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_LIGHTING_AREA](vm);
-    _Area[DISPLAY_LIGHTING_AREA].refer = false;
-}
-
-void display_real_time_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_REAL_TIME_AREA](vm);
-    _Area[DISPLAY_REAL_TIME_AREA].refer = false;
-}
-
-void display_area2_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_TFT_AREA2](vm);
-
-    if (_Area[DISPLAY_TFT_AREA2].refer) {
-        _Area[MEASURE_VALUE_MODE_AREA].refer = true;
-        _Area[DISPLAY_RECORDING_AREA].refer = true;
-        _Area[DISPLAY_HOLD_AREA].refer = true;
-        _Area[MEASURE_RELATIVE_VALUE_AREA].refer = true;
+    if (_Area[DMM_ZONE_CONT].refer) {
+        _Area[DMM_RUN_STATE].refer = true;
+        _Area[DMM_REC].refer = true;
+        _Area[DMM_HOLD].refer = true;
+        _Area[DMM_REL_VAL].refer = true;
     }
 
-    display_measure_value_mode_flush(vm);
-    display_recording_flush(vm);
-    display_hold_flush(vm);
-    display_relative_value_flush(vm);
+    dmm_mea_mod_refer(vm);
+    _Area[DMM_RUN_STATE].refer = false;
 
-    _Area[MEASURE_VALUE_MODE_AREA].refer = false;
-    _Area[DISPLAY_RECORDING_AREA].refer = false;
-    _Area[DISPLAY_HOLD_AREA].refer = false;
-    _Area[MEASURE_RELATIVE_VALUE_AREA].refer = false;
+    dmm_rec_refer(vm);
+    _Area[DMM_REC].refer = false;
+
+    dmm_hold_state_refer(vm);
+    _Area[DMM_HOLD].refer = false;
+
+    dmm_rel_val_refer(vm);
+    _Area[DMM_REL_VAL].refer = false;
 }
 
-void display_area2_flush_enable()
+void dmm_zone_cont_flush_enable()
 {
-    if (_Area[DISPLAY_TFT_AREA2].valid)
-        _Area[DISPLAY_TFT_AREA2].refer = true;
+    if (_Area[DMM_ZONE_CONT].valid)
+        _Area[DMM_ZONE_CONT].refer = true;
 }
 
-void display_measure_value_mode_flush(uint8_t * vm)
+void dmm_ret_flush(uint8_t * vm)
 {
-    display_widget_show[MEASURE_VALUE_MODE_AREA](vm);
-    _Area[MEASURE_VALUE_MODE_AREA].refer = false;
-}
+    dmm_ret_cont_refer(vm);
 
-void display_recording_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_RECORDING_AREA](vm);
-    _Area[DISPLAY_RECORDING_AREA].refer = false;
-}
-
-void display_hold_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_HOLD_AREA](vm);
-    _Area[DISPLAY_HOLD_AREA].refer = false;
-}
-
-void display_relative_value_flush(uint8_t * vm)
-{
-    display_widget_show[MEASURE_RELATIVE_VALUE_AREA](vm);
-    _Area[MEASURE_RELATIVE_VALUE_AREA].refer = false;
-}
-
-void display_area3_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_TFT_AREA3](vm);
-
-    if (_Area[DISPLAY_TFT_AREA3].refer) {
-        _Area[MEASURE_VALUE_AREA].refer = true;
-        _Area[MEASURE_VALUE_UNIT_AREA].refer = true;
+    if (_Area[DMM_RET_CONT].refer) {
+        _Area[DMM_RET_VAL].refer = true;
+        _Area[DMM_RET_UNIT].refer = true;
     }
 
-    display_measure_value_flush(vm);
-    display_measure_value_unit_flush(vm);
+    dmm_ret_val_refer(vm);
+    _Area[DMM_RET_VAL].refer = false;
 
-    _Area[MEASURE_VALUE_AREA].refer = false;
-    _Area[MEASURE_VALUE_UNIT_AREA].refer = false;
+    dmm_ret_unit_refer(vm);
+    _Area[DMM_RET_UNIT].refer = false;
 }
 
-void display_area3_flush_enable()
+void dmm_ret_cont_flush_enable()
 {
-    if (_Area[DISPLAY_TFT_AREA3].valid)
-        _Area[DISPLAY_TFT_AREA3].refer = true;
+    if (_Area[DMM_RET_CONT].valid)
+        _Area[DMM_RET_CONT].refer = true;
 }
 
-void display_measure_value_flush(uint8_t * vm)
+void dmm_bcht_flush(uint8_t * vm)
 {
-    display_widget_show[MEASURE_VALUE_AREA](vm);
-    _Area[MEASURE_VALUE_AREA].refer = false;
-}
+    dmm_bcht_cont_refer(vm);
 
-void measure_value_flush_enable()
-{
-    if (_Area[DISPLAY_TFT_AREA3].valid)
-        _Area[MEASURE_VALUE_AREA].refer = true;
-}
-
-void display_measure_value_unit_flush(uint8_t * vm)
-{
-    display_widget_show[MEASURE_VALUE_UNIT_AREA](vm);
-    _Area[MEASURE_VALUE_UNIT_AREA].refer = false;
-}
-
-void display_area4_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_TFT_AREA4](vm);
-
-    if (_Area[DISPLAY_TFT_AREA4].refer) {
-        _Area[MEASURE_LO_AREA].refer = true;
-        _Area[MEASURE_LOZ_AREA].refer = true;
-        _Area[MEASURE_RULER_AREA].refer = true;
-        _Area[MEASURE_RANGE_STATUS_AREA].refer = true;
+    if (_Area[DMM_BCHT_CONT].refer) {
+        _Area[DMM_MEA_LPF].refer = true;
+        _Area[DMM_LOZ].refer = true;
+        _Area[DMM_BCHT].refer = true;
+        _Area[DMM_RANGE_STATUS].refer = true;
     }
 
-    display_measure_lo_flush(vm);
-    display_measure_loz_flush(vm);
-    display_measure_ruler_flush(vm);
-    display_measure_range_status_flush(vm);
+    dmm_mea_lpf_refer(vm);
+    _Area[DMM_MEA_LPF].refer = false;
 
-    _Area[MEASURE_LO_AREA].refer = false;
-    _Area[MEASURE_LOZ_AREA].refer = false;
-    _Area[MEASURE_RULER_AREA].refer = false;
-    _Area[MEASURE_RANGE_STATUS_AREA].refer = false;
+    dmm_loz_state_refer(vm);
+    _Area[DMM_LOZ].refer = false;
+
+    dmm_bcht_refer(vm);
+    _Area[DMM_BCHT].refer = false;
+
+    dmm_run_state_refer(vm);
+    _Area[DMM_RANGE_STATUS].refer = false;
 }
 
-void display_area4_flush_enable()
+void dmm_bcht_cont_flush_enable()
 {
-    if (_Area[DISPLAY_TFT_AREA4].valid)
-        _Area[DISPLAY_TFT_AREA4].refer = true;
+    if (_Area[DMM_BCHT_CONT].valid)
+        _Area[DMM_BCHT_CONT].refer = true;
 }
 
-void display_measure_lo_flush(uint8_t * vm)
+void dmm_actbar_flush(uint8_t * vm)
 {
-    display_widget_show[MEASURE_LO_AREA](vm);
-    _Area[MEASURE_LO_AREA].refer = false;
-}
+    dmm_actbar_cont_fefer(vm);
 
-void display_measure_loz_flush(uint8_t * vm)
-{
-    display_widget_show[MEASURE_LOZ_AREA](vm);
-    _Area[MEASURE_LOZ_AREA].refer = false;
-}
-
-void display_measure_ruler_flush(uint8_t * vm)
-{
-    display_widget_show[MEASURE_RULER_AREA](vm);
-    _Area[MEASURE_RULER_AREA].refer = false;
-}
-
-void display_measure_range_status_flush(uint8_t * vm)
-{
-    display_widget_show[MEASURE_RANGE_STATUS_AREA](vm);
-    _Area[MEASURE_RANGE_STATUS_AREA].refer = false;
-}
-
-void display_area5_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_TFT_AREA5](vm);
-
-    if (_Area[DISPLAY_TFT_AREA5].refer) {
-        _Area[F1_MENUBAR_AREA].refer = true;
-        _Area[F2_MENUBAR_AREA].refer = true;
-        _Area[F3_MENUBAR_AREA].refer = true;
-        _Area[F4_MENUBAR_AREA].refer = true;
-        _Area[PREV_MENUBAR_AREA].refer = true;
-        _Area[NEXT_MENUBAR_AREA].refer = true;
+    if (_Area[DMM_ACTBAR_CONT].refer) {
+        _Area[DMM_F1_BTN].refer = true;
+        _Area[DMM_F2_BTN].refer = true;
+        _Area[DMM_F3_BTN].refer = true;
+        _Area[DMM_F4_BTN].refer = true;
+        _Area[DMM_PREV_BTN].refer = true;
+        _Area[DMM_NEXT_BTN].refer = true;
     }
 
-    display_f1_menubar_flush(vm);
-    display_f2_menubar_flush(vm);
-    display_f3_menubar_flush(vm);
-    display_f4_menubar_flush(vm);
-    display_prev_menubar_flush(vm);
-    display_next_menubar_flush(vm);
+    dmm_f1_btn_refer(vm);
+    _Area[DMM_F1_BTN].refer = false;
 
-    _Area[F1_MENUBAR_AREA].refer = false;
-    _Area[F2_MENUBAR_AREA].refer = false;
-    _Area[F3_MENUBAR_AREA].refer = false;
-    _Area[F4_MENUBAR_AREA].refer = false;
-    _Area[PREV_MENUBAR_AREA].refer = false;
-    _Area[NEXT_MENUBAR_AREA].refer = false;
+    dmm_f2_btn_refer(vm);
+    _Area[DMM_F2_BTN].refer = false;
+
+    dmm_f3_btn_refer(vm);
+    _Area[DMM_F3_BTN].refer = false;
+
+    dmm_f4_btn_refer(vm);
+    _Area[DMM_F4_BTN].refer = false;
+
+    dmm_prev_btn_refer(vm);
+    _Area[DMM_PREV_BTN].refer = false;
+
+    dmm_next_btn_refer(vm);
+    _Area[DMM_NEXT_BTN].refer = false;
 }
 
-void display_area5_flush_enable()
+void dmm_actbar_cont_flush_enable()
 {
-    if (_Area[DISPLAY_TFT_AREA5].valid)
-        _Area[DISPLAY_TFT_AREA5].refer = true;
+    if (_Area[DMM_ACTBAR_CONT].valid)
+        _Area[DMM_ACTBAR_CONT].refer = true;
 }
 
-void display_f1_menubar_flush(uint8_t * vm)
+static void dmm_activity(uint8_t * vm)
 {
-    display_widget_show[F1_MENUBAR_AREA](vm);
-    _Area[F1_MENUBAR_AREA].refer = false;
+    dmm_zone_cont_flush_enable();
+    dmm_ret_cont_flush_enable();
+    dmm_bcht_cont_flush_enable();
+    dmm_actbar_cont_flush_enable();
+
+    dmm_zone_flush(vm);
+    dmm_ret_flush(vm);
+    dmm_bcht_flush(vm);
+    dmm_actbar_flush(vm);
 }
 
-void display_f2_menubar_flush(uint8_t * vm)
+void ctl_tabv_flush(uint8_t * vm)
 {
-    display_widget_show[F2_MENUBAR_AREA](vm);
-    _Area[F2_MENUBAR_AREA].refer = false;
-}
+    ctl_tabv_cont_refer(vm);
 
-void display_f3_menubar_flush(uint8_t * vm)
-{
-    display_widget_show[F3_MENUBAR_AREA](vm);
-    _Area[F3_MENUBAR_AREA].refer = false;
-}
-
-void display_f4_menubar_flush(uint8_t * vm)
-{
-    display_widget_show[F4_MENUBAR_AREA](vm);
-    _Area[F4_MENUBAR_AREA].refer = false;
-}
-
-void display_prev_menubar_flush(uint8_t * vm)
-{
-    display_widget_show[PREV_MENUBAR_AREA](vm);
-    _Area[PREV_MENUBAR_AREA].refer = false;
-}
-
-void display_next_menubar_flush(uint8_t * vm)
-{
-    display_widget_show[NEXT_MENUBAR_AREA](vm);
-    _Area[NEXT_MENUBAR_AREA].refer = false;
-}
-
-void menubar_flush_enable()
-{
-    if (_Area[DISPLAY_TFT_AREA5].valid)
-        _Area[DISPLAY_TFT_AREA5].refer = true;
-}
-
-static void measure_interface(uint8_t * vm)
-{
-    // -------- temp flush ---------
-    display_area1_flush_enable();
-    display_area2_flush_enable();
-    display_area3_flush_enable();
-    display_area4_flush_enable();
-    // display_area5_flush_enable();
-    // -----------------------------
-
-    display_area1_flush(vm);
-    display_area2_flush(vm);
-    display_area3_flush(vm);
-    display_area4_flush(vm);
-    display_area5_flush(vm);
-
-    // _Area[DISPLAY_TFT_AREA1].refer = false;
-    // _Area[DISPLAY_TFT_AREA2].refer = false;
-    // _Area[DISPLAY_TFT_AREA3].refer = false;
-    // _Area[DISPLAY_TFT_AREA4].refer = false;
-    // _Area[DISPLAY_TFT_AREA5].refer = false;
-    // _Area[SETTING_PAGE_AREA].refer = false;
-}
-
-void display_setting_area2_flush(uint8_t * vm)
-{
-    display_widget_show[DISPLAY_SETTING_AREA2](vm);
-
-    if (_Area[DISPLAY_SETTING_AREA2].refer) {
-        _Area[SETTING_LIST_AREA].refer = true;
+    if (_Area[CTL_TABV_CONT].refer) {
+        _Area[CTL_TABV].refer = true;
     }
 
-    display_setting_list_flush(vm);
-
-    _Area[SETTING_LIST_AREA].refer = false;
+    ctl_tabv_refer(vm);
+    _Area[CTL_TABV].refer = false;
 }
 
-void display_setting_area2_flush_enable()
+void ctl_tabv_cont_flush_enable()
 {
-    if (_Area[DISPLAY_SETTING_AREA2].valid)
-        _Area[DISPLAY_SETTING_AREA2].refer = true;
+    if (_Area[CTL_TABV_CONT].valid)
+        _Area[CTL_TABV_CONT].refer = true;
 }
 
-void display_setting_list_flush(uint8_t * vm)
+void ctl_actbar_flush(uint8_t * vm)
 {
-    display_widget_show[SETTING_LIST_AREA](vm);
-    _Area[SETTING_LIST_AREA].refer = false;
+    ctl_actbar_cont_fefer(vm);
+
+    if (_Area[CTL_ACTBAR_CONT].refer) {
+        _Area[CTL_F1_BTN].refer = true;
+        _Area[CTL_F2_BTN].refer = true;
+        _Area[CTL_F3_BTN].refer = true;
+        _Area[CTL_F4_BTN].refer = true;
+        _Area[CTL_PREV_BTN].refer = true;
+        _Area[CTL_NEXT_BTN].refer = true;
+    }
+
+    ctl_f1_btn_refer(vm);
+    _Area[CTL_F1_BTN].refer = false;
+
+    ctl_f2_btn_refer(vm);
+    _Area[CTL_F2_BTN].refer = false;
+
+    ctl_f3_btn_refer(vm);
+    _Area[CTL_F3_BTN].refer = false;
+
+    ctl_f4_btn_refer(vm);
+    _Area[CTL_F4_BTN].refer = false;
+
+    ctl_prev_btn_refer(vm);
+    _Area[CTL_PREV_BTN].refer = false;
+
+    ctl_next_btn_refer(vm);
+    _Area[CTL_NEXT_BTN].refer = false;
 }
 
-static void setting_interface(uint8_t * vm)
+void ctl_actbar_cont_flush_enable()
 {
-    // -------- temp flush ---------
-    display_area1_flush_enable();
-    // display_area2_flush_enable();
-    // display_area3_flush_enable();
-    // display_area4_flush_enable();
-    // display_area5_flush_enable();
-    // -----------------------------
+    if (_Area[CTL_ACTBAR_CONT].valid) 
+        _Area[CTL_ACTBAR_CONT].refer = true;
+}
 
-    display_area1_flush(vm);
-    display_setting_area2_flush(vm);
-    display_area5_flush(vm);
-
-    // _Area[DISPLAY_TFT_AREA1].refer = false;
-    // _Area[DISPLAY_TFT_AREA2].refer = false;
-    // _Area[DISPLAY_TFT_AREA3].refer = false;
-    // _Area[DISPLAY_TFT_AREA4].refer = false;
-    // _Area[DISPLAY_TFT_AREA5].refer = false;
-    // _Area[SETTING_PAGE_AREA].refer = false;
+static void ctl_activity(uint8_t * vm)
+{
+    ctl_tabv_flush(vm);
+    ctl_actbar_flush(vm);
 }
 
 void display_flush(uint8_t * vm)
 {
-    switch (read_menubar_function()) {
-        case DMM_SETTING:
-            setting_interface(vm);
-            break;
-        default:
-            measure_interface(vm);
-            break;
+    uint8_t _act = read_cur_activity();
+
+    dev_topbar_cont_flush_enable();
+    dev_topbar_flush(vm);
+
+    switch (_act) {
+    case NT_ACT_DMM:
+        dmm_activity(vm);
+        break;
+    case NT_ACT_CTL:
+        ctl_activity(vm);
+        break;
+    default:
+        dmm_activity(vm);
+        break;
     }
 }
 
-const tft_region_setting tft_region = (const tft_region_setting)TFT_REGION_SETTING_DRV;
-const tft_write_data tft_write = (const tft_write_data)TFT_WRITE_DATA_DRV;
+const tft_region_setting tft_region = \
+    (const tft_region_setting)TFT_REGION_SETTING_DRV;
+const tft_write_data tft_write = \
+    (const tft_write_data)TFT_WRITE_DATA_DRV;
 
 void tft_clear(uint8_t color)
 {
-    unsigned int buf_size;
+    uint32_t buf_size = 0;
 
     buf_size = TFT_WIDTH * TFT_HEIGHT;
     tft_region(0, 0, TFT_WIDTH, TFT_HEIGHT);
 
-    for (unsigned int i = 0; i < buf_size; i++)
+    for (uint32_t i = 0; i < buf_size; i++)
         tft_write(color_data[color]);
 }
 
-/**
- * +-----> x
- * |O
- * | tft
- * y
- * 
- * y * tft_width + x = index
- * -----------------------
- * y = (index - x) / tft_width;
- * x = index - (y * tft_width);
- * 
- * x = 0; // later x must clean
- * y = 0; // later y must clean
- * 
- * _Area[PREV_MENUBAR_AREA].set_y  = 215;
- * _Area[PREV_MENUBAR_AREA].set_x  = 4;
- * _Area[PREV_MENUBAR_AREA].width  = 15;
- * _Area[PREV_MENUBAR_AREA].height = 24;
- */
-
-/**
- * +-----> x
- * |O
- * | tft
- * y
- * 
- * index = y * tft_width + x
- * offset = y * tft_width
- * -----------------------
- * tft_buf[index + offset]
- * 
- * _Area[PREV_MENUBAR_AREA].set_y  = 215;
- * _Area[PREV_MENUBAR_AREA].set_x  = 4;
- * _Area[PREV_MENUBAR_AREA].width  = 15;
- * _Area[PREV_MENUBAR_AREA].height = 24;
- */
-
 void tft_flush_area(uint8_t area_num, uint8_t * vm)
 {
-    unsigned int area_y;
-    unsigned int area_x;
-    unsigned int area_width;
-    unsigned int area_height;
-    unsigned int area_yend;
+    uint32_t area_y;
+    uint32_t area_x;
+    uint32_t area_width;
+    uint32_t area_height;
+    uint32_t area_yend;
 
     uint8_t color;
     uint8_t * arr;
 
     if (area_num == 0) {
-        area_y      = _Area[DISPLAY_TFT_AREA1].set_y;
-        area_x      = _Area[DISPLAY_TFT_AREA1].set_x;
-        area_width  = _Area[DISPLAY_TFT_AREA1].width;
-        area_height = _Area[DISPLAY_TFT_AREA1].height;
+        area_y      = _Area[DEV_TOPBAR_CONT].set_y;
+        area_x      = _Area[DEV_TOPBAR_CONT].set_x;
+        area_width  = _Area[DEV_TOPBAR_CONT].width;
+        area_height = _Area[DEV_TOPBAR_CONT].height;
         area_yend   = area_y + area_height;
     } else if (area_num == 1) {
-        area_y      = _Area[DISPLAY_TFT_AREA2].set_y;
-        area_x      = _Area[DISPLAY_TFT_AREA2].set_x;
-        area_width  = _Area[DISPLAY_TFT_AREA2].width;
-        area_height = _Area[DISPLAY_TFT_AREA2].height;
+        area_y      = _Area[DMM_ZONE_CONT].set_y;
+        area_x      = _Area[DMM_ZONE_CONT].set_x;
+        area_width  = _Area[DMM_ZONE_CONT].width;
+        area_height = _Area[DMM_ZONE_CONT].height;
         area_yend   = area_y + area_height;
     } else if (area_num == 2) {
-        area_y      = _Area[DISPLAY_TFT_AREA3].set_y;
-        area_x      = _Area[DISPLAY_TFT_AREA3].set_x;
-        area_width  = _Area[DISPLAY_TFT_AREA3].width;
-        area_height = _Area[DISPLAY_TFT_AREA3].height;
+        area_y      = _Area[DMM_RET_CONT].set_y;
+        area_x      = _Area[DMM_RET_CONT].set_x;
+        area_width  = _Area[DMM_RET_CONT].width;
+        area_height = _Area[DMM_RET_CONT].height;
         area_yend   = area_y + area_height;
     } else if (area_num == 3) {
-        area_y      = _Area[DISPLAY_TFT_AREA4].set_y;
-        area_x      = _Area[DISPLAY_TFT_AREA4].set_x;
-        area_width  = _Area[DISPLAY_TFT_AREA4].width;
-        area_height = _Area[DISPLAY_TFT_AREA4].height;
+        area_y      = _Area[DMM_BCHT_CONT].set_y;
+        area_x      = _Area[DMM_BCHT_CONT].set_x;
+        area_width  = _Area[DMM_BCHT_CONT].width;
+        area_height = _Area[DMM_BCHT_CONT].height;
         area_yend   = area_y + area_height;
     } else if (area_num == 4) {
-        area_y      = _Area[DISPLAY_TFT_AREA5].set_y;
-        area_x      = _Area[DISPLAY_TFT_AREA5].set_x;
-        area_width  = _Area[DISPLAY_TFT_AREA5].width;
-        area_height = _Area[DISPLAY_TFT_AREA5].height;
+        area_y      = _Area[DMM_ACTBAR_CONT].set_y;
+        area_x      = _Area[DMM_ACTBAR_CONT].set_x;
+        area_width  = _Area[DMM_ACTBAR_CONT].width;
+        area_height = _Area[DMM_ACTBAR_CONT].height;
         area_yend   = area_y + area_height;
     } else if (area_num == 5) {
-        area_y      = _Area[DISPLAY_SETTING_AREA2].set_y;
-        area_x      = _Area[DISPLAY_SETTING_AREA2].set_x;
-        area_width  = _Area[DISPLAY_SETTING_AREA2].width;
-        area_height = _Area[DISPLAY_SETTING_AREA2].height;
+        area_y      = _Area[CTL_TABV_CONT].set_y;
+        area_x      = _Area[CTL_TABV_CONT].set_x;
+        area_width  = _Area[CTL_TABV_CONT].width;
+        area_height = _Area[CTL_TABV_CONT].height;
         area_yend   = area_y + area_height;
     }
 
@@ -905,8 +830,8 @@ void tft_flush_area(uint8_t area_num, uint8_t * vm)
 
     uint8_t theme = equip.themecolor * COLOR_MAX;
 
-    for (unsigned int y = area_y; y < area_yend; y++) {
-        for (unsigned int x = 0; x < area_width; x++) {
+    for (uint32_t y = area_y; y < area_yend; y++) {
+        for (uint32_t x = 0; x < area_width; x++) {
             tft_write(color_data[vm[y * TFT_WIDTH + x] + theme]);
         }
     }
@@ -914,36 +839,43 @@ void tft_flush_area(uint8_t area_num, uint8_t * vm)
 
 void tft_flush(uint8_t * vm)
 {
-    uint8_t current_function;
-    current_function = read_menubar_function();
+    uint8_t _func = act_bar_get_func();
 
-    if (_Area[DISPLAY_TFT_AREA1].refer) {
+    if (_Area[DEV_TOPBAR_CONT].refer) {
         tft_flush_area(0, vm);
-        _Area[DISPLAY_TFT_AREA1].refer = false;
+        _Area[DEV_TOPBAR_CONT].refer = false;
     }
 
-    if (_Area[DISPLAY_TFT_AREA2].refer && (current_function != DMM_SETTING)) {
+    if (_Area[DMM_ZONE_CONT].refer && 
+        (_func != DMM_SETTING)
+    ) {
         tft_flush_area(1, vm);
-        _Area[DISPLAY_TFT_AREA2].refer = false;
+        _Area[DMM_ZONE_CONT].refer = false;
     }
 
-    if (_Area[DISPLAY_TFT_AREA3].refer && (current_function != DMM_SETTING)) {
+    if (_Area[DMM_RET_CONT].refer && 
+        (_func != DMM_SETTING)
+    ) {
         tft_flush_area(2, vm);
-        _Area[DISPLAY_TFT_AREA3].refer = false;
+        _Area[DMM_RET_CONT].refer = false;
     }
 
-    if (_Area[DISPLAY_TFT_AREA4].refer && (current_function != DMM_SETTING)) {
+    if (_Area[DMM_BCHT_CONT].refer && 
+        (_func != DMM_SETTING)
+    ) {
         tft_flush_area(3, vm);
-        _Area[DISPLAY_TFT_AREA4].refer = false;
+        _Area[DMM_BCHT_CONT].refer = false;
     }
 
-    if (_Area[DISPLAY_TFT_AREA5].refer) {
+    if (_Area[DMM_ACTBAR_CONT].refer) {
         tft_flush_area(4, vm);
-        _Area[DISPLAY_TFT_AREA5].refer = false;
+        _Area[DMM_ACTBAR_CONT].refer = false;
     }
 
-    if (_Area[DISPLAY_SETTING_AREA2].refer && (current_function == DMM_SETTING)) {
+    if (_Area[CTL_TABV_CONT].refer && 
+        (_func == DMM_SETTING)
+    ) {
         tft_flush_area(5, vm);
-        _Area[DISPLAY_SETTING_AREA2].refer = false;
+        _Area[CTL_TABV_CONT].refer = false;
     }
 }

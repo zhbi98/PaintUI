@@ -48,7 +48,7 @@ void snake_init(unsigned char * vm)
 
 void set_game_status(char incr)
 {
-    if (read_menubar_function() != DMM_GAME)
+    if (act_bar_get_func() != DMM_GAME)
         return; 
     snake_game.status += incr;
     if (snake_game.status > 1)

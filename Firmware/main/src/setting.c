@@ -4,29 +4,29 @@
 void setting_level1_menu(unsigned char key_event, unsigned char * vm)
 {
     switch (key_event) {
-        case F1_KEY_EVT:
-            display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, F1_MENUBAR_AREA, NULL, MENU_MINUS, WHITE, UNSELECT, vm);
-            break;
+    case F1_KEY_EVT:
+        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_MINUS, WHITE, UNSELECT, vm);
+        break;
 
-        case F2_KEY_EVT:
-            display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, F2_MENUBAR_AREA, NULL, MENU_UP, WHITE, UNSELECT, vm);
-            break;
+    case F2_KEY_EVT:
+        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_UP, WHITE, UNSELECT, vm);
+        break;
 
-        case F3_KEY_EVT:
-            display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, F3_MENUBAR_AREA, NULL, MENU_DOWN, WHITE, UNSELECT, vm);
-            break;
+    case F3_KEY_EVT:
+        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_DOWN, WHITE, UNSELECT, vm);
+        break;
 
-        case F4_KEY_EVT:
-            display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, F4_MENUBAR_AREA, NULL, MENU_ADD, WHITE, UNSELECT, vm);
-            break;
+    case F4_KEY_EVT:
+        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_ADD, WHITE, UNSELECT, vm);
+        break;
 
-        case PREV_KEY_EVT:
-            display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, PREV_MENUBAR_AREA, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
-            break;
+    case PREV_KEY_EVT:
+        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
+        break;
 
-        case NEXT_KEY_EVT:
-            display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, NEXT_MENUBAR_AREA, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
-            break;
+    case NEXT_KEY_EVT:
+        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
+        break;
     }
 }
 
@@ -54,18 +54,18 @@ void setting_level1_key_event(unsigned char key_event)
             set_light_time(-1);
             set_sound_status(-1);
             set_theme_color(-1);
-            display_area1_flush_enable();
-            display_setting_area2_flush_enable();
+            dev_topbar_cont_flush_enable();
+            ctl_tabv_cont_flush_enable();
             break;
 
         case F2_KEY_EVT:
             vpos_selected(-1);
-            display_setting_area2_flush_enable();
+            ctl_tabv_cont_flush_enable();
             break;
 
         case F3_KEY_EVT:
             vpos_selected(1);
-            display_setting_area2_flush_enable();
+            ctl_tabv_cont_flush_enable();
             break;
 
         case F4_KEY_EVT:
@@ -89,8 +89,8 @@ void setting_level1_key_event(unsigned char key_event)
             set_light_time(1);
             set_sound_status(1);
             set_theme_color(1);
-            display_area1_flush_enable();
-            display_setting_area2_flush_enable();
+            dev_topbar_cont_flush_enable();
+            ctl_tabv_cont_flush_enable();
             break;
 
         case PREV_KEY_EVT:
@@ -105,8 +105,8 @@ void setting_level1_key_event(unsigned char key_event)
                 digit_lr_move(-1);
             }
 
-            display_setting_area2_flush_enable();
-            display_area1_flush_enable();
+            ctl_tabv_cont_flush_enable();
+            dev_topbar_cont_flush_enable();
             break;
 
         case NEXT_KEY_EVT:
@@ -121,18 +121,18 @@ void setting_level1_key_event(unsigned char key_event)
                 digit_lr_move(1);
             }
 
-            display_setting_area2_flush_enable();
-            display_area1_flush_enable();
+            ctl_tabv_cont_flush_enable();
+            dev_topbar_cont_flush_enable();
             break;
     }
 }
 
 void setting_level1_key_event_enable(unsigned char key_event)
 {
-    _Area[F1_MENUBAR_AREA].valid   = true;
-    _Area[F2_MENUBAR_AREA].valid   = true;
-    _Area[F3_MENUBAR_AREA].valid   = true;
-    _Area[F4_MENUBAR_AREA].valid   = true;
-    _Area[PREV_MENUBAR_AREA].valid = true;
-    _Area[NEXT_MENUBAR_AREA].valid = true;
+    _Area[DMM_F1_BTN].valid   = true;
+    _Area[DMM_F2_BTN].valid   = true;
+    _Area[DMM_F3_BTN].valid   = true;
+    _Area[DMM_F4_BTN].valid   = true;
+    _Area[DMM_PREV_BTN].valid = true;
+    _Area[DMM_NEXT_BTN].valid = true;
 }

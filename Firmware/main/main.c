@@ -22,7 +22,7 @@ void hw_module_init()
 
 void sw_module_init()
 {
-    widget_size_init();
+    _Area_init();
     key_function_init();
     tft_clear(BLACK);
     digit_lr_move(0);

@@ -6,26 +6,26 @@ void key_event_doing()
     static unsigned char release = true;
     unsigned char event = read_key_event();
 
-    if ((_Area[F1_MENUBAR_AREA].valid == true) && (F1_KEY_STATUS() == 1)){
-        menubar_pressed(F1_KEY_EVT);
+    if ((_Area[DMM_F1_BTN].valid == true) && (F1_KEY_STATUS() == 1)){
+        actbar_btn_pressed(F1_KEY_EVT);
         release = true;
     }
-    if ((_Area[F2_MENUBAR_AREA].valid == true) && (F2_KEY_STATUS() == 0)){
-        menubar_pressed(F2_KEY_EVT);
+    if ((_Area[DMM_F2_BTN].valid == true) && (F2_KEY_STATUS() == 0)){
+        actbar_btn_pressed(F2_KEY_EVT);
         release = true;
     }
-    if ((_Area[F3_MENUBAR_AREA].valid == true) && (F3_KEY_STATUS() == 0)){
-        menubar_pressed(F3_KEY_EVT);
+    if ((_Area[DMM_F3_BTN].valid == true) && (F3_KEY_STATUS() == 0)){
+        actbar_btn_pressed(F3_KEY_EVT);
         release = true;
     }
-    if ((_Area[F4_MENUBAR_AREA].valid == true) && (F4_KEY_STATUS() == 0)){
-        menubar_pressed(F4_KEY_EVT);
+    if ((_Area[DMM_F4_BTN].valid == true) && (F4_KEY_STATUS() == 0)){
+        actbar_btn_pressed(F4_KEY_EVT);
         release = true;
     }
 
     if ((F1_KEY_STATUS() == 0) && (F2_KEY_STATUS() == 1) && (F3_KEY_STATUS() == 1) && (F4_KEY_STATUS() == 1)) {
         if (release == true) {
-            menubar_pressed(RELEASE);
+            actbar_btn_pressed(RELEASE);
             release = false;
         }
     }
@@ -33,116 +33,116 @@ void key_event_doing()
     if (event != RELEASE) {
         read_password(&param_setting_auth, event);
         if (get_lock_status(&param_setting_auth) == true) {
-            if (read_menubar_function() == DMM_VOLTAGE_V) {
-                set_menubar_function(DMM_SETTING);
-                display_area1_flush_enable();
-                display_area2_flush_enable();
-                display_area3_flush_enable();
-                display_area4_flush_enable();
+            if (act_bar_get_func() == DMM_VOLTAGE_V) {
+                act_bar_set_func(DMM_SETTING);
+                dev_topbar_cont_flush_enable();
+                dmm_zone_cont_flush_enable();
+                dmm_ret_cont_flush_enable();
+                dmm_bcht_cont_flush_enable();
             } else {
-                set_menubar_function(DMM_VOLTAGE_V);
-                display_area1_flush_enable();
-                display_area2_flush_enable();
-                display_area3_flush_enable();
-                display_area4_flush_enable();
+                act_bar_set_func(DMM_VOLTAGE_V);
+                dev_topbar_cont_flush_enable();
+                dmm_zone_cont_flush_enable();
+                dmm_ret_cont_flush_enable();
+                dmm_bcht_cont_flush_enable();
             }
         }
     }
 
     switch (event) {
         case F1_KEY_EVT:
-            if (_Area[DISPLAY_TFT_AREA5].valid) {
-                if (_Area[F1_MENUBAR_AREA].valid) {
-                    menubar_flush_enable();
+            if (_Area[DMM_ACTBAR_CONT].valid) {
+                if (_Area[DMM_F1_BTN].valid) {
+                    dmm_actbar_cont_flush_enable();
 
                     // key released to display the effect
-                    menubar_pressed(RELEASE);
+                    actbar_btn_pressed(RELEASE);
 
-                    set_menubar_pressed(F1_KEY_EVT);
-                    function_key_event(F1_KEY_EVT);
+                    act_bar_set_pressed(F1_KEY_EVT);
+                    dmm_function_key_event(F1_KEY_EVT);
                 }
             } else {
-                function_key_event_enable(F1_KEY_EVT);
+                dmm_function_key_event_enable(F1_KEY_EVT);
             }
             break;
 
         case F2_KEY_EVT:
-            if (_Area[DISPLAY_TFT_AREA5].valid) {
-                if (_Area[F2_MENUBAR_AREA].valid) {
-                    menubar_flush_enable();
+            if (_Area[DMM_ACTBAR_CONT].valid) {
+                if (_Area[DMM_F2_BTN].valid) {
+                    dmm_actbar_cont_flush_enable();
                     
                     // key released to display the effect
-                    menubar_pressed(RELEASE);
+                    actbar_btn_pressed(RELEASE);
  
-                    set_menubar_pressed(F2_KEY_EVT);
-                    function_key_event(F2_KEY_EVT);
+                    act_bar_set_pressed(F2_KEY_EVT);
+                    dmm_function_key_event(F2_KEY_EVT);
                 }
             } else {
-                function_key_event_enable(F2_KEY_EVT);
+                dmm_function_key_event_enable(F2_KEY_EVT);
             }
             break;
 
         case F3_KEY_EVT:
-            if (_Area[DISPLAY_TFT_AREA5].valid) {
-                if (_Area[F3_MENUBAR_AREA].valid) {
-                    menubar_flush_enable();
+            if (_Area[DMM_ACTBAR_CONT].valid) {
+                if (_Area[DMM_F3_BTN].valid) {
+                    dmm_actbar_cont_flush_enable();
                     
                     // key released to display the effect
-                    menubar_pressed(RELEASE);
+                    actbar_btn_pressed(RELEASE);
 
-                    set_menubar_pressed(F3_KEY_EVT);
-                    function_key_event(F3_KEY_EVT);
+                    act_bar_set_pressed(F3_KEY_EVT);
+                    dmm_function_key_event(F3_KEY_EVT);
                 }
             } else {
-                function_key_event_enable(F3_KEY_EVT);
+                dmm_function_key_event_enable(F3_KEY_EVT);
             }
             break;
 
         case F4_KEY_EVT:
-            if (_Area[DISPLAY_TFT_AREA5].valid) {
-                if (_Area[F4_MENUBAR_AREA].valid) {
-                    menubar_flush_enable();
+            if (_Area[DMM_ACTBAR_CONT].valid) {
+                if (_Area[DMM_F4_BTN].valid) {
+                    dmm_actbar_cont_flush_enable();
 
                     // key released to display the effect
-                    menubar_pressed(RELEASE);
+                    actbar_btn_pressed(RELEASE);
 
-                    set_menubar_pressed(F4_KEY_EVT);
-                    function_key_event(F4_KEY_EVT);
+                    act_bar_set_pressed(F4_KEY_EVT);
+                    dmm_function_key_event(F4_KEY_EVT);
                 }
             } else {
-                function_key_event_enable(F4_KEY_EVT);
+                dmm_function_key_event_enable(F4_KEY_EVT);
             }
             break;
 
         case PREV_KEY_EVT:
-            if (_Area[DISPLAY_TFT_AREA5].valid) {
-                if (_Area[F4_MENUBAR_AREA].valid) {
-                    menubar_flush_enable();
+            if (_Area[DMM_ACTBAR_CONT].valid) {
+                if (_Area[DMM_F4_BTN].valid) {
+                    dmm_actbar_cont_flush_enable();
 
                     // key released to display the effect
-                    menubar_pressed(RELEASE);
+                    actbar_btn_pressed(RELEASE);
 
-                    set_menubar_pressed(PREV_KEY_EVT);
-                    function_key_event(PREV_KEY_EVT);
+                    act_bar_set_pressed(PREV_KEY_EVT);
+                    dmm_function_key_event(PREV_KEY_EVT);
                 }
             } else {
-                function_key_event_enable(PREV_KEY_EVT);
+                dmm_function_key_event_enable(PREV_KEY_EVT);
             }
             break;
 
         case NEXT_KEY_EVT:
-            if (_Area[DISPLAY_TFT_AREA5].valid) {
-                if (_Area[F4_MENUBAR_AREA].valid) {
-                    menubar_flush_enable();
+            if (_Area[DMM_ACTBAR_CONT].valid) {
+                if (_Area[DMM_F4_BTN].valid) {
+                    dmm_actbar_cont_flush_enable();
 
                     // key released to display the effect
-                    menubar_pressed(RELEASE);
+                    actbar_btn_pressed(RELEASE);
 
-                    set_menubar_pressed(NEXT_KEY_EVT);
-                    function_key_event(NEXT_KEY_EVT);
+                    act_bar_set_pressed(NEXT_KEY_EVT);
+                    dmm_function_key_event(NEXT_KEY_EVT);
                 }
             } else {
-                function_key_event_enable(NEXT_KEY_EVT);
+                dmm_function_key_event_enable(NEXT_KEY_EVT);
             }
             break;
     }
@@ -150,7 +150,7 @@ void key_event_doing()
 
 void key_function_init()
 {
-    set_menubar_function(DMM_VOLTAGE_V);
+    act_bar_set_func(DMM_VOLTAGE_V);
 }
 
 struct password_auth_t param_setting_auth = {

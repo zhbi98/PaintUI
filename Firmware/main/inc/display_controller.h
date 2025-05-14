@@ -12,7 +12,7 @@
 
 #define FUNC_TYPE_MAX 16U
 #define DEPTH_MAX  2U
-#define WIDGET_NUM_MAX    40U
+#define _Area_NUM_MAX    40U
 
 // This is tft region and write data driver interface
 #define TFT_REGION_SETTING_DRV ili9341_display_region
@@ -42,50 +42,72 @@ typedef struct {
     uint8_t page[FUNC_TYPE_MAX];
 } dev_actbar_t;
 
-enum widget_number {
-    DISPLAY_TFT_AREA1,
-    DISPLAY_TFT_AREA2,
-    DISPLAY_TFT_AREA3,
-    DISPLAY_TFT_AREA4,
-    DISPLAY_TFT_AREA5,
-    DISPLAY_SETTING_AREA2,
+/**
+ * Device display Area
+ */
+enum {
+    DEV_TOPBAR_CONT = 0,
+    DEV_BAT,
+    DEV_BLE,
+    DEV_POFF_TIM,
+    DEV_TRUMPET,
+    DEV_LIGHTING,
+    DEV_REAL_TIM,
 
-    // DISPLAY_TFT_AREA1
-    DISPLAY_BATTERY_AREA,
-    DISPLAY_BLUETOOTH_AREA,
-    DISPLAY_POWER_OFF_TIMER_AREA,
-    DISPLAY_TRUMPET_AREA,
-    DISPLAY_LIGHTING_AREA,
-    DISPLAY_REAL_TIME_AREA,
+    DMM_ZONE_CONT,
+    DMM_RUN_STATE,
+    DMM_REC,
+    DMM_HOLD,
+    DMM_REL_VAL,
 
-    // DISPLAY_TFT_AREA2
-    MEASURE_VALUE_MODE_AREA,
-    DISPLAY_RECORDING_AREA,
-    DISPLAY_HOLD_AREA,
-    MEASURE_RELATIVE_VALUE_AREA,
+    DMM_RET_CONT,
+    DMM_RET_VAL,
+    DMM_RET_UNIT,
 
-    // DISPLAY_TFT_AREA3
-    MEASURE_VALUE_AREA,
-    MEASURE_VALUE_UNIT_AREA,
+    DMM_BCHT_CONT,
+    DMM_MEA_LPF,
+    DMM_LOZ,
+    DMM_BCHT,
+    DMM_RANGE_STATUS,
 
-    // DISPLAY_TFT_AREA4
-    MEASURE_LO_AREA,
-    MEASURE_LOZ_AREA,
-    MEASURE_RULER_AREA,
-    MEASURE_RANGE_STATUS_AREA,
+    DMM_ACTBAR_CONT,
+    DMM_F1_BTN,
+    DMM_F2_BTN,
+    DMM_F3_BTN,
+    DMM_F4_BTN,
+    DMM_PREV_BTN,
+    DMM_NEXT_BTN,
 
-    // DISPLAY_TFT_AREA5
-    F1_MENUBAR_AREA,
-    F2_MENUBAR_AREA,
-    F3_MENUBAR_AREA,
-    F4_MENUBAR_AREA,
-
-    PREV_MENUBAR_AREA,
-    NEXT_MENUBAR_AREA,
-
-    // DISPLAY_SETTING_AREA2
-    SETTING_LIST_AREA,
+    CTL_TABV_CONT,
+    CTL_TABV,
+    CTL_ACTBAR_CONT,
+    CTL_F1_BTN,
+    CTL_F2_BTN,
+    CTL_F3_BTN,
+    CTL_F4_BTN,
+    CTL_PREV_BTN,
+    CTL_NEXT_BTN,
 };
+
+typedef uint16_t nt_area_idx_t;
+
+/**
+ * NT activity type
+ */
+enum {
+    NT_ACT_DMM = '0',
+    NT_ACT_CTL = '1',
+};
+
+typedef uint8_t nt_act_type_t;
+
+/**
+ * Construct a activity type
+ */
+typedef struct {
+    uint8_t last_act;
+    uint8_t cur_act;
+} nt_activity_t;
 
 typedef void key_event_interface(uint8_t key);
 typedef void menu_content_interface(uint8_t key_event, uint8_t * vm);
@@ -97,82 +119,38 @@ typedef void (* tft_write_data)(uint32_t data);
 extern const key_event_interface * key_event_controller[][DEPTH_MAX];
 extern const key_event_interface * key_event_enable[][DEPTH_MAX];
 extern const menu_content_interface * display_menu_content[][DEPTH_MAX];
-extern const display_show_interface * display_widget_show[];
 
 extern dev_area_t _Area[];
-extern dev_actbar_t menubar;
+extern dev_actbar_t _dmm_actbar;
 
-extern void widget_size_init();
-
-extern void set_menubar_function(uint8_t function);
-extern uint8_t read_menubar_function();
-
-extern void set_menubar_level(uint8_t level);
-extern uint8_t read_menu_level();
-
-extern void set_menubar_page(uint8_t page);
-extern uint8_t read_menubar_page();
-
-extern void set_menubar_pressed(uint8_t menu_num);
-extern uint8_t read_pressed_menubar();
-
-extern void function_key_event(uint8_t key_event);
-extern void function_key_event_enable(uint8_t key);
-
-extern void display_menubar_content(uint8_t key_event, uint8_t * vm);
-extern void menubar_pressed(uint8_t key_event);
-
-extern void display_area1_flush(uint8_t * vm);
-extern void display_area1_flush_enable();
-extern void display_battery_flush(uint8_t * vm);
-extern void battery_flush_enable();
-extern void display_bluetooth_flush(uint8_t * vm);
-extern void display_power_off_timer_flush(uint8_t * vm);
-extern void display_trumpet_flush(uint8_t * vm);
-extern void display_lighting_flush(uint8_t * vm);
-extern void display_real_time_flush(uint8_t * vm);
-
-extern void display_area2_flush(uint8_t * vm);
-extern void display_area2_flush_enable();
-extern void display_measure_value_mode_flush(uint8_t * vm);
-extern void display_recording_flush(uint8_t * vm);
-extern void display_hold_flush(uint8_t * vm);
-extern void display_relative_value_flush(uint8_t * vm);
-
-extern void display_area3_flush(uint8_t * vm);
-extern void display_area3_flush_enable();
-extern void display_measure_value_flush(uint8_t * vm);
-extern void display_measure_value_unit_flush(uint8_t * vm);
-extern void measure_value_flush_enable();
-
-extern void display_area4_flush(uint8_t * vm);
-extern void display_area4_flush_enable();
-extern void display_measure_lo_flush(uint8_t * vm);
-extern void display_measure_loz_flush(uint8_t * vm);
-extern void display_measure_ruler_flush(uint8_t * vm);
-extern void display_measure_range_status_flush(uint8_t * vm);
-
-extern void display_area5_flush(uint8_t * vm);
-extern void display_area5_flush_enable();
-extern void display_f1_menubar_flush(uint8_t * vm);
-extern void display_f2_menubar_flush(uint8_t * vm);
-extern void display_f3_menubar_flush(uint8_t * vm);
-extern void display_f4_menubar_flush(uint8_t * vm);
-extern void display_prev_menubar_flush(uint8_t * vm);
-extern void display_next_menubar_flush(uint8_t * vm);
-extern void menubar_flush_enable();
-static void measure_interface(uint8_t * vm);
-
-extern void display_setting_area2_flush(uint8_t * vm);
-extern void display_setting_area2_flush_enable();
-extern void display_setting_list_flush(uint8_t * vm);
-static void setting_interface(uint8_t * vm);
-
-extern void display_flush(uint8_t * vm);
-
-// This related to tft driver
-extern void tft_clear(uint8_t color);
-extern void tft_flush_area(uint8_t area_num, uint8_t * vm);
-extern void tft_flush(uint8_t * vm);
+void _Area_init();
+void act_bar_set_func(uint8_t function);
+uint8_t act_bar_get_func();
+void act_bar_set_depth(uint8_t level);
+uint8_t act_bar_get_depth();
+void act_bar_set_page(uint8_t page);
+uint8_t act_bar_get_page();
+void act_bar_set_pressed(uint8_t menu_num);
+uint8_t act_bar_get_pressed();
+void dmm_function_key_event(uint8_t key_event);
+void dmm_function_key_event_enable(uint8_t key);
+void dmm_display_actbar_content(uint8_t key_event, uint8_t * vm);
+void actbar_btn_pressed(uint8_t key_event);
+void dev_topbar_flush(uint8_t * vm);
+void dev_topbar_cont_flush_enable();
+void dmm_zone_flush(uint8_t * vm);
+void dmm_zone_cont_flush_enable();
+void dmm_ret_flush(uint8_t * vm);
+void dmm_ret_cont_flush_enable();
+void dmm_bcht_flush(uint8_t * vm);
+void dmm_bcht_cont_flush_enable();
+void dmm_actbar_flush(uint8_t * vm);
+void dmm_actbar_cont_flush_enable();
+void ctl_tabv_flush(uint8_t * vm);
+void ctl_tabv_cont_flush_enable();
+void display_flush(uint8_t * vm);
+void tft_clear(uint8_t color);
+void tft_flush_area(uint8_t area_num, uint8_t * vm);
+void tft_flush(uint8_t * vm);
 
 #endif
