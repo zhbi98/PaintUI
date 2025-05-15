@@ -2,7 +2,9 @@
 #ifndef __DISPLAY_MENU_CONTENT_H__
 #define __DISPLAY_MENU_CONTENT_H__
 
-enum menu_content_number {
+#include <stdint.h>
+
+enum {
 	MENU_RANGE       = 0,
     MENU_MAX_MIN     = 1,
     MENU_REL         = 2,
@@ -26,7 +28,7 @@ enum menu_content_number {
     TEMP_CONTENT     = 512,
 };
 
-enum list_content_number {
+enum {
     LIST_1_2             = 0,
     LIST_SET_TIME        = 1,
     LIST_SET_DATE        = 2,
@@ -43,14 +45,14 @@ enum list_content_number {
     LIST_COLOR           = 13,
 };
 
-enum tips_content_number {
+enum {
     TIPS_BATTERY_LOW_20 = 0,
     TIPS_BATTERY_LOW_10 = 1,
     TIPS_BATTERY_LOW_05 = 2,
 };
 
-extern const unsigned char * const menu_content[];
-extern const unsigned char * const list_content[];
-extern const unsigned char * const tips_content[];
+extern const uint8_t * const menu_content[];
+extern const uint8_t * const list_content[];
+extern const uint8_t * const tips_content[];
 
 #endif

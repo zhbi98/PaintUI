@@ -6,24 +6,37 @@ void key_event_doing()
     static unsigned char release = true;
     unsigned char event = read_key_event();
 
-    if ((_Area[DMM_F1_BTN].valid == true) && (F1_KEY_STATUS() == 1)){
+    if ((_Area[DMM_F1_BTN].valid == true) && 
+        (F1_KEY_STATUS() == 1)
+    ){
         actbar_btn_pressed(F1_KEY_EVT);
         release = true;
     }
-    if ((_Area[DMM_F2_BTN].valid == true) && (F2_KEY_STATUS() == 0)){
+    if ((_Area[DMM_F2_BTN].valid == true) && 
+        (F2_KEY_STATUS() == 0)
+    ) {
         actbar_btn_pressed(F2_KEY_EVT);
         release = true;
     }
-    if ((_Area[DMM_F3_BTN].valid == true) && (F3_KEY_STATUS() == 0)){
+    if ((_Area[DMM_F3_BTN].valid == true) && 
+        (F3_KEY_STATUS() == 0)
+    ){
         actbar_btn_pressed(F3_KEY_EVT);
         release = true;
     }
-    if ((_Area[DMM_F4_BTN].valid == true) && (F4_KEY_STATUS() == 0)){
+    if ((_Area[DMM_F4_BTN].valid == true) && 
+        (F4_KEY_STATUS() == 0)
+    ){
         actbar_btn_pressed(F4_KEY_EVT);
         release = true;
     }
 
-    if ((F1_KEY_STATUS() == 0) && (F2_KEY_STATUS() == 1) && (F3_KEY_STATUS() == 1) && (F4_KEY_STATUS() == 1)) {
+    if (
+        (F1_KEY_STATUS() == 0) && 
+        (F2_KEY_STATUS() == 1) && 
+        (F3_KEY_STATUS() == 1) && 
+        (F4_KEY_STATUS() == 1)
+    ) {
         if (release == true) {
             actbar_btn_pressed(RELEASE);
             release = false;
@@ -33,14 +46,14 @@ void key_event_doing()
     if (event != RELEASE) {
         read_password(&param_setting_auth, event);
         if (get_lock_status(&param_setting_auth) == true) {
-            if (act_bar_get_func() == DMM_VOLTAGE_V) {
-                act_bar_set_func(DMM_SETTING);
+            if (act_bar_get_func(&_dmm_actbar) == DMM_VOLTAGE_V) {
+							  load_activity(NT_ACT_CTL);
                 dev_topbar_cont_flush_enable();
                 dmm_zone_cont_flush_enable();
                 dmm_ret_cont_flush_enable();
                 dmm_bcht_cont_flush_enable();
             } else {
-                act_bar_set_func(DMM_VOLTAGE_V);
+                act_bar_set_func(&_dmm_actbar, DMM_VOLTAGE_V);
                 dev_topbar_cont_flush_enable();
                 dmm_zone_cont_flush_enable();
                 dmm_ret_cont_flush_enable();
@@ -58,7 +71,7 @@ void key_event_doing()
                     // key released to display the effect
                     actbar_btn_pressed(RELEASE);
 
-                    act_bar_set_pressed(F1_KEY_EVT);
+                    act_bar_set_pressed(&_dmm_actbar, F1_KEY_EVT);
                     dmm_function_key_event(F1_KEY_EVT);
                 }
             } else {
@@ -74,7 +87,7 @@ void key_event_doing()
                     // key released to display the effect
                     actbar_btn_pressed(RELEASE);
  
-                    act_bar_set_pressed(F2_KEY_EVT);
+                    act_bar_set_pressed(&_dmm_actbar, F2_KEY_EVT);
                     dmm_function_key_event(F2_KEY_EVT);
                 }
             } else {
@@ -90,7 +103,7 @@ void key_event_doing()
                     // key released to display the effect
                     actbar_btn_pressed(RELEASE);
 
-                    act_bar_set_pressed(F3_KEY_EVT);
+                    act_bar_set_pressed(&_dmm_actbar, F3_KEY_EVT);
                     dmm_function_key_event(F3_KEY_EVT);
                 }
             } else {
@@ -106,7 +119,7 @@ void key_event_doing()
                     // key released to display the effect
                     actbar_btn_pressed(RELEASE);
 
-                    act_bar_set_pressed(F4_KEY_EVT);
+                    act_bar_set_pressed(&_dmm_actbar, F4_KEY_EVT);
                     dmm_function_key_event(F4_KEY_EVT);
                 }
             } else {
@@ -122,7 +135,7 @@ void key_event_doing()
                     // key released to display the effect
                     actbar_btn_pressed(RELEASE);
 
-                    act_bar_set_pressed(PREV_KEY_EVT);
+                    act_bar_set_pressed(&_dmm_actbar, PREV_KEY_EVT);
                     dmm_function_key_event(PREV_KEY_EVT);
                 }
             } else {
@@ -138,7 +151,7 @@ void key_event_doing()
                     // key released to display the effect
                     actbar_btn_pressed(RELEASE);
 
-                    act_bar_set_pressed(NEXT_KEY_EVT);
+                    act_bar_set_pressed(&_dmm_actbar, NEXT_KEY_EVT);
                     dmm_function_key_event(NEXT_KEY_EVT);
                 }
             } else {
@@ -150,7 +163,7 @@ void key_event_doing()
 
 void key_function_init()
 {
-    act_bar_set_func(DMM_VOLTAGE_V);
+    act_bar_set_func(&_dmm_actbar, DMM_VOLTAGE_V);
 }
 
 struct password_auth_t param_setting_auth = {

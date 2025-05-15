@@ -614,24 +614,9 @@
               <FilePath>..\hal\src\ili9341a.c</FilePath>
             </File>
             <File>
-              <FileName>mpu6050.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\hal\src\mpu6050.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\hal\src\stm32f4xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>time.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\hal\src\time.c</FilePath>
-            </File>
-            <File>
-              <FileName>timers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\hal\src\timers.c</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>
@@ -727,6 +712,11 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\main\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\time.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -324,110 +324,111 @@ uint8_t read_last_activity()
     return activity.last_act;
 }
 
-void act_bar_set_func(uint8_t function)
+void act_bar_set_func(dev_actbar_t * _actbar_p, uint8_t _func)
 {
-    _dmm_actbar.func = function;
-    // F1_KEY_EVT placeholder parameter
-    dmm_function_key_event_enable(F1_KEY_EVT);
+    if (_func == _actbar_p->func) return;
+
+    _actbar_p->_func = _actbar_p->func;
+    _actbar_p->func = _func;
 }
 
-uint8_t act_bar_get_func()
+uint8_t act_bar_get_func(dev_actbar_t * _actbar_p)
 {
-    return _dmm_actbar.func;
+    return _actbar_p->func;
 }
 
-void act_bar_set_depth(uint8_t level)
+uint8_t act_bar_get_last_func(dev_actbar_t * _actbar_p)
 {
-    uint8_t function = act_bar_get_func();
-
-    _dmm_actbar._depth[function] = level;
+    return _actbar_p->_func;
 }
 
-uint8_t act_bar_get_depth()
+void act_bar_set_depth(dev_actbar_t * _actbar_p, uint8_t _depth)
 {
-    uint8_t function = act_bar_get_func();
-
-    return _dmm_actbar._depth[function];
+    uint8_t func = act_bar_get_func(_actbar_p);
+    _actbar_p->_depth[func] = _depth;
 }
 
-void act_bar_set_page(uint8_t page)
+uint8_t act_bar_get_depth(dev_actbar_t * _actbar_p)
 {
-    uint8_t function = act_bar_get_func();
-
-    _dmm_actbar.page[function] = page;
+    uint8_t func = act_bar_get_func(_actbar_p);
+    return _actbar_p->_depth[func];
 }
 
-uint8_t act_bar_get_page()
+void act_bar_set_page(dev_actbar_t * _actbar_p, uint8_t page)
 {
-    uint8_t function = act_bar_get_func();
-
-    return _dmm_actbar.page[function];
+    uint8_t func = act_bar_get_func(_actbar_p);
+    _actbar_p->page[func] = page;
 }
 
-void act_bar_set_pressed(uint8_t menu_num)
+uint8_t act_bar_get_page(dev_actbar_t * _actbar_p)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    _dmm_actbar.pressed[function][level] = menu_num;
+    uint8_t func = act_bar_get_func(_actbar_p);
+    return _actbar_p->page[func];
 }
 
-uint8_t act_bar_get_pressed()
+void act_bar_set_pressed(dev_actbar_t * _actbar_p, 
+    uint8_t _idx)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
+    uint8_t func = act_bar_get_func(_actbar_p);
+    uint8_t level = act_bar_get_depth(_actbar_p);
+    _actbar_p->pressed[func][level] = _idx;
+}
 
-    return _dmm_actbar.pressed[function][level];
+uint8_t act_bar_get_pressed(dev_actbar_t * _actbar_p)
+{
+    uint8_t func = act_bar_get_func(_actbar_p);
+    uint8_t level = act_bar_get_depth(_actbar_p);
+    return _actbar_p->pressed[func][level];
 }
 
 /*Activity DMM*/
 void dmm_function_key_event(uint8_t key_event)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    (*dmm_key_event_controller[function][level])(key_event);
+    uint8_t func = act_bar_get_func(&_dmm_actbar);
+    uint8_t level = act_bar_get_depth(&_dmm_actbar);
+    if (dmm_key_event_controller[func][level] != NULL)
+    (*dmm_key_event_controller[func][level])(key_event);
 }
 
 void dmm_function_key_event_enable(uint8_t key)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    (*dmm_key_event_enable[function][level])(key);
+    uint8_t func = act_bar_get_func(&_dmm_actbar);
+    uint8_t level = act_bar_get_depth(&_dmm_actbar);
+    if (dmm_key_event_enable[func][level] != NULL)
+        (*dmm_key_event_enable[func][level])(key);
 }
 
 void dmm_display_actbar_content(uint8_t key_event, uint8_t * vm)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    (*dmm_display_menu_content[function][level])(key_event, vm);
+    uint8_t func = act_bar_get_func(&_dmm_actbar);
+    uint8_t level = act_bar_get_depth(&_dmm_actbar);
+    if (dmm_display_menu_content[func][level] != NULL)
+        (*dmm_display_menu_content[func][level])(key_event, vm);
 }
 
 /*Activity CTL*/
 void ctl_function_key_event(uint8_t key_event)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    (*ctl_key_event_controller[function][level])(key_event);
+    uint8_t func = act_bar_get_func(&_ctl_actbar);
+    uint8_t level = act_bar_get_depth(&_ctl_actbar);
+    if (ctl_key_event_controller[func][level] != NULL)
+    (*ctl_key_event_controller[func][level])(key_event);
 }
 
 void ctl_function_key_event_enable(uint8_t key)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    (*ctl_key_event_enable[function][level])(key);
+    uint8_t func = act_bar_get_func(&_ctl_actbar);
+    uint8_t level = act_bar_get_depth(&_ctl_actbar);
+    if (ctl_key_event_enable[func][level] != NULL)
+        (*ctl_key_event_enable[func][level])(key);
 }
 
 void ctl_display_actbar_content(uint8_t key_event, uint8_t * vm)
 {
-    uint8_t function = act_bar_get_func();
-    uint8_t level = act_bar_get_depth();
-
-    (*ctl_display_menu_content[function][level])(key_event, vm);
+    uint8_t func = act_bar_get_func(&_ctl_actbar);
+    uint8_t level = act_bar_get_depth(&_ctl_actbar);
+    if (ctl_display_menu_content[func][level] != NULL)
+        (*ctl_display_menu_content[func][level])(key_event, vm);
 }
 
 void actbar_btn_pressed(uint8_t key_event)
@@ -839,7 +840,7 @@ void tft_flush_area(uint8_t area_num, uint8_t * vm)
 
 void tft_flush(uint8_t * vm)
 {
-    uint8_t _func = act_bar_get_func();
+    uint8_t _func = act_bar_get_func(&_dmm_actbar);
 
     if (_Area[DEV_TOPBAR_CONT].refer) {
         tft_flush_area(0, vm);

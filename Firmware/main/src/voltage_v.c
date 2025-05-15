@@ -5,7 +5,7 @@ struct voltage_measure_t voltage_measure;
 
 void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
 {
-    unsigned char page = act_bar_get_page();
+    unsigned char page = act_bar_get_page(&_dmm_actbar);
 
     if (voltage_measure.type == VOLTAGE_DC) {
         if (page == VOLTAGE_LEFT) {
@@ -174,7 +174,7 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
 
 void voltage_level1_key_event(unsigned char key_event)
 {
-    unsigned char page = act_bar_get_page();
+    unsigned char page = act_bar_get_page(&_dmm_actbar);
 
     if (voltage_measure.type == VOLTAGE_DC) {
         if (page == VOLTAGE_LEFT) {
@@ -195,7 +195,7 @@ void voltage_level1_key_event(unsigned char key_event)
                     break;
 
                 case NEXT_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_CENTER);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_CENTER);
                     break;
             }
         }
@@ -217,11 +217,11 @@ void voltage_level1_key_event(unsigned char key_event)
                     break;
 
                 case PREV_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_LEFT);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_LEFT);
                     break;
 
                 case NEXT_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_RIGHT);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_RIGHT);
                     break;
             }
         }
@@ -241,7 +241,7 @@ void voltage_level1_key_event(unsigned char key_event)
                     break;
 
                 case PREV_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_CENTER);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_CENTER);
                     break;
 
                 case NEXT_KEY_EVT:
@@ -269,7 +269,7 @@ void voltage_level1_key_event(unsigned char key_event)
                     break;
 
                 case NEXT_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_CENTER);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_CENTER);
                     break;
             }
         }
@@ -289,11 +289,11 @@ void voltage_level1_key_event(unsigned char key_event)
                     break;
 
                 case PREV_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_LEFT);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_LEFT);
                     break;
 
                 case NEXT_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_RIGHT);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_RIGHT);
                     break;
             }
         }
@@ -313,7 +313,7 @@ void voltage_level1_key_event(unsigned char key_event)
                     break;
 
                 case PREV_KEY_EVT:
-                    act_bar_set_page(VOLTAGE_LEFT);
+                    act_bar_set_page(&_dmm_actbar, VOLTAGE_LEFT);
                     break;
 
                 case NEXT_KEY_EVT:
@@ -325,7 +325,7 @@ void voltage_level1_key_event(unsigned char key_event)
 
 void voltage_level1_key_event_enable(unsigned char key_event)
 {
-    unsigned char page = act_bar_get_page();
+    unsigned char page = act_bar_get_page(&_dmm_actbar);
 
     if (voltage_measure.type == VOLTAGE_DC) {
         if (page == VOLTAGE_LEFT) {
@@ -388,11 +388,11 @@ void voltage_level1_key_event_enable(unsigned char key_event)
 
 void voltage_select()
 {
-    if (act_bar_get_func() != DMM_VOLTAGE_V)
+    if (act_bar_get_func(&_dmm_actbar) != DMM_VOLTAGE_V)
         return;
 
     voltage_measure.type++;
-    act_bar_set_page(VOLTAGE_CENTER);
+    act_bar_set_page(&_dmm_actbar, VOLTAGE_CENTER);
 
     if (voltage_measure.type > VOLTAGE_AC)
         voltage_measure.type = VOLTAGE_DC; 

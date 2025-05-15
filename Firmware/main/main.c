@@ -3,7 +3,6 @@
 
 #include "key.h"
 #include "time.h"
-#include "timers.h"
 #include "display.h"
 
 #include "key_controller.h"
@@ -16,7 +15,6 @@ void hw_module_init()
 {
     ili9341_init();
     usart_init();
-    timers_init(50, 1680);
     key_gpio_init();
 }
 
