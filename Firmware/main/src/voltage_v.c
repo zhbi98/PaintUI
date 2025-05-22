@@ -204,7 +204,7 @@ void voltage_level1_key_event(unsigned char key_event)
             switch (key_event) {
                 case F1_KEY_EVT:
                     // image_shot();
-                    active_tips(&message_tips[0], second_convert_ticks(100));
+                    active_tips(&message_tips[0], STMS_TICKS(100, 500));
                     break;
 
                 case F2_KEY_EVT:

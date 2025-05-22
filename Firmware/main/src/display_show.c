@@ -45,7 +45,7 @@ void dev_buletooth_refer(uint8_t * vm)
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
 
-    display_status_logo(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, GRAY, logo.name, logo.status, vm);
 }
 
@@ -60,7 +60,7 @@ void dev_poff_tim_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
-    display_status_logo(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, GRAY, logo.name, logo.status, vm);
 }
 
@@ -74,7 +74,7 @@ void dev_trumpet_refer(uint8_t * vm)
     if (status_logo_output_pool(&logo_pool, &logo) == false)
         return;
 
-    display_status_logo(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, GRAY, logo.name, logo.status, vm);
 }
 
@@ -90,7 +90,7 @@ void dev_lighting_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
-    display_status_logo(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, GRAY, logo.name, logo.status, vm);
 }
 
@@ -218,7 +218,7 @@ void dmm_ret_unit_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
-    display_status_logo(_Area[_area_idx].set_y - 10, _Area[_area_idx].set_x + 24, 
+    display_sym(_Area[_area_idx].set_y - 10, _Area[_area_idx].set_x + 24, 
         WHITE, BLACK, DC_DESC, 1, vm);
     display_measure_value_unit_content(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         RIGHT_ALIGN, LAYOUT_R11, _area_idx, "mV", TEMP_CONTENT, WHITE, UNSELECT, vm);
@@ -242,7 +242,7 @@ void dmm_mea_lpf_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
-    if (1) display_status_logo(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    if (1) display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, BLACK, LO, 1, vm);
 }
 
@@ -254,7 +254,7 @@ void dmm_loz_state_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
-    if (1) display_status_logo(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    if (1) display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, BLACK, LOZ, 1, vm);
 }
 
@@ -266,7 +266,7 @@ void dmm_bcht_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height + 15, BLACK, vm);
-    if (1) display_ruler_percent_mode(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    if (1) display_barchart(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         WHITE, BLACK, 60, 600, vm);
 }
 
@@ -410,7 +410,7 @@ void ctl_tabv_refer(uint8_t * vm)
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
 
-    display_setting_dock(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+    display_dock(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, RED, GRAY, 8, LINE_GAP, get_vpos_selected(), vm);
 
     uint8_t list_item_color[8];

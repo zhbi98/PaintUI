@@ -8,6 +8,14 @@
 #include "key_controller.h"
 #include "display_controller.h"
 
+/*********************
+ *      DEFINES
+ *********************/
+#define TICKS(v1, v2) \
+    (((uint32_t)(v1)) / ((uint32_t)(v2)))
+#define STMS_TICKS(s, ms) \
+    ((uint32_t)((s) * (1000U) / (ms)))
+
 #define RTC_BASE    2000
 
 #define YEAR_MAX    2099
