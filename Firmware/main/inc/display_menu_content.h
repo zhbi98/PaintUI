@@ -1,8 +1,20 @@
+/**
+ * @file display_menu_content.h
+ *
+ */
 
 #ifndef __DISPLAY_MENU_CONTENT_H__
 #define __DISPLAY_MENU_CONTENT_H__
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdint.h>
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 enum {
 	MENU_RANGE = 0,
@@ -50,8 +62,12 @@ enum {
     TIPS_BATTERY_LOW_05,
 };
 
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
+
 extern const uint8_t * const menu_content[];
 extern const uint8_t * const list_content[];
 extern const uint8_t * const tips_content[];
 
-#endif
+#endif /*__DISPLAY_MENU_CONTENT_H__*/

@@ -1,5 +1,7 @@
 
+#include "display_controller.h"
 #include "display_string.h"
+#include "fontlib.h"
 #include "ext.h"
 
 /**

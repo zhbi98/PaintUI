@@ -1,7 +1,20 @@
+/**
+ * @file display_menu_content.c
+ *
+ */
+
+/*********************
+ *      INCLUDES
+ *********************/
 
 #include "display_menu_content.h"
 
-const uint8_t * const menu_content[] = {
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
+
+const uint8_t * 
+const menu_content[] = {
     "RANGE",           // 000
     "MAX/MIN",         // 001
     "REL",             // 002
@@ -23,7 +36,8 @@ const uint8_t * const menu_content[] = {
     "LOG",             // 018
 };
 
-const uint8_t * const list_content[] = {
+const uint8_t * 
+const list_content[] = {
     "1/2",             // 000
     "Set Time",        // 001
     "Set Date",        // 002
@@ -40,7 +54,8 @@ const uint8_t * const list_content[] = {
     "Color",           // 013
 };
 
-const uint8_t * const tips_content[] = {
+const uint8_t * 
+const tips_content[] = {
     "Battery < 20%\nPlease Recharge", // 000
     "Battery < 15%",                  // 001
     "Battery < 10%",                  // 002

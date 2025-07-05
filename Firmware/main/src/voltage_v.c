@@ -11,7 +11,7 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
         if (page == VOLTAGE_LEFT) {
             switch (key_event) {
                 case F1_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_AC_DC, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_AC_DC, WHITE, UNSELECT, vm);
                     break;
 
                 case F2_KEY_EVT:
@@ -27,7 +27,7 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
                     break;
 
                 case NEXT_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
                     break;
             }
         } 
@@ -35,27 +35,27 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
         if (page == VOLTAGE_CENTER) {
             switch (key_event) {
                 case F1_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_RANGE, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_RANGE, WHITE, UNSELECT, vm);
                     break;
 
                 case F2_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_MAX_MIN, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_MAX_MIN, WHITE, UNSELECT, vm);
                     break;
 
                 case F3_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_REL, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_REL, WHITE, UNSELECT, vm);
                     break;
 
                 case F4_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_HOLD, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_HOLD, WHITE, UNSELECT, vm);
                     break;
 
                 case PREV_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
                     break;
 
                 case NEXT_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
                     break;
             }
         } 
@@ -63,23 +63,23 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
         if (page == VOLTAGE_RIGHT) {
             switch (key_event) {
                 case F1_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_COMP, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_COMP, WHITE, UNSELECT, vm);
                     break;
 
                 case F2_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_AUTO_SAVE, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_AUTO_SAVE, WHITE, UNSELECT, vm);
                     break;
 
                 case F3_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_MANUAL_SAVE, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_MANUAL_SAVE, WHITE, UNSELECT, vm);
                     break;
 
                 case F4_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_VIEW_DATA, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_VIEW_DATA, WHITE, UNSELECT, vm);
                     break;
 
                 case PREV_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
                     break;
 
                 case NEXT_KEY_EVT:
@@ -92,15 +92,15 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
         if (page == VOLTAGE_LEFT) {
             switch (key_event) {
                 case F1_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_AC_DC, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_AC_DC, WHITE, UNSELECT, vm);
                     break;
 
                 case F2_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_LO, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_LO, WHITE, UNSELECT, vm);
                     break;
 
                 case F3_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_PEAK, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_PEAK, WHITE, UNSELECT, vm);
                     break;
 
                 case F4_KEY_EVT:
@@ -110,7 +110,7 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
                     break;
 
                 case NEXT_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
                     break;
             }
         }
@@ -118,27 +118,27 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
         if (page == VOLTAGE_CENTER) {
             switch (key_event) {
                 case F1_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_RANGE, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_RANGE, WHITE, UNSELECT, vm);
                     break;
 
                 case F2_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_MAX_MIN, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_MAX_MIN, WHITE, UNSELECT, vm);
                     break;
 
                 case F3_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_REL, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_REL, WHITE, UNSELECT, vm);
                     break;
 
                 case F4_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_HOLD, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_HOLD, WHITE, UNSELECT, vm);
                     break;
 
                 case PREV_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
                     break;
 
                 case NEXT_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
                     break;
             }
         }
@@ -146,23 +146,23 @@ void voltage_level1_menu(unsigned char key_event, unsigned char * vm)
         if (page == VOLTAGE_RIGHT) {
             switch (key_event) {
                 case F1_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_COMP, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_COMP, WHITE, UNSELECT, vm);
                     break;
 
                 case F2_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_AUTO_SAVE, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_AUTO_SAVE, WHITE, UNSELECT, vm);
                     break;
 
                 case F3_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_MANUAL_SAVE, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_MANUAL_SAVE, WHITE, UNSELECT, vm);
                     break;
 
                 case F4_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_VIEW_DATA, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_VIEW_DATA, WHITE, UNSELECT, vm);
                     break;
 
                 case PREV_KEY_EVT:
-                    display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
+                    display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
                     break;
 
                 case NEXT_KEY_EVT:

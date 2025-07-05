@@ -5,27 +5,27 @@ void setting_level1_menu(unsigned char key_event, unsigned char * vm)
 {
     switch (key_event) {
     case F1_KEY_EVT:
-        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_MINUS, WHITE, UNSELECT, vm);
+        display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F1_BTN, NULL, MENU_MINUS, WHITE, UNSELECT, vm);
         break;
 
     case F2_KEY_EVT:
-        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_UP, WHITE, UNSELECT, vm);
+        display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F2_BTN, NULL, MENU_UP, WHITE, UNSELECT, vm);
         break;
 
     case F3_KEY_EVT:
-        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_DOWN, WHITE, UNSELECT, vm);
+        display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F3_BTN, NULL, MENU_DOWN, WHITE, UNSELECT, vm);
         break;
 
     case F4_KEY_EVT:
-        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_ADD, WHITE, UNSELECT, vm);
+        display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_F4_BTN, NULL, MENU_ADD, WHITE, UNSELECT, vm);
         break;
 
     case PREV_KEY_EVT:
-        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
+        display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, UNSELECT, vm);
         break;
 
     case NEXT_KEY_EVT:
-        display_widget_content(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
+        display_N1string(0, 0, CENTER_ALIGN, LAYOUT_R11, DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, UNSELECT, vm);
         break;
     }
 }

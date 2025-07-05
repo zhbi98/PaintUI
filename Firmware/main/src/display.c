@@ -1,4 +1,5 @@
 
+#include "display_menu_content.h"
 #include "display.h"
 
 uint8_t display_buf[DISP_BUF_SIZE] = {0};
@@ -411,7 +412,7 @@ void display_recording_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t hei
     if (!status) return;
 
     display_solid_rect(y, x, width, height, bg, vm);
-    display_mark_content(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
+    display_N2string(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
         "RECORDING", TEMP_CONTENT, fg, UNSELECT, vm);
 }
 
@@ -421,7 +422,7 @@ void display_maxmin_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height
     if (!status) return;
 
     display_solid_rect(y, x, width, height, bg, vm);
-    display_mark_content(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
+    display_N2string(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
         "MAX/MIN", TEMP_CONTENT, fg, UNSELECT, vm);
 }
 
@@ -431,7 +432,7 @@ void display_hold_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
     if (!status) return;
 
     display_solid_rect(y, x, width, height, bg, vm);
-    display_mark_content(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
+    display_N2string(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
         "HOLD", TEMP_CONTENT, fg, UNSELECT, vm);
 }
 
@@ -463,7 +464,7 @@ void display_barchart(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg,
 
     for (uint8_t i = 0; i < (bar_chart.param_cnt + 1); i++) {
         sprintf(param_string, "%d", i * bar_chart.param_incr);
-        display_widget_content(y, x + bar_chart.sigh_len + bar_chart.scale_width * 10 * i - 2, 
+        display_N1string(y, x + bar_chart.sigh_len + bar_chart.scale_width * 10 * i - 2, 
             MANUAL_ALIGN, 0, 0, param_string, TEMP_CONTENT, fg, UNSELECT, vm);
     }
 
