@@ -412,7 +412,7 @@ void display_recording_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t hei
     if (!status) return;
 
     display_solid_rect(y, x, width, height, bg, vm);
-    display_N2string(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
+    display_N2string(y + 2, x + 2, SPECIFY, LAYOUT_R11, 0, 
         "RECORDING", _MENU_LAST, fg, UNSELECT, vm);
 }
 
@@ -422,7 +422,7 @@ void display_maxmin_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height
     if (!status) return;
 
     display_solid_rect(y, x, width, height, bg, vm);
-    display_N2string(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
+    display_N2string(y + 2, x + 2, SPECIFY, LAYOUT_R11, 0, 
         "MAX/MIN", _MENU_LAST, fg, UNSELECT, vm);
 }
 
@@ -432,7 +432,7 @@ void display_hold_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
     if (!status) return;
 
     display_solid_rect(y, x, width, height, bg, vm);
-    display_N2string(y + 2, x + 2, MANUAL_ALIGN, LAYOUT_R11, 0, 
+    display_N2string(y + 2, x + 2, SPECIFY, LAYOUT_R11, 0, 
         "HOLD", _MENU_LAST, fg, UNSELECT, vm);
 }
 
@@ -465,7 +465,7 @@ void display_barchart(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg,
     for (uint8_t i = 0; i < (bar_chart.param_cnt + 1); i++) {
         sprintf(param_string, "%d", i * bar_chart.param_incr);
         display_N1string(y, x + bar_chart.sigh_len + bar_chart.scale_width * 10 * i - 2, 
-            MANUAL_ALIGN, 0, 0, param_string, _MENU_LAST, fg, UNSELECT, vm);
+            SPECIFY, 0, 0, param_string, _MENU_LAST, fg, UNSELECT, vm);
     }
 
     for (uint8_t i = 0; i < bar_chart.scale_count + 1; i++) {
@@ -645,7 +645,7 @@ void display_tips(uint32_t y, uint32_t x, uint32_t tft_width,
     display_bevel_rect(y, x, str_length + 4, str_height * line + 4 * line, bg, 1, vm);
 
     for (uint8_t l = 0; l < line; l++) {
-        display_string_align(y + 2, x + 2, MANUAL_ALIGN, 0, 0, fg, font_size, (uint8_t *)/*tips_content[tips->content_num]*/tips_buf[l], UNSELECT, vm);
+        display_string_align(y + 2, x + 2, SPECIFY, 0, 0, fg, font_size, (uint8_t *)/*tips_content[tips->content_num]*/tips_buf[l], UNSELECT, vm);
         if (l != (line - 1))
             display_dotted_line(y + str_height + 4, x + 2, str_length, 2, 0, WHITE, vm);
         y = y + str_height + 4;
