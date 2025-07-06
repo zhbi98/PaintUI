@@ -36,7 +36,7 @@ enum {
     MENU_AUTO_SAVE,
     MENU_MANUAL_SAVE,
     MENU_VIEW_DATA,
-    TEMP_CONTENT,
+    _MENU_LAST,
 };
 
 enum {
@@ -54,12 +54,14 @@ enum {
     LIST_BACK_LIGHT_TIME,
     LIST_SOUND,
     LIST_COLOR,
+    _LIST_LAST,
 };
 
 enum {
     TIPS_BATTERY_LOW_20 = 0,
     TIPS_BATTERY_LOW_10,
     TIPS_BATTERY_LOW_05,
+    _TIPS_LAST,
 };
 
 /**********************

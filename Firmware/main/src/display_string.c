@@ -27,6 +27,15 @@
  *  STATIC PROTOTYPES
  **********************/
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 static int32_t font_valid_width(int32_t width, int32_t height, uint8_t start_char, 
     uint8_t character, const uint8_t * fontlib);
 
@@ -38,72 +47,70 @@ static int32_t font_valid_width(int32_t width, int32_t height, uint8_t start_cha
  * pixel line    Height -> Low
  * byte bit scan Right  <- Left
  *
- * 0x00 -> 0 0 0 0 0 0 0 0
+
+/**
+ * Calculate the valid width of a character in a font
+ * Note: Font data is stored with pixel lines from Height to Low,
+ * and byte bit scanning from Right to Left
+ * Example font representation:
  * 0x00 -> 0 0 0 0 0 0 0 0
  * 0xFC -> 1 1 1 1 1 1 0 0
- * 0x42 -> 0 1 0 0 0 0 1 0
- * 0x42 -> 0 1 0 0 0 0 1 0
- * 0x42 -> 0 1 0 0 0 0 1 0
- * 0x7C -> 0 1 1 1 1 1 0 0
- * 0x48 -> 0 1 0 0 1 0 0 0
- * 0x48 -> 0 1 0 0 1 0 0 0
- * 0x44 -> 0 1 0 0 0 1 0 0
- * 0x44 -> 0 1 0 0 0 1 0 0
- * 0x42 -> 0 1 0 0 0 0 1 0
- * 0xE3 -> 1 1 1 0 0 0 1 1
- * 0x00 -> 0 0 0 0 0 0 0 0
- * 0x00 -> 0 0 0 0 0 0 0 0
- * 0x00 -> 0 0 0 0 0 0 0 0
+ * etc.
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
  */
 static int32_t font_valid_width(int32_t width, int32_t height, uint8_t start_char, 
     uint8_t character, const uint8_t * fontlib)
 {
-    uint32_t space = 0;
-
-    uint32_t bytes, total_byte;
-    uint32_t faddress = 0;
-    uint32_t valid_width = 0;
-
-    /*bytes per line*/
-    bytes = (int32_t)((width + 7) / 8);
-    /*bytes occupied by font*/
-    total_byte = bytes * height;
+    uint32_t bytes = (int32_t)((width + 7) / 8);
+    uint32_t total_byte = bytes * height;
     character = character - start_char;
-    faddress = total_byte * character;
+    uint32_t faddress = total_byte * character;
+
+    uint32_t _width = 0;
+    uint32_t _padding = 0;
+    uint32_t _index = 0;
 
     for (uint32_t byte = 0; byte < bytes; byte++) {
         for (uint8_t bit = 0; bit < 8; bit++) {
             for (uint32_t line = 0; line < height; line++) {
-                /** 
-                 * 2 bytes
-                 * 0, 1    | 0 (line)
-                 * 2, 3    | 1 (line)
-                 * 4, 5    | 2 (line)
-                 *
-                 * 3 bytes
-                 * 0, 1, 2 | 0 (line)
-                 * 3, 4, 5 | 1 (line)
-                 * 6, 7, 8 | 2 (line)
-                 */
-                if ((fontlib[faddress + (bytes * line + ((bytes - 1) - byte))]) & (0x01 << bit)) {
-                    valid_width = bytes * 8 - space;
-                    /*printf("space:%d\n", space);*/
-                    return valid_width + 1;
+                _index = (bytes * line) + ((bytes - 1) - byte);
+                /*printf("Addr:%d:index:%d", faddress, _index);*/
+                if ((fontlib[faddress + _index]) & (0x01 << bit)) {
+                    _width = bytes * 8 - _padding;
+                    /*printf("space:%d\n", _padding);*/
+                    return _width + 1;
                 }
-                /*printf("faddress:%d\n", faddress);*/
-                /*printf("index:%d\n", */
-                /*(bytes * line + ((bytes - 1) - byte)));*/
             }
-            space++;
+            _padding++;
         }
     }
-    valid_width = bytes * 8 - space;
-    if (valid_width <= 0)
-        valid_width = 1;
-    /*printf("space:%d\n", space);*/
-    return valid_width + 1;
+
+    /** 
+     * 2 bytes             /  3 bytes
+     * 0, 1    | 0 (line)  /  0, 1, 2 | 0 (line)
+     * 2, 3    | 1 (line)  /  3, 4, 5 | 1 (line)
+     * 4, 5    | 2 (line)  /  6, 7, 8 | 2 (line)
+     */
+
+    _width = bytes * 8 - _padding;
+    if (_width < 1) _width = 1;
+    return _width + 1;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 void read_font_valid_width(uint8_t font_size, uint8_t finish_character)
 {
     uint8_t font_width = 0;
@@ -111,18 +118,23 @@ void read_font_valid_width(uint8_t font_size, uint8_t finish_character)
     uint32_t _start = en_font[font_size].base_char;
 
     for (uint32_t _char = _start; _char <= finish_character; _char++) {
-        font_width = font_valid_width(
-            en_font[font_size].width, 
-            en_font[font_size].height, 
-            en_font[font_size].base_char, 
-            _char, 
-            en_font[font_size].fontdata
-        );
+        font_width = font_valid_width(en_font[font_size].width, 
+            en_font[font_size].height, en_font[font_size].base_char, 
+            _char, en_font[font_size].fontdata);
         logger("/*sym:[%c] width:*/%d,", 
         _char, font_width);
     }
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 void display_character(int32_t y, int32_t x, int32_t width, int32_t height, 
     uint32_t fg, uint32_t bg, uint8_t start_char, uint8_t character, 
     const uint8_t * fontlib, uint8_t * vm)
@@ -131,7 +143,7 @@ void display_character(int32_t y, int32_t x, int32_t width, int32_t height,
     uint32_t faddress = 0;
     uint32_t column = 0;
 
-    uint32_t tx, ty;
+    uint32_t tx = 0, ty = 0;
 
     ty = y;
     tx = x;
@@ -163,6 +175,15 @@ void display_character(int32_t y, int32_t x, int32_t width, int32_t height,
     }
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint8_t check_utf8_size(const uint8_t * string, uint8_t bits)
 {
     if ((string[bits] & 0x80) == 0)
@@ -177,12 +198,21 @@ uint8_t check_utf8_size(const uint8_t * string, uint8_t bits)
     return 0;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t unicode_to_utf8(uint32_t letter_uni)
 {
     if (letter_uni < 128) 
         return letter_uni;
 
-    uint32_t bytes[4];
+    uint32_t bytes[4] = {0};
 
     if (letter_uni < 0x0800) {
         bytes[0] = ((letter_uni >>  6) & 0x1f) | 0xc0;
@@ -205,11 +235,29 @@ uint32_t unicode_to_utf8(uint32_t letter_uni)
     return *res_p;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint8_t utf8_1byte_fontdata(uint8_t byte)
 {
     return byte;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint16_t utf8_2byte_fontdata(uint8_t byte1, uint8_t byte2)
 {
     uint16_t data = 0x0000;
@@ -218,6 +266,15 @@ uint16_t utf8_2byte_fontdata(uint8_t byte1, uint8_t byte2)
     return data;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t utf8_3byte_fontdata(uint8_t byte1, uint8_t byte2, uint8_t byte3)
 {
     uint32_t data;
@@ -227,6 +284,15 @@ uint32_t utf8_3byte_fontdata(uint8_t byte1, uint8_t byte2, uint8_t byte3)
     return data;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t find_utf8_1byte_character(uint8_t character, uint8_t * index_buf)
 {
     uint32_t index = 0;
@@ -238,6 +304,15 @@ uint32_t find_utf8_1byte_character(uint8_t character, uint8_t * index_buf)
     return index / 1;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t find_utf8_2byte_character(uint16_t character, uint8_t * index_buf)
 {
     uint32_t index = 0;
@@ -251,6 +326,15 @@ uint32_t find_utf8_2byte_character(uint16_t character, uint8_t * index_buf)
     return index / 2;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t find_utf8_3byte_character(uint32_t character, uint8_t * index_buf)
 {
     uint32_t index = 0;
@@ -264,6 +348,15 @@ uint32_t find_utf8_3byte_character(uint32_t character, uint8_t * index_buf)
     return index / 3;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 void display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg, 
     uint8_t font_size, uint8_t * string, uint8_t * vm)
 {
@@ -311,6 +404,15 @@ void display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg,
     }
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 void _display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg, 
     uint8_t font_size, uint8_t * string, uint8_t _bs, uint8_t * vm)
 {
@@ -372,6 +474,15 @@ void _display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg,
     }
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t string_valid_width(uint8_t font_size, uint8_t * string)
 {
     uint8_t bits = 0;
@@ -389,15 +500,32 @@ uint32_t string_valid_width(uint8_t font_size, uint8_t * string)
             valid_width = valid_width + jp_font[font_size].width;
             bits += 3;
         } else {
-            /*valid_width = valid_width + font_valid_width(en_font[font_size].width, en_font[font_size].height, en_font[font_size].base_char, string[bits], en_font[font_size].fontdata);*/
-            index = find_utf8_1byte_character(utf8_1byte_fontdata(string[bits]), (uint8_t *)/*fontdata_1byte_index*/en_index[font_size].index_buf);
-            valid_width = valid_width + en_font[font_size].widthdata[/*string[bits]*/index - en_font[font_size].base_char];
-            bits++;            
+            index = find_utf8_1byte_character(utf8_1byte_fontdata(string[bits]), 
+                (uint8_t *)/*fontdata_1byte_index*/en_index[font_size].index_buf);
+            valid_width = valid_width + en_font[font_size]\
+                .widthdata[/*string[bits]*/index - en_font[font_size].base_char];
+            bits++;
+
+            /**
+             * valid_width = valid_width + font_valid_width(
+             *    en_font[font_size].width, en_font[font_size].height, 
+             *    en_font[font_size].base_char, string[bits], 
+             *    en_font[font_size].fontdata);
+             */
         }
     }
     return valid_width;
 }
 
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
 uint32_t string_valid_height(uint8_t font_size, uint8_t * string)
 {
     uint8_t utf8_size = 0;
@@ -413,9 +541,18 @@ uint32_t string_valid_height(uint8_t font_size, uint8_t * string)
         return en_font[font_size].height;
 }
 
-void display_string_auto_place(uint32_t y, uint32_t x, uint8_t align, 
-    uint8_t row, uint32_t widget_num, uint8_t color, uint8_t font_size, 
-    uint8_t * string, uint8_t select, uint8_t * vm)
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
+void display_string_align(uint32_t y, uint32_t x, uint8_t align, 
+    uint8_t row, uint32_t _area_idx, uint8_t color, uint8_t font_size, 
+    uint8_t * string, uint8_t _invert, uint8_t * vm)
 {
     uint32_t offset_y = 0, offset_x = 0;
     uint32_t last_y = 0, last_x = 0;
@@ -423,8 +560,8 @@ void display_string_auto_place(uint32_t y, uint32_t x, uint8_t align,
     uint16_t str_length = string_valid_width(font_size, string);
     uint16_t str_height = string_valid_height(font_size, string);
 
-    uint32_t widget_w = _Area[widget_num].width;
-    uint32_t widget_h = _Area[widget_num].height;
+    uint32_t widget_w = _Area[_area_idx].width;
+    uint32_t widget_h = _Area[_area_idx].height;
 
     /**
      * Place row = 0 only 1 string display on center.
@@ -493,8 +630,8 @@ void display_string_auto_place(uint32_t y, uint32_t x, uint8_t align,
         break;
     }
 
-    uint32_t widget_y = _Area[widget_num].set_y;
-    uint32_t widget_x = _Area[widget_num].set_x;
+    uint32_t widget_y = _Area[_area_idx].set_y;
+    uint32_t widget_x = _Area[_area_idx].set_x;
 
     if (align != MANUAL_ALIGN) {
         last_y = widget_y + offset_y;
@@ -504,7 +641,7 @@ void display_string_auto_place(uint32_t y, uint32_t x, uint8_t align,
         last_x = x;
     }
 
-    if (select) {
+    if (_invert) {
         color = BLACK;
         display_bevel_rect(last_y, last_x, 
             str_length, str_height, WHITE, 1, vm);
@@ -515,50 +652,86 @@ void display_string_auto_place(uint32_t y, uint32_t x, uint8_t align,
         string, vm);
 }
 
-void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm)
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
+void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
-    if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N1_PT, 
-            string, select, vm);
+    if (str_id != _MENU_LAST) {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N1_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N1_PT, 
-            (uint8_t *)menu_content[string_num], select, vm);
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N1_PT, 
+            str_p, _invert, vm);
     }
 }
 
-void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm)
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
+void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
-    if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N2_PT, 
-            string, select, vm);
+    if (str_id != _MENU_LAST) {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N2_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N2_PT, 
-            (uint8_t *)menu_content[string_num], select, vm);
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N2_PT, 
+            str_p, _invert, vm);
     }
 }
 
-void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm)
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
+void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
-    if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N3_PT, 
-            string, select, vm);
+    if (str_id != _MENU_LAST) {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N3_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N3_PT, 
-            (uint8_t *)menu_content[string_num], select, vm);
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N3_PT, 
+            str_p, _invert, vm);
     }
 }
 
-void display_N4string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm)
+/**
+ * Calculate the valid width of a character in a font
+ * @param width The maximum width of the font
+ * @param height The height of the font
+ * @param start_char The ASCII code of the first character in the font library
+ * @param character The character to calculate width for
+ * @param fontlib Pointer to the font library data
+ * @return The actual width of the character in pixels
+ */
+void display_N4string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
-    if (string_num == TEMP_CONTENT) {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N4_PT, 
-            (uint8_t *)string, select, vm);
+    if (str_id != _MENU_LAST) {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N4_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     } else {
-        display_string_auto_place(y, x, align, row, widget_num, color, FONT_N4_PT, 
-            (uint8_t *)menu_content[string_num], select, vm);
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N4_PT, 
+            (uint8_t *)str_p, _invert, vm);
     }
 }

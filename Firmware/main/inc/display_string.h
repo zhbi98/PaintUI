@@ -74,15 +74,15 @@ void display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg, uint8_t
 void _display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg, uint8_t font_size, uint8_t * string, uint8_t _bs, uint8_t * vm);
 uint32_t string_valid_width(uint8_t font_size, uint8_t * string);
 uint32_t string_valid_height(uint8_t font_size, uint8_t * string);
-void display_string_auto_place(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, uint8_t color, uint8_t font_size, 
-    uint8_t * string, uint8_t select, uint8_t * vm);
-void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm);
-void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm);
-void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm);
-void display_N4string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t widget_num, 
-    const uint8_t * string, uint32_t string_num, uint8_t color, uint8_t select, uint8_t * vm);
+void display_string_align(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, uint8_t color, uint8_t font_size, 
+    uint8_t * string, uint8_t _invert, uint8_t * vm);
+void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm);
+void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm);
+void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm);
+void display_N4string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32_t _area_idx, 
+    const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm);
 
 #endif /*__DISPLAY_STRING_H__*/
