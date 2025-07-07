@@ -7,8 +7,6 @@
  *      INCLUDES
  *********************/
 
-#include "display_controller.h"
-#include "key_controller.h"
 #include "setup.h"
 
 /*********************
@@ -92,6 +90,9 @@ static list_view_t listview = {
  **********************/
 
 static _devset_t _verify_devset = {0};
+static dev_off_t dispoff = {0};
+static dev_off_t apoff = {0};
+
 static uint8_t monday(uint16_t y, uint8_t m);
 static bool isleap(uint16_t year);
 static void verify_time_up();
@@ -701,6 +702,24 @@ uint8_t lv_bright_get_val()
 }
 
 /**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_voice_get_state_val()
+{
+    return _devset.voice.state;
+}
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_dispoff_get_val()
+{
+    return _devset.display_off;
+}
+
+/**
  * Adds or subtracts a value from the specified 
  * part of the date's tran switch value.
  */
@@ -790,16 +809,227 @@ static void verify_time_up()
  * Writes the display date of user changes 
  * to the hardware module.
  */
-uint8_t lv_dispoff_get_val()
+void _apoff_set_val()
 {
-    return _devset.display_off;
+    int8_t apoff_val = lv_apoff_get_val();
+
+    apoff.val = apoff_val;
+    apoff_tick_refer();
 }
 
 /**
  * Writes the display date of user changes 
  * to the hardware module.
  */
-uint8_t lv_voice_get_state_val()
+void apoff_tick_refer()
 {
-    return _devset.voice.state;
+    uint32_t _time = _MIN(5);
+
+    if (!apoff.val) _time = _MIN(5);
+    else if (apoff.val == 1) _time = _MIN(10);
+    else if (apoff.val == 2) _time = _MIN(15);
+    else if (apoff.val == 3) _time = _MIN(30);
+    else _time = _MIN(5);
+
+    apoff.tick = STMS_TICKS(
+        _time, TICK_APOFF);
+
+    if (apoff.val == 4) apoff.tick = 0x7FFFF;
+}
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void _dispoff_set_val()
+{
+    dispoff_tick_refer();
+}
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void dispoff_tick_refer()
+{
+    bool _record = 0;
+    uint32_t _time = _MIN(1);
+
+    /*Record start backlight will be turned off in 1 min
+    Backlight time is forced to 1 min.*/
+    if (_record) _time = _MIN(1);
+
+    dispoff.tick = STMS_TICKS(
+        _time, TICK_APOFF);
+
+    if (!_record) dispoff.tick = 0x7FFFF;
+}
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void apoff_tick_work()
+{
+    if (apoff.tick > 0) apoff.tick--;
+
+    uint32_t _60s = \
+        STMS_TICKS(60, TICK_APOFF);
+
+    uint32_t _0s = \
+        STMS_TICKS(0, TICK_APOFF);
+
+    if (apoff.tick == _0s) {
+        /*write_file();*/
+        /*power_down();*/
+    }
+}
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void dispoff_tick_work()
+{
+    if (dispoff.tick > 0) dispoff.tick--;
+    if (!dispoff.tick) {}
+}
+
+/**
+ * Clears and restores all user settings 
+ * to their default values.
+ * At the same time, the data used for 
+ * observation also needs to be restored 
+ * to the default values.
+ */
+void reset()
+{
+    memcpy(&_devset, &_devset_def, 
+        sizeof(_devset_t));
+
+    apoff_tick_refer();
+    dispoff_tick_refer();
+
+    write_file();
+}
+
+/**
+ * Writes the changed parameters to the file system, next time can 
+ * extract the settings from the file system 
+ * to update to the hardware drive
+ */
+void write_file()
+{
+    /*int8_t res = 0;*/
+
+    void * data_p = (void *)(&_devset);
+
+    memset(_devset.dispstr, 
+        '\0', 32);
+
+    __disable_irq();
+    sleep_ms(50);
+
+    /*Observe whether the data has changed*/
+    bool ify = verify(&_devset, 
+        &_verify_devset, 
+        sizeof(_devset_t));
+
+    /*The file has not changed and does not need 
+    to be written to memory to save*/
+    if (ify) {
+        sleep_ms(50);
+        __enable_irq();
+        return;
+    }
+
+    /*rom_flash_erase(
+        ROM_ADDRESS_USER_SET, 
+        FLASH_SECTOR_SIZE);*/
+
+    /*rom_flash_write(
+        ROM_ADDRESS_USER_SET, 
+        sizeof(_devset_t), 
+        (uint8_t *)data_p);*/
+
+    sleep_ms(50);
+    __enable_irq();
+}
+
+/**
+ * Extract the settings from the file system 
+ * to update to the hardware drive
+ */
+void read_file()
+{
+    uint16_t file_size = sizeof(_devset_t);
+    bool inv_file = 1;
+
+    /*The maximum amount of data stored is 65kbyte*/
+    uint16_t byte_addr = 0;
+    uint16_t _verify = 0;
+
+    /*rom_flash_read(ROM_ADDRESS_USER_SET, 
+        sizeof(_devset_t), 
+        (uint8_t *)&_devset);*/
+
+    const uint8_t * head_p = ".SYS.";
+    const uint8_t * ssid_p = ".Bin-SYS";
+
+    bool res1 = verify(
+        &_devset.head[0], 
+        head_p, 5);
+
+    bool res2 = verify(
+        &_devset.ssid[0], 
+        ssid_p, 8);
+
+    if ((res1 != true) || 
+        (res2 != true)) {
+        memcpy(&_devset, 
+            &_devset_def, 
+            file_size);
+
+        /*rom_flash_write(
+            ROM_ADDRESS_USER_SET, 
+            sizeof(_devset_t), 
+            (uint8_t *)(&_devset));*/
+    }
+
+    /*Reads data from a permanent storage 
+    device into dynamic memory*/
+    uint8_t * data_p = \
+        (uint8_t *)(&_devset);
+
+
+    /*Reads data from a permanent storage 
+    device into dynamic memory*/
+    while (byte_addr < file_size) {
+        if (data_p[byte_addr] != 0xFF)
+            _verify++;
+        byte_addr++;
+    }
+
+    if (_verify > (file_size / 3)) 
+        inv_file = 0;
+
+    /*Make the calibration mark valid 
+      after performing the calibration*/
+    /*Data in permanent storage is valid*/
+    if (inv_file) {
+        memcpy(&_devset, 
+            &_devset_def, 
+            file_size);
+
+        /*rom_flash_write(
+            ROM_ADDRESS_USER_SET, 
+            sizeof(_devset_t), 
+            (uint8_t *)(&_devset));*/
+    }
+
+    memcpy(&_verify_devset, 
+        &_devset, 
+        file_size);
+
+    memset(_verify_devset.dispstr, '\0', 32);
 }

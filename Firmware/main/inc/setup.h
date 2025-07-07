@@ -21,6 +21,7 @@
     (((uint32_t)(v1)) / ((uint32_t)(v2)))
 #define STMS_TICKS(s, ms) \
     ((uint32_t)((s) * (1000U) / (ms)))
+#define TICK_APOFF 500U /*ms*/
 
 /**********************
  *      TYPEDEFS
@@ -335,5 +336,18 @@ uint8_t lv_dispoff_get_val();
  * to the hardware module.
  */
 uint8_t lv_voice_get_state_val();
+
+/**
+ * Writes the changed parameters to the file system, next time can 
+ * extract the settings from the file system 
+ * to update to the hardware drive
+ */
+void write_file();
+
+/**
+ * Extract the settings from the file system 
+ * to update to the hardware drive
+ */
+void read_file();
 
 #endif /*__SETUP_H__*/
