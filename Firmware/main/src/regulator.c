@@ -20,11 +20,11 @@ void read_need_changed_value()
     value_regulator.data = 0;
     value_regulator.be_changed_value = (void *)&temp_data;
 
-    if (get_value_type() == SETUP_COMP_MAX)
-        *((int *)value_regulator.be_changed_value) = abs(equip.comp_max);
+    if (get_value_type() == DEV_COMP_MAX)
+        *((int *)value_regulator.be_changed_value) = abs(_devset.comp.max);
 
-    if (get_value_type() == SETUP_COMP_MIN)
-        *((int *)value_regulator.be_changed_value) = abs(equip.comp_min);
+    if (get_value_type() == DEV_COMP_MIN)
+        *((int *)value_regulator.be_changed_value) = abs(_devset.comp.min);
 
     if (value_regulator.data == 0)
         value_regulator.data = *((int *)value_regulator.be_changed_value);
@@ -36,7 +36,7 @@ void value_format()
 
     read_need_changed_value();
 
-    if (get_value_type() == SETUP_COMP_MAX) {
+    if (get_value_type() == DEV_COMP_MAX) {
         sprintf(value_regulator.value_string, "%06d", *((int *)value_regulator.be_changed_value));
         value_regulator.display_length_max = 6;
         value_regulator.standard_unit_length_max = 6;
@@ -44,7 +44,7 @@ void value_format()
         value_regulator.value_length = strlen(value_regulator.value_string);
     }
 
-    if (get_value_type() == SETUP_COMP_MIN) {
+    if (get_value_type() == DEV_COMP_MIN) {
         sprintf(value_regulator.value_string, "%06d", *((int *)value_regulator.be_changed_value));
         value_regulator.display_length_max = 6;
         value_regulator.standard_unit_length_max = 6;
@@ -178,28 +178,34 @@ void value_ud_flip(int incr)
 {
     int value;
 
-    if (get_value_type() == SETUP_COMP_MAX) {
-        value = equip.comp_max;
+    if (get_value_type() == DEV_COMP_MAX) {
+        value = _devset.comp.max;
         // info("cursor position:%d", value_regulator.cursor_position);
         value += pow(10, ((value_regulator.value_length - 1) - value_regulator.cursor_position)) * incr;
         // info("value:%d", value);
 
-        if (value > 900000 || value < 1)
-            return;
+        if (value > 20000) value = 20000;
+        if (value < 0) value = 0;
 
-        equip.comp_max = value;
+        if (_devset.comp.min > value) 
+            _devset.comp.min = value;
+
+        _devset.comp.max = value;
     }
 
-    if (get_value_type() == SETUP_COMP_MIN) {
-        value = equip.comp_min;
+    if (get_value_type() == DEV_COMP_MIN) {
+        value = _devset.comp.min;
         // info("cursor position:%d", value_regulator.cursor_position);
         value += pow(10, ((value_regulator.value_length - 1) - value_regulator.cursor_position)) * incr;
         // info("value:%d", value);
 
-        if (value > 900000 || value < 1)
-            return;
+        if (value > 20000) value = 20000;
+        if (value < 0) value = 0;
 
-        equip.comp_min = value;
+        if (_devset.comp.max < value) 
+            _devset.comp.max = value;
+
+        _devset.comp.min = value;
     }
 
     if (value_regulator.start_position > value_regulator.cursor_position)
@@ -360,7 +366,7 @@ void read_display_part_string(unsigned char param_type)
     if (value_regulator.start_position > value_regulator.cursor_position)
         value_regulator.start_position = value_regulator.cursor_position;
 
-    if (param_type == SETUP_COMP_MAX) {
+    if (param_type == DEV_COMP_MAX) {
         // tf = value_valid_bit_index(value_regulator.display_buf[0]);
         // add_decimal_point(tf + (value_regulator.standard_unit_length_max - tf) % 3 + 1);
         // info("get_digit_pos:%d", value_regulator.start_position);
@@ -370,7 +376,7 @@ void read_display_part_string(unsigned char param_type)
         // strcat(value_regulator.display_buf[1], unit[(value_regulator.start_position + 1) / 3]);
     }
 
-    if (param_type == SETUP_COMP_MIN) {
+    if (param_type == DEV_COMP_MIN) {
         // tf = value_valid_bit_index(value_regulator.display_buf[0]);
         // add_decimal_point(tf + (value_regulator.standard_unit_length_max - tf) % 3 + 1);
         // info("get_digit_pos:%d", value_regulator.start_position);

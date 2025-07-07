@@ -1,144 +1,339 @@
+/**
+ * @file setup.h
+ *
+ */
 
 #ifndef __SETUP_H__
 #define __SETUP_H__
 
-#include <stdbool.h>
+/*********************
+ *      INCLUDES
+ *********************/
 
+#include <stdbool.h>
 #include "log.h"
-#include "key_controller.h"
-#include "display_controller.h"
 
 /*********************
  *      DEFINES
  *********************/
+
 #define TICKS(v1, v2) \
     (((uint32_t)(v1)) / ((uint32_t)(v2)))
 #define STMS_TICKS(s, ms) \
     ((uint32_t)((s) * (1000U) / (ms)))
 
-#define RTC_BASE    2000
+/**********************
+ *      TYPEDEFS
+ **********************/
 
-#define YEAR_MAX    2099
-#define YEAR_MIN    2000
-#define MONTH_MAX   12
-#define MONTH_MIN   1
-#define DAY_MAX     30
-#define DAY_MIN     1
-
-#define HOUR_MAX    23
-#define HOUR_MIN    0
-#define MINUTE_MAX  59
-#define MINUTE_MIN  0
-#define SECOND_MAX  59
-#define SECOND_MIN  0
-
-#define TIME_FORMAT "%04d/%02d/%02d  %02d:%02d:%02d"
-
-#define MINUTE_7200 (7200 * 60 * 2) // 500ms
-#define MINUTE_15   (15   * 60 * 2) // 500ms
-#define MINUTE_30   (30   * 60 * 2) // 500ms
-#define MINUTE_60   (60   * 60 * 2) // 500ms
-#define MINUTE_120  (120  * 60 * 2) // 500ms
-#define MINUTE_180  (180  * 60 * 2) // 500ms
-
-struct rtc_time_t {
-    char hour;
-    char minute;
-    char second;
+enum {
+    DEV_TIM = 0,
+    DEV_DATE,
+    DEV_DATE_TRAN,
+    DEV_APOFF,
+    DEV_COMP_MAX,
+    DEV_COMP_MIN,
+    DEV_COMP_TYPE,
+    DEV_REC_RATE,
+    DEV_MEM,
+    DEV_BRIGHT,
+    DEV_DISP_OFF,
+    DEV_VOICE,
+    DEV_DARK,
+    DEV_CTL_MAX = 12,
 };
 
-struct rtc_date_t {
-    int year;
-    char month;
-    char day;
-};
+typedef struct {
+    uint8_t head[5 + 1];
 
-enum equip_setup_type {
-    SETUP_RTC_TIME    = 0,
-    SETUP_RTC_DATE    = 1,
-    SETUP_APO_TIME    = 2,
-    SETUP_COMP_MAX    = 3,
-    SETUP_COMP_MIN    = 4,
-    SETUP_COMP_TYPE   = 5,
-    SETUP_RECORD_RATE = 6,
-    SETUP_MEMORY_MODE = 7,
-    SETUP_BACK_LIGHT  = 8,
-    SETUP_LIGHT_TIME  = 9,
-    SETUP_SOUND       = 10,
-    SETUP_THEMECOLOR  = 11,
+    struct {
+        int8_t hour;
+        int8_t min;
+        int8_t sec;
+    } time;
 
-    PARAM_NUM_MAX     = 12,
-    PARAM_DOCK_MAX    = 8,
-};
+    struct {
+        int32_t year;
+        int8_t month;
+        int8_t day;
+        int8_t tran;
+    } date;
 
-struct equip_param_t {
-    struct rtc_time_t time;
-    struct rtc_date_t date;
-    char apo_time; // auto power off time
-    int comp_max;
-    int comp_min;
-    char comp_type;
-    char record_rate;
-    char memory_mode;
-    char back_light;
-    char light_time;
-    char sound_status;
-    char themecolor;
-    unsigned char display[32];
-};
+    int8_t apo_time;
 
-struct set_item_list {
-    char vpos;
-    char hpos;
-    char page;
-    char param_number;
-    const unsigned char subitem[PARAM_NUM_MAX];
-};
+    struct {
+        int32_t max;
+        int32_t min;
+        int8_t type;
+    } comp;
 
-extern struct equip_param_t equip;
-extern struct set_item_list list;
+    int32_t contval;
 
-extern void vpos_selected(char incr);
-extern unsigned char get_vpos_selected();
-extern unsigned char get_param_number();
+    struct {
+        int32_t rate;
+        int32_t nr;
+    } record;
 
-extern void hpos_reset();
-extern void hpos_selected(char incr);
-extern unsigned char get_hpos_selected();
+    struct {
+        int8_t bright;
+        int8_t dark;
+    } display;
 
-extern void page_selected(char incr);
-extern unsigned char get_page_selected();
+    int8_t memMod;
 
-extern void set_equip_time(char incr);
-extern void set_equip_date(char incr);
-extern void set_apo_time(char incr);
-extern void set_comp_type(char incr);
-extern void set_record_rate(char incr);
-extern void set_memory_mode(char incr);
-extern void set_back_light(char incr);
-extern void set_light_time(char incr);
-extern void set_sound_status(char incr);
-extern void set_theme_color(char incr);
+    int8_t torch_light_off;
+    int8_t key_light_off;
+    int8_t display_off;
 
-extern unsigned char * get_hour();
-extern unsigned char * get_minute();
-extern unsigned char * get_second();
-extern unsigned char * get_year();
-extern unsigned char * get_month();
-extern unsigned char * get_day();
-extern unsigned char * get_real_time();
-extern unsigned char   get_apo_time();
-extern unsigned char * get_comp_max();
-extern unsigned char * get_comp_min();
-extern unsigned char   get_comp_type();
-extern unsigned char * get_record_rate();
-extern unsigned char   get_memory_mode();
-extern unsigned char * get_back_light();
-extern unsigned char   get_light_time();
-extern unsigned char   get_sound_status();
-extern unsigned char   get_theme_color();
+    struct {
+        int8_t state;
+        int8_t vol;
+    } voice;
 
-extern unsigned char check_leap_year(unsigned int year);
-extern unsigned char check_month_day(unsigned int year, unsigned char month);
+    int8_t devdsc;
 
-#endif
+    uint8_t dispstr[32];
+    uint8_t ssid[8 + 1];
+} _devset_t;
+
+typedef struct {
+    const uint8_t h_cnt[DEV_CTL_MAX];
+    int8_t v_idx;
+    int8_t h_idx;
+    int8_t page;
+    int8_t opti_id;
+} list_view_t;
+
+typedef struct {
+    uint8_t val;
+    uint32_t tick;
+    bool start;
+} dev_off_t;
+
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
+
+extern _devset_t _devset;
+
+/**
+ * Activate a child view under the device settings view.
+ * @param _tabvidx tabview card index.
+ */
+void lv_tab_set_line(int8_t val);
+
+/**
+ * Activate a child option under the device settings view.
+ * @param _optidx card options index.
+ */
+void lv_tab_set_hidx(int8_t val);
+
+/**
+ * Gets the index of the child view currently 
+ * active under settings view.
+ * @return tabview card index result.
+ */
+uint8_t lv_tab_get_line_id();
+
+/**
+ * Gets the index of the child view currently 
+ * active under settings view.
+ * @return index of the current page options.
+ */
+uint8_t lv_tab_get_opti_id();
+
+/**
+ * Gets the index of the child view currently 
+ * active under settings view.
+ * @return index of the current option part.
+ */
+uint8_t lv_tab_get_hidx();
+
+/**
+ * Gets the index of the child view currently 
+ * active under settings view.
+ * @return index of the current option part.
+ */
+uint8_t lv_tab_get_page_id();
+
+/**
+ * Adds or subtracts a value from the specified 
+ * part of the date value.
+ */
+void lv_date_set_val(int8_t val);
+
+/**
+ * Adds or subtracts a value from the specified 
+ * part of the time value.
+ */
+void lv_time_set_val(int8_t val);
+
+/**
+ * Adds or subtracts a value from the specified 
+ * part of the date's tran switch value.
+ */
+void lv_tran_set_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_apoff_set_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_bright_set_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_voice_set_val(int8_t val);
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_dark_set_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_comp_set_type_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_record_set_val(uint16_t nr, uint32_t tim);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_mem_set_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_dispoff_set_val(int8_t val);
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return date of year.
+ */
+int16_t lv_date_year_get_val();
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return date of month.
+ */
+int8_t lv_date_month_get_val();
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return date of day.
+ */
+int8_t lv_date_day_get_val();
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return date is need tran.
+ */
+int8_t lv_date_tran_get_val();
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return time of hour.
+ */
+int8_t lv_time_hour_get_val();
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return time of minute.
+ */
+int8_t lv_time_min_get_val();
+
+/**
+ * Gets the value of the current setting, which is used only to update 
+ * page options and the state of the element.
+ * @return time of second.
+ */
+int8_t lv_time_sec_get_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_apoff_get_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_comp_get_type_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint32_t lv_comp_get_max_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint32_t lv_comp_get_min_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint32_t lv_record_get_rate_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint32_t lv_record_get_nr_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+void lv_mem_set_val(int8_t val);
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_dark_get_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_bright_get_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_dispoff_get_val();
+
+/**
+ * Writes the display date of user changes 
+ * to the hardware module.
+ */
+uint8_t lv_voice_get_state_val();
+
+#endif /*__SETUP_H__*/

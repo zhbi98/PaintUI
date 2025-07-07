@@ -829,7 +829,7 @@ void tft_flush_area(uint8_t area_num, uint8_t * vm)
 
     tft_region(area_y, area_x, area_width, area_height);
 
-    uint8_t theme = equip.themecolor * COLOR_MAX;
+    uint8_t theme = _devset.display.dark * COLOR_MAX;
 
     for (uint32_t y = area_y; y < area_yend; y++) {
         for (uint32_t x = 0; x < area_width; x++) {

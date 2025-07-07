@@ -22,14 +22,22 @@
  **********************/
 
 enum {
-    SPECIFY = 0,
-    CENTER_ALIGN,
-    LEFT_ALIGN,
-    RIGHT_ALIGN,
+    ALIGN_SPECIFY = 0,
+    ALIGN_CENTER,
+    ALIGN_LEFT,
+    ALIGN_RIGHT,
     _ALIGN_LAST,
 };
 
 typedef uint8_t _align_t;
+
+enum {
+    INV_OFF = 0,
+    INV_ON,
+    _INV_LAST,
+};
+
+typedef uint8_t _inverse_t;
 
 enum {
     LAYOUT_R11 = 0,
@@ -46,14 +54,6 @@ enum {
 };
 
 typedef uint8_t _layout_t;
-
-enum {
-    UNSELECT = 0,
-    SELECTED,
-    _LAST,
-};
-
-typedef uint8_t _selected_t;
 
 /**********************
  * GLOBAL PROTOTYPES
@@ -191,9 +191,9 @@ uint32_t string_valid_height(uint8_t font_size, uint8_t * string);
 
 /**
  * Displays a string with specified alignment and layout within a widget area.
- * @param y Base Y coordinate (used when align=SPECIFY).
- * @param x Base X coordinate (used when align=SPECIFY).
- * @param align Text alignment (CENTER_ALIGN/LEFT_ALIGN/RIGHT_ALIGN/SPECIFY).
+ * @param y Base Y coordinate (used when align=ALIGN_SPECIFY).
+ * @param x Base X coordinate (used when align=ALIGN_SPECIFY).
+ * @param align Text alignment (ALIGN_CENTER/ALIGN_LEFT/ALIGN_RIGHT/ALIGN_SPECIFY).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the widget area in _Area array.
  * @param color Text color.

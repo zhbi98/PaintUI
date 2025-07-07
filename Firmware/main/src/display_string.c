@@ -512,9 +512,9 @@ uint32_t string_valid_height(uint8_t font_size, uint8_t * string)
 
 /**
  * Displays a string with specified alignment and layout within a widget area.
- * @param y Base Y coordinate (used when align=SPECIFY).
- * @param x Base X coordinate (used when align=SPECIFY).
- * @param align Text alignment (CENTER_ALIGN/LEFT_ALIGN/RIGHT_ALIGN/SPECIFY).
+ * @param y Base Y coordinate (used when align=ALIGN_SPECIFY).
+ * @param x Base X coordinate (used when align=ALIGN_SPECIFY).
+ * @param align Text alignment (ALIGN_CENTER/ALIGN_LEFT/ALIGN_RIGHT/ALIGN_SPECIFY).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the widget area in _Area array.
  * @param color Text color.
@@ -602,14 +602,14 @@ void display_string_align(uint32_t y, uint32_t x, uint8_t align,
      * align = 3 String auto right
      */
     switch (align) {
-    case CENTER_ALIGN: /*Center alignment*/
+    case ALIGN_CENTER: /*Center alignment*/
         offset_x = abs(area_w - str_length) / 2;
         break;
-    case LEFT_ALIGN: /*Left alignment (+3px margin)*/
+    case ALIGN_LEFT: /*Left alignment (+3px margin)*/
         /*(+3) left side stay 3 piexls*/
         offset_x = 0 + (3); 
         break;
-    case RIGHT_ALIGN: /*Right alignment (-2px margin)*/
+    case ALIGN_RIGHT: /*Right alignment (-2px margin)*/
         /*(-2) right side stay 2 piexls*/
         offset_x = abs(area_w - str_length) / 2 * 2 - (2);
         break;
@@ -620,7 +620,7 @@ void display_string_align(uint32_t y, uint32_t x, uint8_t align,
     uint32_t area_x = _Area[_area_idx].set_x;
 
     /*Calculate final position*/
-    if (align != SPECIFY) {
+    if (align != ALIGN_SPECIFY) {
         last_y = area_y + offset_y;
         last_x = area_x + offset_x;
     } else {
