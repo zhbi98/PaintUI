@@ -1,9 +1,21 @@
+/**
+ * @file fontlib.h
+ *
+ */
 
 #ifndef __FONTLIB_H__
 #define __FONTLIB_H__
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdio.h>
 #include <stdint.h>
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 typedef struct {
     const uint8_t * fontdata;
@@ -77,6 +89,10 @@ extern const uint8_t fontdata_jp_N3_index[];
 extern const font_index_t en_index[];
 extern const font_index_t cn_index[];
 extern const font_index_t jp_index[];
+
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
 
 font_data_t read_font_data(uint8_t font_type, uint8_t font_size);
 font_index_t read_font_index(uint8_t font_type, uint8_t font_size);

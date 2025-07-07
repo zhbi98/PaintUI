@@ -1,5 +1,5 @@
 /**
- * @file display_menu_content.c
+ * @file menu_str.c
  *
  */
 
@@ -7,7 +7,7 @@
  *      INCLUDES
  *********************/
 
-#include "display_menu_content.h"
+#include "menu_str.h"
 
 /**********************
  *   GLOBAL FUNCTIONS

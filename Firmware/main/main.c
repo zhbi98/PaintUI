@@ -5,7 +5,7 @@
 #include "time.h"
 #include "display.h"
 
-#include "key_controller.h"
+#include "key_doing.h"
 #include "display_controller.h"
 
 #include "setting.h"
@@ -21,7 +21,8 @@ void hw_module_init()
 void sw_module_init()
 {
     _Area_init();
-    key_function_init();
+    act_bar_set_func(&_dmm_actbar, 
+        DMM_VOLTAGE_V);
     tft_clear(BLACK);
     digit_lr_move(0);
 }

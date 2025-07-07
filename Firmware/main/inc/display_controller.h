@@ -118,7 +118,7 @@ typedef void (* tft_write_data)(uint32_t data);
 
 extern const key_event_interface * key_event_controller[][DEPTH_MAX];
 extern const key_event_interface * key_event_enable[][DEPTH_MAX];
-extern const menu_content_interface * display_menu_content[][DEPTH_MAX];
+extern const menu_content_interface * menu_str[][DEPTH_MAX];
 
 extern dev_area_t _Area[_Area_NUM_MAX];
 extern dev_actbar_t _dmm_actbar;

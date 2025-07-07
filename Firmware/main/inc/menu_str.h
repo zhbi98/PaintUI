@@ -1,10 +1,10 @@
 /**
- * @file display_menu_content.h
+ * @file menu_str.h
  *
  */
 
-#ifndef __DISPLAY_MENU_CONTENT_H__
-#define __DISPLAY_MENU_CONTENT_H__
+#ifndef __MENU_STR_H__
+#define __MENU_STR_H__
 
 /*********************
  *      INCLUDES

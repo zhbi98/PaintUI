@@ -1,4 +1,12 @@
-﻿
+﻿/**
+ * @file fontlib.c
+ *
+ */
+
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "fontlib.h"
 #include <stdlib.h>
 
@@ -1729,6 +1737,10 @@ const font_data_t jp_font[FONT_MAX_PT] = {
     },
 };
 
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
+
 font_data_t read_font_data(uint8_t font_type, uint8_t font_size)
 {
     if (font_type == LANGUAGE_EN) return en_font[font_size];
@@ -1805,6 +1817,10 @@ const font_index_t jp_index[FONT_MAX_PT] = {
         .buf_size = 0 * JP_CHAR_BYTE,
     },
 };
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 font_index_t read_font_index(uint8_t font_type, uint8_t font_size)
 {

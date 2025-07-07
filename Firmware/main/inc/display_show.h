@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdbool.h>
 
-#include "logo_manager.h"
+#include "idenMang.h"
 #include "display.h"
 #include "display_string.h"
 #include "display_controller.h"
@@ -14,8 +14,6 @@
 #include "regulator.h"
 #include "setup.h"
 #include "setting.h"
-
-extern struct status_logo_pool_t logo_pool;
 
 void dev_topbar_cont_refer(uint8_t * vm);
 void dev_battery_refer(uint8_t * vm);

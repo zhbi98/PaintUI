@@ -339,7 +339,7 @@
               <MiscControls>--diag_suppress=1295</MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\drivers\CMSIS\Include;..\drivers\CMSIS\Device\ST\STM32F4xx\Include;..\drivers\STM32F4xx_StdPeriph_Driver\inc;..\hal\inc;..\main\inc;..\main\ext</IncludePath>
+              <IncludePath>..\drivers\CMSIS\Include;..\drivers\CMSIS\Device\ST\STM32F4xx\Include;..\drivers\STM32F4xx_StdPeriph_Driver\inc;..\hal\inc;..\main\inc;..\main\ext;..\main\src\Power</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -639,11 +639,6 @@
               <FilePath>..\main\src\display_controller.c</FilePath>
             </File>
             <File>
-              <FileName>display_menu_content.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\main\src\display_menu_content.c</FilePath>
-            </File>
-            <File>
               <FileName>display_show.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\main\src\display_show.c</FilePath>
@@ -662,21 +657,6 @@
               <FileName>key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\main\src\key.c</FilePath>
-            </File>
-            <File>
-              <FileName>key_controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\main\src\key_controller.c</FilePath>
-            </File>
-            <File>
-              <FileName>logo_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\main\src\logo_manager.c</FilePath>
-            </File>
-            <File>
-              <FileName>power_manager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\main\src\power_manager.c</FilePath>
             </File>
             <File>
               <FileName>regulator.c</FileName>
@@ -717,6 +697,41 @@
               <FileName>time.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\main\src\time.c</FilePath>
+            </File>
+            <File>
+              <FileName>apoff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\Power\apoff.c</FilePath>
+            </File>
+            <File>
+              <FileName>lpoff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\Power\lpoff.c</FilePath>
+            </File>
+            <File>
+              <FileName>power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\Power\power.c</FilePath>
+            </File>
+            <File>
+              <FileName>nt_pwd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\nt_pwd.c</FilePath>
+            </File>
+            <File>
+              <FileName>idenMang.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\idenMang.c</FilePath>
+            </File>
+            <File>
+              <FileName>key_doing.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\key_doing.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu_str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\menu_str.c</FilePath>
             </File>
           </Files>
         </Group>

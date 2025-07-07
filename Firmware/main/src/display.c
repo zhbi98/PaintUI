@@ -1,5 +1,5 @@
 
-#include "display_menu_content.h"
+#include "menu_str.h"
 #include "display.h"
 
 uint8_t display_buf[DISP_BUF_SIZE] = {0};

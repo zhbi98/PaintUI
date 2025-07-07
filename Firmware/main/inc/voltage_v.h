@@ -3,9 +3,9 @@
 #define __VOLTAGE_V_H__
 
 #include <stdbool.h>
-#include "key_controller.h"
+#include "key_doing.h"
 #include "display_controller.h"
-#include "display_menu_content.h"
+#include "menu_str.h"
 #include "log.h"
 
 struct voltage_measure_t {

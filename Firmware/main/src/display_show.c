@@ -6,14 +6,14 @@
 #define _DATE2_ "%02d/%02d/%04d"
 #define _TIME_  "%02d:%02d:%02d"
 
-struct status_logo_pool_t logo_pool = {.phead = 0, .ptail = 0,};
+_iden_mang_t iden_qq = {.phead = 0, .ptail = 0,};
 
-static void logo_state_refer()
+static void logo_refer()
 {
-    if (1) status_logo_input_pool(&logo_pool, BLUETOOTH, true);
-    if (lv_apoff_get_val()) status_logo_input_pool(&logo_pool, POWEROFF_TIMER, true);
-    if (lv_voice_get_state_val()) status_logo_input_pool(&logo_pool, TRUMPET, true);
-    if (1) status_logo_input_pool(&logo_pool, LIGHTING, true);
+    if (1) iden_qq_ins(&iden_qq, BLUETOOTH, true);
+    if (lv_apoff_get_val()) iden_qq_ins(&iden_qq, POWEROFF_TIMER, true);
+    if (lv_voice_get_state_val()) iden_qq_ins(&iden_qq, TRUMPET, true);
+    if (1) iden_qq_ins(&iden_qq, LIGHTING, true);
 }
 
 void dev_topbar_cont_refer(uint8_t * vm)
@@ -25,7 +25,7 @@ void dev_topbar_cont_refer(uint8_t * vm)
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
 
-    logo_state_refer();
+    logo_refer();
 }
 
 void dev_battery_refer(uint8_t * vm)
@@ -44,14 +44,14 @@ void dev_buletooth_refer(uint8_t * vm)
 
     if ((!_Area[_area_idx].refer) || (!_Area[DEV_TOPBAR_CONT].valid)) return;
 
-    struct status_logo_t logo = {0};
-    if (status_logo_output_pool(&logo_pool, &logo) == false) return;
+    _iden_t logo = {0};
+    if (iden_qq_remove(&iden_qq, &logo) == false) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
 
     display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
-        WHITE, GRAY, logo.name, logo.status, vm);
+        WHITE, GRAY, logo.name, logo.state, vm);
 }
 
 void dev_poff_tim_refer(uint8_t * vm)
@@ -60,13 +60,13 @@ void dev_poff_tim_refer(uint8_t * vm)
 
     if ((!_Area[_area_idx].refer) || (!_Area[DEV_TOPBAR_CONT].valid)) return;
 
-    struct status_logo_t logo = {0};
-    if (status_logo_output_pool(&logo_pool, &logo) == false) return;
+    _iden_t logo = {0};
+    if (iden_qq_remove(&iden_qq, &logo) == false) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
     display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
-        WHITE, GRAY, logo.name, logo.status, vm);
+        WHITE, GRAY, logo.name, logo.state, vm);
 }
 
 void dev_trumpet_refer(uint8_t * vm)
@@ -75,12 +75,12 @@ void dev_trumpet_refer(uint8_t * vm)
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_ZONE_CONT].valid)) return;
 
-    struct status_logo_t logo = {0};
-    if (status_logo_output_pool(&logo_pool, &logo) == false)
+    _iden_t logo = {0};
+    if (iden_qq_remove(&iden_qq, &logo) == false)
         return;
 
     display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
-        WHITE, GRAY, logo.name, logo.status, vm);
+        WHITE, GRAY, logo.name, logo.state, vm);
 }
 
 void dev_lighting_refer(uint8_t * vm)
@@ -89,14 +89,14 @@ void dev_lighting_refer(uint8_t * vm)
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_ZONE_CONT].valid)) return;
 
-    struct status_logo_t logo = {0};
-    if (status_logo_output_pool(&logo_pool, &logo) == false)
+    _iden_t logo = {0};
+    if (iden_qq_remove(&iden_qq, &logo) == false)
         return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, GRAY, vm);
     display_sym(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
-        WHITE, GRAY, logo.name, logo.status, vm);
+        WHITE, GRAY, logo.name, logo.state, vm);
 }
 
 void dev_realtim_refer(uint8_t * vm)

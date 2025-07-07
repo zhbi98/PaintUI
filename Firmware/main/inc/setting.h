@@ -7,7 +7,7 @@
 #include "log.h"
 #include "key.h"
 #include "display_controller.h"
-#include "display_menu_content.h"
+#include "menu_str.h"
 #include "display_show.h"
 #include "setup.h"
 

@@ -1,8 +1,22 @@
+/**
+ * @file time.h
+ *
+ */
 
 #ifndef __TIME_H__
 #define __TIME_H__
 
-extern void sleep_us(unsigned int us);
-extern void sleep_ms(unsigned int ms);
+/*********************
+ *      INCLUDES
+ *********************/
 
-#endif
+#include <stdint.h>
+
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
+
+void sleep_us(uint32_t us);
+void sleep_ms(uint32_t ms);
+
+#endif /*__TIME_H__*/

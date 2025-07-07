@@ -841,6 +841,7 @@ void tft_flush_area(uint8_t area_num, uint8_t * vm)
 void tft_flush(uint8_t * vm)
 {
     uint8_t _func = act_bar_get_func(&_dmm_actbar);
+    uint8_t _act = read_cur_activity();
 
     if (_Area[DEV_TOPBAR_CONT].refer) {
         tft_flush_area(0, vm);
@@ -848,21 +849,21 @@ void tft_flush(uint8_t * vm)
     }
 
     if (_Area[DMM_ZONE_CONT].refer && 
-        (_func != DMM_SETTING)
+        (_act != NT_ACT_CTL)
     ) {
         tft_flush_area(1, vm);
         _Area[DMM_ZONE_CONT].refer = false;
     }
 
     if (_Area[DMM_RET_CONT].refer && 
-        (_func != DMM_SETTING)
+        (_act != NT_ACT_CTL)
     ) {
         tft_flush_area(2, vm);
         _Area[DMM_RET_CONT].refer = false;
     }
 
     if (_Area[DMM_BCHT_CONT].refer && 
-        (_func != DMM_SETTING)
+        (_act != NT_ACT_CTL)
     ) {
         tft_flush_area(3, vm);
         _Area[DMM_BCHT_CONT].refer = false;
@@ -874,7 +875,7 @@ void tft_flush(uint8_t * vm)
     }
 
     if (_Area[CTL_TABV_CONT].refer && 
-        (_func == DMM_SETTING)
+        (_act == NT_ACT_CTL)
     ) {
         tft_flush_area(5, vm);
         _Area[CTL_TABV_CONT].refer = false;

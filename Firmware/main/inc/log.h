@@ -1,3 +1,7 @@
+/**
+ * @file log.h
+ *
+ */
 
 #ifndef __LOG_H__
 #define __LOG_H__
@@ -51,4 +55,4 @@
         getchar();                           \
     } while (0)
 
-#endif
+#endif /*__LOG_H__*/
