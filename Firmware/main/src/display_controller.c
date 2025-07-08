@@ -804,13 +804,14 @@ const tft_write_data tft_write = \
 
 void tft_clear(uint8_t color)
 {
+    uint16_t * colorTrue = req_colorTrue();
     uint32_t buf_size = 0;
 
     buf_size = TFT_WIDTH * TFT_HEIGHT;
     tft_region(0, 0, TFT_WIDTH, TFT_HEIGHT);
 
     for (uint32_t i = 0; i < buf_size; i++)
-        tft_write(color_data[color]);
+        tft_write(colorTrue[color]);
 }
 
 void tft_flush_area(uint8_t area_num, uint8_t * vm)
@@ -865,10 +866,11 @@ void tft_flush_area(uint8_t area_num, uint8_t * vm)
     tft_region(area_y, area_x, area_width, area_height);
 
     uint8_t theme = _devset.display.dark * COLOR_MAX;
+    uint16_t * colorTrue = req_colorTrue();
 
     for (uint32_t y = area_y; y < area_yend; y++) {
         for (uint32_t x = 0; x < area_width; x++) {
-            tft_write(color_data[vm[y * TFT_WIDTH + x] + theme]);
+            tft_write(colorTrue[vm[y * TFT_WIDTH + x] + theme]);
         }
     }
 }

@@ -39,7 +39,11 @@ typedef struct {
  *  STATIC PROTOTYPES
  **********************/
 
-const uint16_t color_data[] = {
+static uint8_t rendererVM[rendererSIZE] = {0};
+static const sym_desc_t sym_descs[];
+
+static const 
+uint16_t colorTrue[] = {
     /**< Dark color*/
     0x0000,/**< Black Color*/
     0xFFFF,/**< White Color*/
@@ -59,13 +63,19 @@ const uint16_t color_data[] = {
     0x8DFF,/**< Dark Blue*/
 };
 
-static uint8_t rendererVM[rendererSIZE] = {0};
-static const sym_desc_t dmm_logo[];
-
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
+/**
+ * Retrieves the pointer to renderer video memory buffer
+ * @return uint8_t* Pointer to the renderer's video memory buffer
+ * 
+ * Note: 
+ * - The returned buffer should be treated as read-only in most cases
+ * - Buffer size and layout depends on the current display configuration
+ * - Can be received either as simple pointer or array pointer (uint8_t (*)[])
+ */
 uint8_t * req_rendererVM()
 {
     /**
@@ -75,16 +85,42 @@ uint8_t * req_rendererVM()
     return rendererVM;
 }
 
+/**
+ * Retrieves the pointer to the true color palette buffer
+ * @return uint16_t* Pointer to the true color palette array
+ * 
+ * Note:
+ * - The returned buffer contains 16-bit color values (RGB565 format)
+ * - Buffer size depends on the current color palette configuration
+ * - Caller should not modify the buffer contents directly
+ */
+uint16_t * req_colorTrue()
+{
+    return colorTrue;
+}
+
+/**
+ * Writes a pixel color value to the specified video memory location
+ * @param y Vertical coordinate (row) of the pixel
+ * @param x Horizontal coordinate (column) of the pixel 
+ * @param color 8-bit color value to write
+ * @param vm Pointer to video memory buffer
+ * 
+ * Note:
+ * - Coordinates are zero-based (0,0) is top-left corner
+ * - Uses TFT_WIDTH constant for memory offset calculation
+ * - No bounds checking is performed on coordinates
+ */
 void display_pixel(uint32_t y, uint32_t x, uint8_t color, uint8_t * vm)
 {
     /**
      * Two colors
      * 
-     * uint32_t index = (y * TFT_WIDTH + x) / 8;
+     * uint32_t idx = (y * TFT_WIDTH + x) / 8;
      * uint8_t pxindex = (y * TFT_WIDTH + x) % 8;
      *
      * # method 1:
-     * vm[index] = (vm[index] & (~(0x01 << (7 - pxindex)))) | (color << (7 - pxindex));
+     * vm[idx] = (vm[idx] & (~(0x01 << (7 - pxindex)))) | (color << (7 - pxindex));
      * 
      * # method 2:
      * 0x7f: [0111, 1111]
@@ -97,24 +133,39 @@ void display_pixel(uint32_t y, uint32_t x, uint8_t color, uint8_t * vm)
      * 0xfe: [1111, 1110]
      *
      * switch (pxindex) {
-     *     case 0: vm[index] = (vm[index] & 0x7f) | (color << (7 - pxindex)); break;
-     *     case 1: vm[index] = (vm[index] & 0xbf) | (color << (7 - pxindex)); break;
-     *     case 2: vm[index] = (vm[index] & 0xdf) | (color << (7 - pxindex)); break;
-     *     case 3: vm[index] = (vm[index] & 0xef) | (color << (7 - pxindex)); break;
-     *     case 4: vm[index] = (vm[index] & 0xf7) | (color << (7 - pxindex)); break;
-     *     case 5: vm[index] = (vm[index] & 0xfb) | (color << (7 - pxindex)); break;
-     *     case 6: vm[index] = (vm[index] & 0xfd) | (color << (7 - pxindex)); break;
-     *     case 7: vm[index] = (vm[index] & 0xfe) | (color << (7 - pxindex)); break;
+     * case 0: vm[idx] = (vm[idx] & 0x7f) | (color << (7 - pxindex)); break;
+     * case 1: vm[idx] = (vm[idx] & 0xbf) | (color << (7 - pxindex)); break;
+     * case 2: vm[idx] = (vm[idx] & 0xdf) | (color << (7 - pxindex)); break;
+     * case 3: vm[idx] = (vm[idx] & 0xef) | (color << (7 - pxindex)); break;
+     * case 4: vm[idx] = (vm[idx] & 0xf7) | (color << (7 - pxindex)); break;
+     * case 5: vm[idx] = (vm[idx] & 0xfb) | (color << (7 - pxindex)); break;
+     * case 6: vm[idx] = (vm[idx] & 0xfd) | (color << (7 - pxindex)); break;
+     * case 7: vm[idx] = (vm[idx] & 0xfe) | (color << (7 - pxindex)); break;
      * }
      *
      * # method 3:
      * const uint8_t split_byte[8] = {0x7f, 0xbf, 0xdf, 0xef, 0xf7, 0xfb, 0xfd, 0xfe};
-     * vm[index] = (vm[index] & split_byte[pxindex]) | (color << (7 - pxindex));
+     * vm[idx] = (vm[idx] & split_byte[pxindex]) | (color << (7 - pxindex));
      */
     
     vm[y * TFT_WIDTH + x] = color;
 }
 
+/**
+ * Draws a straight line between two points in video memory using Bresenham's algorithm
+ * @param y1 Vertical coordinate of starting point (row)
+ * @param x1 Horizontal coordinate of starting point (column)
+ * @param y2 Vertical coordinate of ending point (row)
+ * @param x2 Horizontal coordinate of ending point (column)
+ * @param color 8-bit color value for the line
+ * @param vm Pointer to video memory buffer
+ * 
+ * Note:
+ * - Uses Bresenham's line algorithm for efficient pixel plotting
+ * - Coordinates are zero-based (0,0) is top-left corner
+ * - No bounds checking is performed on coordinates
+ * - Calls display_pixel() for each pixel in the line
+ */
 void display_line(uint32_t y1, uint32_t x1, 
     uint32_t y2, uint32_t x2, uint8_t color, uint8_t * vm)
 {
@@ -163,22 +214,40 @@ void display_line(uint32_t y1, uint32_t x1,
     }
 }
 
-void display_dotted_line(uint32_t y, uint32_t x, uint32_t lenth, uint8_t space, 
-    uint8_t direction, uint8_t color, uint8_t * vm)
+/**
+ * Draws a dotted line in video memory with specified spacing
+ * @param y Vertical starting coordinate (row)
+ * @param x Horizontal starting coordinate (column)
+ * @param length Total length of the dotted line in pixels
+ * @param space Spacing between dots in pixels
+ * @param dir Direction flag (0=horizontal, 1=vertical)
+ * @param color 8-bit color value for the dots
+ * @param vm Pointer to video memory buffer
+ */
+void display_dotted_line(uint32_t y, uint32_t x, 
+    uint32_t lenth, uint8_t space, uint8_t dir, 
+    uint8_t color, uint8_t * vm)
 {
-    uint32_t l;
-
-    if (!direction) {
-        for (l = 0; l < lenth; l = l + space)
+    if (!dir) {
+        for (uint32_t l = 0; l < lenth; l = l + space)
             display_pixel(y, x + l, color, vm);
     } else {
-        for (l = 0; l < lenth; l = l + space)
+        for (uint32_t l = 0; l < lenth; l = l + space)
             display_pixel(y + l, x, color, vm);
     }
 }
 
-void display_hollow_rect(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t color, uint8_t * vm)
+/**
+ * Draws a hollow rectangle in video memory using four line segments
+ * @param y Top-left vertical coordinate (row)
+ * @param x Top-left horizontal coordinate (column)
+ * @param width Width of the rectangle in pixels
+ * @param height Height of the rectangle in pixels
+ * @param color 8-bit color value for the rectangle border
+ * @param vm Pointer to video memory buffer
+ */
+void display_hollow_rect(uint32_t y, uint32_t x, 
+    uint32_t width, uint32_t height, uint8_t color, uint8_t * vm)
 {
     display_line(y, x, y, x + width, color, vm);
     display_line(y, x + width, y + height, x + width, color, vm);
@@ -186,47 +255,75 @@ void display_hollow_rect(uint32_t y, uint32_t x, uint32_t width, uint32_t height
     display_line(y, x, y + height, x, color, vm);
 }
 
-void display_solid_rect(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t color, uint8_t * vm)
+/**
+ * Draws a solid filled rectangle in video memory
+ * @param y Top-left vertical coordinate (row)
+ * @param x Top-left horizontal coordinate (column) 
+ * @param width Width of the rectangle in pixels
+ * @param height Height of the rectangle in pixels
+ * @param color 8-bit color value for the rectangle
+ * @param vm Pointer to video memory buffer
+ */
+void display_solid_rect(uint32_t y, uint32_t x, 
+    uint32_t width, uint32_t height, uint8_t color, uint8_t * vm)
 {
-    uint32_t i, j;
-
-    for (i = 0; i < height; i++)
-        for (j = 0; j < width; j++)
+    for (uint32_t i = 0; i < height; i++) {
+        for (uint32_t j = 0; j < width; j++)
             display_pixel(y + i, x + j, color, vm);
+    }
 }
 
-void display_bevel_rect(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint32_t color, uint8_t chamfer, uint8_t * vm)
+/**
+ * Draws a beveled rectangle with chamfered edges in video memory
+ * @param y Top-left vertical coordinate (row)
+ * @param x Top-left horizontal coordinate (column)
+ * @param width Width of the rectangle in pixels
+ * @param height Height of the rectangle in pixels 
+ * @param color 8-bit color value for the rectangle
+ * @param chamfer Size of the chamfered edges in pixels
+ * @param vm Pointer to video memory buffer
+ */
+void display_bevel_rect(uint32_t y, uint32_t x, 
+    uint32_t width, uint32_t height, uint32_t color, 
+    uint8_t chamfer, uint8_t * vm)
 {
-    uint32_t i, j;
-
-    for (i = chamfer; i > 0; i--) {
-        for (j = 0; j < (width - i * 2); j++) {
+    for (uint32_t i = chamfer; i > 0; i--) {
+        for (uint32_t j = 0; j < (width - i * 2); j++) {
             display_pixel(y, x + i + j, color, vm);
         }
         y++;
         height--;
     }
-    for (i = 0; i < (height - chamfer * 2); i++) {
-        for (j = 0; j < width; j++) {
+    for (uint32_t i = 0; i < (height - chamfer * 2); i++) {
+        for (uint32_t j = 0; j < width; j++) {
             display_pixel(y, x + j, color, vm);
         }
         y++;
     }
-    for (i = 0; i < chamfer + 1; i++) {
-        for (j = 0; j < (width - i * 2); j++) {
+    for (uint32_t i = 0; i < chamfer + 1; i++) {
+        for (uint32_t j = 0; j < (width - i * 2); j++) {
             display_pixel(y, x + i + j, color, vm);
         }
         y++;
     }
 }
 
-void display_fillet_rect(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint32_t color, uint8_t radius, uint8_t * vm)
+/**
+ * Draws a rectangle with rounded corners (fillet) in video memory
+ * @param y Top-left vertical coordinate (row)
+ * @param x Top-left horizontal coordinate (column)
+ * @param width Total width of the rectangle in pixels
+ * @param height Total height of the rectangle in pixels
+ * @param color 8-bit color value for the rectangle
+ * @param radius Corner rounding radius in pixels
+ * @param vm Pointer to video memory buffer
+ */
+void display_fillet_rect(uint32_t y, uint32_t x, 
+    uint32_t width, uint32_t height, uint32_t color, 
+    uint8_t radius, uint8_t * vm)
 {
-    uint32_t a, b;
-    uint32_t j;
+    uint32_t a = 0, b = 0;
+    uint32_t j = 0;
 
     for (b = radius; b > 0; b--) {
         a = sqrt(radius * radius - b * b);
@@ -250,15 +347,33 @@ void display_fillet_rect(uint32_t y, uint32_t x, uint32_t width, uint32_t height
     }
 }
 
-void display_hollow_triangle(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t color, uint8_t * vm)
+/**
+ * Draws a hollow triangle outline in video memory
+ * @param y Bottom-left vertical coordinate (row)
+ * @param x Bottom-left horizontal coordinate (column)
+ * @param width Base width of the triangle in pixels
+ * @param height Height of the triangle in pixels
+ * @param color 8-bit color value for the triangle outline
+ * @param vm Pointer to video memory buffer
+ */
+void display_hollow_triangle(uint32_t y, uint32_t x, 
+    uint32_t width, uint32_t height, uint8_t color, uint8_t * vm)
 {
     display_line(y + height, x, y, x + width / 2, color, vm);
     display_line(y, x + width / 2, y + height, x + width, color, vm);
     display_line(y + height, x + width, y + height, x, color, vm);
 }
 
-void _display_circle(uint16_t y, uint16_t x, uint16_t r, uint16_t color, uint8_t * vm)
+/**
+ * Draws a circle outline using Bresenham's algorithm
+ * @param y Vertical center coordinate of the circle
+ * @param x Horizontal center coordinate of the circle 
+ * @param r Radius of the circle in pixels
+ * @param color 16-bit color value for the circle
+ * @param vm Pointer to video memory buffer
+ */
+void _display_circle(uint16_t y, uint16_t x, uint16_t r, 
+    uint16_t color, uint8_t * vm)
 {
     /**Bresenham 画圆算法*/
     int16_t a = 0, b = r;
@@ -292,7 +407,16 @@ void _display_circle(uint16_t y, uint16_t x, uint16_t r, uint16_t color, uint8_t
     }
 }
 
-void display_circle(uint16_t y, uint16_t x, uint16_t r, uint16_t color, uint8_t * vm)
+/**
+ * Draws a circle outline using Bresenham's algorithm
+ * @param y Vertical center coordinate of the circle
+ * @param x Horizontal center coordinate of the circle 
+ * @param r Radius of the circle in pixels
+ * @param color 16-bit color value for the circle
+ * @param vm Pointer to video memory buffer
+ */
+void display_circle(uint16_t y, uint16_t x, uint16_t r, 
+    uint16_t color, uint8_t * vm)
 {
     /**Bresenham 画圆算法*/
     int16_t a = 0, b = r;
@@ -325,51 +449,42 @@ void display_circle(uint16_t y, uint16_t x, uint16_t r, uint16_t color, uint8_t 
     display_pixel(y, x, color, vm); /**圆心坐标*/
 }
 
-void display_bookmark(int y, uint32_t x, uint32_t width, uint32_t height, 
-    uint32_t color, uint8_t radian, uint8_t * vm)
-{
-    uint8_t i, j;
-
-    /*Open to the right*/
-    for (i = 0; i < radian; i++) {
-        for (j = 0; j < (width - i); j++) {
-            if ((!(i == 0 && j == 0)) && (j < width - 1))
-            display_pixel(y, (x + j), color, vm);
-        }
-        y++;
-    }
-    for (i = radian; i > 0; i--) {
-        for (j = 0; j < (width - i); j++) {
-            if ((!(i == 1 && j == 0)) && (j < width - 2))
-            display_pixel(y, (x + j), color, vm);
-        }
-        y++;
-    }
-}
-
+/**
+ * Displays a single character on screen using a bitmap font.
+ * @param y Starting Y coordinate (top position).
+ * @param x Starting X coordinate (left position).
+ * @param width Width of each character in pixels.
+ * @param height Height of each character in pixels.
+ * @param fg Foreground color (pixel on).
+ * @param bg Background color (pixel off, 0 means transparent).
+ * @param start_char First character in font library.
+ * @param character Character to display.
+ * @param fontlib Pointer to font bitmap data.
+ * @param vm Pointer to video memory/framebuffer.
+ */
 void display_sym(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg, 
-    uint8_t logo_name, uint8_t status, uint8_t * vm)
+    uint8_t _sym, uint8_t status, uint8_t * vm)
 {
-    uint32_t width, height;
+    uint32_t width = 0, height = 0;
 
-    uint32_t total_byte = 0;
-    uint32_t column = 0;
-    uint32_t tx, ty;
+    uint32_t total_byte = 0; /*Total bytes per character in font data*/
+    uint32_t column = 0; /*Font data address offset*/
+    uint32_t tx, ty; /*Current column counter*/
 
     if (!status) return; /*Do not show this logo*/
 
     ty = y;
     tx = x;
 
-    width = dmm_logo[logo_name].width;
-    height = dmm_logo[logo_name].height;
+    width = sym_descs[_sym].width;
+    height = sym_descs[_sym].height;
 
     /*How many bytes are needed for a character*/
     total_byte = (int)((width + 7) / 8) * height;
 
     for (int i = 0; i < total_byte; i++) {
         for (int j = 0; j < 8; j++) {
-            if (dmm_logo[logo_name].data[i] & (0x80 >> j)) {
+            if (sym_descs[_sym].data[i] & (0x80 >> j)) {
                 display_pixel(ty, tx, fg, vm);
             } else {
                 if (1/*bg != 0*/) display_pixel(ty, tx, bg, vm);
@@ -377,19 +492,25 @@ void display_sym(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg,
             tx++;
             column++;
             if (column >= width) {
-                column = 0;
-                ty++;
-                tx = x;
-                break;
+                column = 0; /*Reset column counter*/
+                ty++; /*Move to next line*/
+                tx = x; /*Reset x position*/
+                break; /*Skip remaining bits in this byte*/
             }
         }
     }
 }
 
-void display_battery(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t fg, uint8_t bg, uint8_t power, uint8_t status, uint8_t * vm)
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
+void display_battery(uint32_t y, uint32_t x, 
+    uint32_t width, uint32_t height, uint8_t fg, uint8_t bg, 
+    uint8_t power, uint8_t status, uint8_t * vm)
 {
-    uint8_t direction = 0;
+    uint8_t dir = 0;
 
     /*power area range: 0 pixel to (width-5) pixel, express power 0%-100%*/
     power = power / (100 / (width - 5));
@@ -397,10 +518,9 @@ void display_battery(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
         power = width - 5;
 
     /*Recharge status*/
-    if (status == true)
-        fg = GREEN;
+    if (status) fg = GREEN;
 
-    if (direction) {
+    if (dir) {
         /*battery back ground*/
         display_solid_rect(y, x, width, height, bg, vm);
         /*battery rim*/
@@ -420,7 +540,8 @@ void display_battery(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
         display_hollow_rect(y, x, width, height, fg, vm);
         display_hollow_rect(y + 1, x + 1, width - 2, height - 2, fg, vm);
         /*display power area*/
-        if (power < width / 4) display_solid_rect(y + 3, x + 3 + (width - 5 - power), power, height - 5, RED, vm);
+        if (power < width / 4) 
+            display_solid_rect(y + 3, x + 3 + (width - 5 - power), power, height - 5, RED, vm);
         else display_solid_rect(y + 3, x + 3 + (width - 5 - power), power, height - 5, fg, vm);
         /*display no power blank area*/
         display_solid_rect(y + 3, x + 3, (width - 5 - power), height - 5, bg, vm);
@@ -436,61 +557,37 @@ void display_battery(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
     }
 }
 
-void display_recording_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t fg, uint8_t bg, uint8_t status, uint8_t * vm)
-{
-    if (!status) return;
-
-    display_solid_rect(y, x, width, height, bg, vm);
-    display_N2string(y + 2, x + 2, ALIGN_SPECIFY, LAYOUT_R11, 0, 
-        "RECORDING", _MENU_LAST, fg, INV_OFF, vm);
-}
-
-void display_maxmin_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t fg, uint8_t bg, uint8_t status, uint8_t * vm)
-{
-    if (!status) return;
-
-    display_solid_rect(y, x, width, height, bg, vm);
-    display_N2string(y + 2, x + 2, ALIGN_SPECIFY, LAYOUT_R11, 0, 
-        "MAX/MIN", _MENU_LAST, fg, INV_OFF, vm);
-}
-
-void display_hold_mark(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t fg, uint8_t bg, uint8_t status, uint8_t * vm)
-{
-    if (!status) return;
-
-    display_solid_rect(y, x, width, height, bg, vm);
-    display_N2string(y + 2, x + 2, ALIGN_SPECIFY, LAYOUT_R11, 0, 
-        "HOLD", _MENU_LAST, fg, INV_OFF, vm);
-}
-
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
 void display_barchart(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg, 
-    int8_t percentage, int32_t value_max, uint8_t * vm)
+    int8_t _per, int32_t valmax, uint8_t * vm)
 {
+    uint8_t param_string[8] = {0};
     bar_chart_t bar_chart = {0};
-
-    uint8_t param_string[8];
     uint8_t offset_y = 0;
 
-    if ((value_max % 6) == 0) {
+    if ((valmax % 6) == 0) {
         bar_chart.param_cnt = 6;
         bar_chart.param_height = 15;
-        bar_chart.param_incr = value_max / 6;
+        bar_chart.param_incr = valmax / 6;
         bar_chart.scale_width = 4;
         bar_chart.scale_count = 60;
         bar_chart.sigh_len = 10;
     } else {
         bar_chart.param_cnt = 5;
         bar_chart.param_height = 15;
-        bar_chart.param_incr = value_max / 5;
+        bar_chart.param_incr = valmax / 5;
         bar_chart.scale_width = 4;
         bar_chart.scale_count = 50;
         bar_chart.sigh_len = 10;
     }
 
-    if (percentage < 0) display_solid_rect(y + bar_chart.param_height + 11, x, bar_chart.sigh_len - 4, 4, fg, vm);
+    if (_per < 0) display_solid_rect(
+        y + bar_chart.param_height + 11, x, 
+        bar_chart.sigh_len - 4, 4, fg, vm);
 
     for (uint8_t i = 0; i < (bar_chart.param_cnt + 1); i++) {
         sprintf(param_string, "%d", i * bar_chart.param_incr);
@@ -506,35 +603,52 @@ void display_barchart(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg,
             bar_chart.scale_height = 4;
             offset_y = 4;
         }
-        display_dotted_line(y + bar_chart.param_height + offset_y, x + bar_chart.sigh_len + bar_chart.scale_width * i, bar_chart.scale_height, 1, 1, fg, vm);
+
+        display_dotted_line(y + bar_chart.param_height + offset_y, 
+            x + bar_chart.sigh_len + bar_chart.scale_width * i, 
+            bar_chart.scale_height, 1, 1, fg, vm);
     }
     bar_chart.scale_height = 8;
 
-    for (uint8_t i = 0; i < bar_chart.scale_count + 1; i++)
-        display_solid_rect(y + bar_chart.param_height + bar_chart.scale_height + 2, x + bar_chart.sigh_len + bar_chart.scale_width * i - 1, 3, 6, fg, vm);
+    for (uint8_t i = 0; i < bar_chart.scale_count + 1; i++) {
+        display_solid_rect(y + bar_chart.param_height + bar_chart.scale_height + 2, 
+            x + bar_chart.sigh_len + bar_chart.scale_width * i - 1, 3, 6, fg, vm);
+    }
 
     /*Red color progress*/
-    if (abs(percentage) <= 100) display_solid_rect(y + bar_chart.param_height + bar_chart.scale_height + 2, x + bar_chart.sigh_len - 1, (bar_chart.scale_width * bar_chart.scale_count) * abs(percentage) / 100 + 3, 6, RED, vm);
-    else display_sym(y + bar_chart.param_height + bar_chart.scale_height + 1, x + bar_chart.sigh_len + (bar_chart.scale_width * bar_chart.scale_count) + 4, WHITE, BLACK, SYM_BCHT_OVE, 1, vm);
+    if (abs(_per) <= 100) {
+        display_solid_rect(y + bar_chart.param_height + bar_chart.scale_height + 2, 
+            x + bar_chart.sigh_len - 1, (bar_chart.scale_width * bar_chart.scale_count) * \
+            abs(_per) / 100 + 3, 6, RED, vm);
+    } else {
+        display_sym(y + bar_chart.param_height + bar_chart.scale_height + 1, 
+            x + bar_chart.sigh_len + (bar_chart.scale_width * bar_chart.scale_count) + 4, 
+            WHITE, BLACK, SYM_BCHT_OVE, 1, vm);
+    }
 }
 
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
 void display_dock(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
-    uint8_t fg, uint8_t bg, uint32_t rows, uint8_t row_gap, uint8_t select_num, uint8_t * vm)
+    uint8_t fg, uint8_t bg, uint32_t rows, uint8_t row_gap, 
+    uint8_t linecur, uint8_t * vm)
 {
     uint32_t color;
     uint8_t items = rows;
 
     for (; items > 0; items--) {
-        if (items == (rows - select_num)) color = fg;
+        if (items == (rows - linecur)) color = fg;
         else color = bg;
-
         display_bevel_rect(y, x, width, height, color, 1, vm);
         y = y + height + row_gap;
     }
 
     /**
      * for (; items > 0; items--) {
-     *     if (items == (rows - select_num))
+     *     if (items == (rows - linecur))
      *         display_bevel_rect(y + 1, x + 5, width - 10, height - 2, fg, 1, vm);
      *     else
      *         display_bevel_rect(y, x, width, height, bg, 1, vm);
@@ -543,6 +657,11 @@ void display_dock(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
      */
 }
 
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
 void _letter_refer(_letter_t * _lettr_p, const uint8_t * str_p, uint8_t _offs)
 {
     if ((!_lettr_p) || (!str_p)) return;
@@ -556,85 +675,23 @@ void _letter_refer(_letter_t * _lettr_p, const uint8_t * str_p, uint8_t _offs)
     _lettr_p->_len++;
 }
 
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
 const uint8_t * _letter_get_str(_letter_t * _lettr_p)
 {
     if (_lettr_p) return _lettr_p->letter;
     return " ";
 }
 
-dev_alerts_t message_tips[5] = {
-    {
-        .msg_width = 50,
-        .msg_high = 30,
-        .active = true,
-        .reside_time = 300,
-        .stridx = TIPS_BATTERY_LOW_20,
-    },
-
-    {
-        .msg_width = 50,
-        .msg_high = 30,
-        .active = true,
-        .reside_time = 0,
-        .stridx = TIPS_BATTERY_LOW_10,
-    },
-
-    {
-        .msg_width = 50,
-        .msg_high = 30,
-        .active = true,
-        .reside_time = 0,
-        .stridx = TIPS_BATTERY_LOW_05,
-    },
-
-    {
-        .msg_width = 50,
-        .msg_high = 30,
-        .active = true,
-        .reside_time = 0,
-        .stridx = 3,
-    },
-};
-
-void active_tips(dev_alerts_t * tips, uint32_t reside_time)
-{
-    tips->reside_time = reside_time;
-    tips->active = true;
-}
-
-void inactive_tips(dev_alerts_t * tips)
-{
-    tips->reside_time = 0;
-    tips->active = false;
-}
-
-void inactive_all_tips(dev_alerts_t tips[])
-{
-    uint8_t n = sizeof(message_tips) / sizeof(dev_alerts_t);
-
-    for (uint8_t i = 0; i < n; i++) {
-        tips[i].reside_time = 0;
-        tips[i].active = false;
-    }
-}
-
-void tips_timing(dev_alerts_t * tips)
-{
-    if (tips->reside_time > 0)
-        tips->reside_time--;
-}
-
-void tips_all_timing(dev_alerts_t tips[])
-{
-    uint8_t n = sizeof(message_tips) / sizeof(dev_alerts_t);
-
-    for (uint8_t i = 0; i < n; i++) {
-        if (tips[i].reside_time > 0)
-            tips[i].reside_time--;
-    }
-}
-
-void display_tips(uint32_t y, uint32_t x, uint32_t tft_width, 
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
+void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width, 
     uint8_t fg, uint8_t bg, uint8_t font_size, 
     dev_alerts_t * tips, uint8_t * vm)
 {
@@ -646,7 +703,7 @@ void display_tips(uint32_t y, uint32_t x, uint32_t tft_width,
     uint8_t postion = 0;
     uint8_t len     = 0;
 
-    if ((tips->active == false) || (tips->reside_time <= 0)) return;
+    if ((tips->active == false) || (tips->_time <= 0)) return;
 
     for (uint8_t set = 0; set < 4; set++)
         memset(tips_buf[set], '\0', 32);
@@ -675,64 +732,133 @@ void display_tips(uint32_t y, uint32_t x, uint32_t tft_width,
     display_bevel_rect(y, x, str_length + 4, str_height * line + 4 * line, bg, 1, vm);
 
     for (uint8_t l = 0; l < line; l++) {
-        display_string_align(y + 2, x + 2, ALIGN_SPECIFY, 0, 0, fg, font_size, (uint8_t *)/*tips_content[tips->stridx]*/tips_buf[l], INV_OFF, vm);
+        display_string_align(y + 2, x + 2, ALIGN_SPECIFY, 0, 0, fg, font_size, 
+            (uint8_t *)tips_buf[l], INV_OFF, vm);
         if (l != (line - 1))
-            display_dotted_line(y + str_height + 4, x + 2, str_length, 2, 0, WHITE, vm);
+            display_dotted_line(y + str_height + 4, x + 2, 
+                str_length, 2, 0, WHITE, vm);
         y = y + str_height + 4;
     }
 }
 
-const static uint8_t ble_desc[] = {
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
+void alerts_active(dev_alerts_t * alerts_p, uint32_t _time)
+{
+    alerts_p->_time = _time;
+    alerts_p->active = true;
+}
+
+/**
+ * Deactivates a single device alert
+ * @param alerts_p Pointer to the device alert structure to deactivate
+ */
+void alerts_inactive(dev_alerts_t * alerts_p)
+{
+    alerts_p->_time = 0;
+    alerts_p->active = false;
+}
+
+/**
+ * Deactivates all device alerts in an array
+ * @param alerts Array of device alert structures to deactivate
+ * Note: Array size is determined at runtime using sizeof
+ */
+void alerts_inactAll(dev_alerts_t alerts[])
+{
+    uint8_t nr = sizeof(alerts) / sizeof(dev_alerts_t);
+
+    for (uint8_t i = 0; i < nr; i++) {
+        alerts[i]._time = 0;
+        alerts[i].active = false;
+    }
+}
+
+/**
+ * Decrements the timer for a single active alert
+ * @param alerts_p Pointer to the device alert structure to process
+ * Only decrements if time remaining is greater than 0
+ */
+void alerts_tick_work(dev_alerts_t * alerts_p)
+{
+    if (alerts_p->_time > 0)
+        alerts_p->_time--;
+}
+
+/**
+ * Decrements timers for all active alerts in an array
+ * @param alerts Array of device alert structures to process
+ * Note: Array size is determined at runtime using sizeof
+ */
+void alertsAll_tick_work(dev_alerts_t alerts[])
+{
+    uint8_t n = sizeof(alerts) / sizeof(dev_alerts_t);
+
+    for (uint8_t i = 0; i < n; i++) {
+        if (alerts[i]._time > 0)
+            alerts[i]._time--;
+    }
+}
+
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
+
+static const uint8_t ble_desc[] = {
     0x00,0x00,0x01,0xC0,0x01,0xE0,0x31,0xB0,0x19,0x98,0x0D,0x98,0x07,0xB0,0x03,0xE0,
     0x03,0xE0,0x07,0xB0,0x0D,0x98,0x19,0x98,0x31,0xB0,0x01,0xE0,0x01,0xC0,0x00,0x00,
 };
 
-const static uint8_t poff_desc[] = {
+static const uint8_t poff_desc[] = {
     0x00,0x00,0x7D,0xBE,0x7D,0xBE,0x61,0x86,0x61,0x86,0x61,0x86,0x61,0x86,0x60,0x00,
     0x60,0xFE,0x60,0x92,0x60,0x92,0x60,0x9E,0x60,0x82,0x7E,0x82,0x7E,0xFE,0x00,0x00,
 };
 
-const static uint8_t lighting_desc[] = {
+static const uint8_t lighting_desc[] = {
     0x00,0x00,0x01,0xF0,0x03,0xE0,0x07,0xC0,0x0F,0x80,0x1F,0x00,0x3F,0xFE,0x7F,0xFE,
     0x7F,0xFC,0x00,0xF8,0x01,0xF0,0x03,0xE0,0x07,0xC0,0x0F,0x80,0x1F,0x00,0x00,0x00,
 };
 
-const static uint8_t lo_desc[] = {
+static const uint8_t lo_desc[] = {
     0xFF,0xFC,0x00,0x00,0xFF,0xFE,0x00,0x00,0x00,0x03,0x00,0x00,0x60,0x03,0x00,0x00,
     0x60,0x01,0x80,0x00,0x60,0x79,0x80,0x00,0x60,0xFC,0xC0,0x00,0x61,0xCE,0xC0,0x00,
     0x61,0x86,0x60,0x00,0x61,0x86,0x60,0x00,0x61,0x86,0x30,0x00,0x61,0xCE,0x30,0x00,
     0x7E,0xFC,0x18,0x00,0x7E,0x78,0x18,0x00,0x00,0x00,0x00,0x00,
 };
 
-const static uint8_t loz_desc[] = {
+static const uint8_t loz_desc[] = {
     0x00,0x00,0x00,0x00,0x60,0x00,0x00,0x00,0x60,0x00,0x00,0x00,0x60,0x00,0x00,0x00,
     0x60,0x00,0x00,0x00,0x60,0x78,0xFC,0x00,0x60,0xFC,0xFC,0x00,0x61,0xCE,0x0C,0x00,
     0x61,0x86,0x18,0x00,0x61,0x86,0x30,0x00,0x61,0x86,0x60,0x00,0x61,0xCE,0xC0,0x00,
     0x7E,0xFC,0xFC,0x00,0x7E,0x78,0xFC,0x00,0x00,0x00,0x00,0x00,
 };
 
-const static uint8_t bcht_ove_desc[] = {
+static const uint8_t bcht_ove_desc[] = {
     0x80,0xc0,0xe0,0xf0,0xf0,0xe0,0xc0,0x80,
 };
 
-const static uint8_t ac_desc[] = {
+static const uint8_t ac_desc[] = {
     0x00,0x00,0x00,0x00,0x00,0x00,0x3e,0x00,0x7f,0x06,0xe3,0x8e,0xc1,0xfc,0x00,0xf8,
 };
 
-const static uint8_t dc_desc[] = {
+static const uint8_t dc_desc[] = {
     0xff,0xfe,0xff,0xfe,0x00,0x00,0x00,0x00,0xdb,0x6e,0xdb,0x6e,0x00,0x00,0x00,0x00,
 };
 
-const static uint8_t ac_dc_desc[] = {
+static const uint8_t ac_dc_desc[] = {
     0xff,0xfe,0xff,0xfe,0x00,0x00,0x3e,0x00,0x7f,0x06,0xe3,0x8e,0xc1,0xfc,0x00,0xf8,
 };
 
-const static uint8_t trumpet_desc[] = {
+static const uint8_t trumpet_desc[] = {
     0x00,0x00,0x00,0x00,0x00,0xC8,0x01,0xC4,0x03,0xD2,0x3F,0xCA,0x7F,0xCA,0x7F,0xCA,
     0x7F,0xCA,0x7F,0xCA,0x3F,0xCA,0x03,0xD2,0x01,0xC4,0x00,0xC8,0x00,0x00,0x00,0x00,
 };
 
-const sym_desc_t dmm_logo[] = {
+const sym_desc_t sym_descs[] = {
     {
         .width = 16,
         .height = 16,
@@ -794,7 +920,12 @@ const sym_desc_t dmm_logo[] = {
     },
 };
 
-sym_desc_t read_logo_data(uint8_t logo_name)
+/**
+ * Reads and logs the valid width of each character in a font range.
+ * @param font_size - Index of the font in the en_font array.
+ * @param finish_character - Last character in the range to check.
+ */
+sym_desc_t sym_req_desc(uint8_t _sym)
 {
-    return dmm_logo[logo_name];
+    return sym_descs[_sym];
 }

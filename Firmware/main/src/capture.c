@@ -16,7 +16,7 @@
  *********************/
 
 #define BMP_WRITE_DATA(a_byte) \
-    usart_send_byte(USART1, a_byte)
+  usart_send_byte(USART1, a_byte)
 
 /**
  * 0x42, 0x4D,             // BM
@@ -37,22 +37,22 @@
  */
 
 const uint8_t bmp_desc[54] = {
-    0x42, 0x4D, 
-    0x36, 0x84, 0x03, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 
-    0x36, 0x00, 0x00, 0x00, 
-    0x28, 0x00, 0x00, 0x00,
-    0x40, 0x01, 0x00, 0x00,
-    0x10, 0xFF, 0xFF, 0xFF, 
-    0x01, 0x00, 
-    0x18, 0x00, 
-    0x00, 0x00,
-    0x00, 0x00, 0x00, 0x84, 
-    0x30, 0x00, 0x88, 0x13, 
-    0x00, 0x00, 0x88, 0x13, 
-    0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00, 0x00, 0x00, 
-    0x00, 0x00
+  0x42, 0x4D, 
+  0x36, 0x84, 0x03, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 
+  0x36, 0x00, 0x00, 0x00, 
+  0x28, 0x00, 0x00, 0x00,
+  0x40, 0x01, 0x00, 0x00,
+  0x10, 0xFF, 0xFF, 0xFF, 
+  0x01, 0x00, 
+  0x18, 0x00, 
+  0x00, 0x00,
+  0x00, 0x00, 0x00, 0x84, 
+  0x30, 0x00, 0x88, 0x13, 
+  0x00, 0x00, 0x88, 0x13, 
+  0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00
 };
 
 /**********************
@@ -61,8 +61,8 @@ const uint8_t bmp_desc[54] = {
 
 static void _bmpdesc(uint8_t * desc_p, uint32_t _len)
 {
-    for (uint8_t i = 0; i < _len; i++)
-        BMP_WRITE_DATA(desc_p[i]);
+  for (uint8_t i = 0; i < _len; i++)
+    BMP_WRITE_DATA(desc_p[i]);
 }
 
 /**
@@ -81,25 +81,26 @@ static void _bmpdesc(uint8_t * desc_p, uint32_t _len)
  */
 static void _bmpcolor(uint8_t * vm, uint32_t _len)
 {
-    uint32_t color;
+  uint16_t * colorTrue = req_colorTrue();
+  uint32_t color = 0;
 
-    for (uint32_t y = 0; y < TFT_HEIGHT; y++) {
-        for (uint32_t x = 0; x < TFT_WIDTH; x++) {
-            color = color_data[vm[y * TFT_WIDTH + x]];
-            /*RGB565 to RGB888*/
-            BMP_WRITE_DATA((color & 0x1F) << 3);
-            BMP_WRITE_DATA(((color >> 5) & 0x3F) << 2);
-            BMP_WRITE_DATA((color >> 11) << 3);
-        }
+  for (uint32_t y = 0; y < TFT_HEIGHT; y++) {
+    for (uint32_t x = 0; x < TFT_WIDTH; x++) {
+      color = colorTrue[vm[y * TFT_WIDTH + x]];
+      /*RGB565 to RGB888*/
+      BMP_WRITE_DATA((color & 0x1F) << 3);
+      BMP_WRITE_DATA(((color >> 5) & 0x3F) << 2);
+      BMP_WRITE_DATA((color >> 11) << 3);
     }
+  }
 }
 
 void capture()
 {
-    uint16_t _len = sizeof(bmp_desc) / sizeof(uint8_t);
-    uint32_t size = TFT_WIDTH * TFT_HEIGHT;
-    uint8_t _disp_p = req_rendererVM();
+  uint16_t _len = sizeof(bmp_desc) / sizeof(uint8_t);
+  uint32_t size = TFT_WIDTH * TFT_HEIGHT;
+  uint8_t _disp_p = req_rendererVM();
 
-    _bmpdesc(bmp_desc, _len);
-    _bmpcolor(_disp_p, size);
+  _bmpdesc(bmp_desc, _len);
+  _bmpcolor(_disp_p, size);
 }

@@ -250,7 +250,7 @@ void volt_level1_key_event(uint8_t key_event)
     if (page == VOLT_CENTER) {
       switch (key_event) {
       case F1_KEY_EVT:
-        active_tips(&message_tips[0], STMS_TICKS(100, 500));
+        alerts_active(&alerts[0], STMS_TICKS(100, 500));
         break;
 
       case F2_KEY_EVT:

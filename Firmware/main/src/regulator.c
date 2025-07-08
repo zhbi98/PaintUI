@@ -340,13 +340,13 @@ void regu_separator_add(uint8_t character)
                 *pt = '\0';
 
                 switch (character) {
-                    case ',':
-                        strcat(regu.disp_buf[1], ",");
-                        break;
+                case ',':
+                    strcat(regu.disp_buf[1], ",");
+                    break;
 
-                    case ' ':
-                        strcat(regu.disp_buf[1], " ");
-                        break;
+                case ' ':
+                    strcat(regu.disp_buf[1], " ");
+                    break;
                 }
                 strcat(regu.disp_buf[1], ch);
             }
@@ -365,12 +365,12 @@ void regu_separator_add(uint8_t character)
             strcpy(ch, pt);
             *pt = '\0';
             switch (character) {
-                case ',':
-                    strcat(regu.disp_buf[1], ",");
-                    break;
-                case ' ':
-                    strcat(regu.disp_buf[1], " ");
-                    break;
+            case ',':
+                strcat(regu.disp_buf[1], ",");
+                break;
+            case ' ':
+                strcat(regu.disp_buf[1], " ");
+                break;
             }
             strcat(regu.disp_buf[1], ch);
             i++;

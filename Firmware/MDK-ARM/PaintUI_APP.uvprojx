@@ -733,6 +733,11 @@
               <FileType>1</FileType>
               <FilePath>..\main\src\capture.c</FilePath>
             </File>
+            <File>
+              <FileName>alerts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main\src\alerts.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

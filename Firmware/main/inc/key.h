@@ -40,8 +40,6 @@ typedef struct {
   bool press_long;
 } key_event_t;
 
-extern key_event_t key_evt;
-
 /**********************
  * GLOBAL PROTOTYPES
  **********************/

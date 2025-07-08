@@ -223,8 +223,11 @@ void dmm_rec_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
-    display_recording_mark(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
-        _Area[_area_idx].width, _Area[_area_idx].height, WHITE, RED, 1, vm);
+
+    display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+        _Area[_area_idx].width, _Area[_area_idx].height, RED, vm);
+    display_N2string(_Area[_area_idx].set_y + 2, _Area[_area_idx].set_x + 2, 
+        ALIGN_SPECIFY, LAYOUT_R11, 0, "RECORDING", _MENU_LAST, WHITE, INV_OFF, vm);
 }
 
 void dmm_hold_state_refer(uint8_t * vm)
@@ -235,8 +238,12 @@ void dmm_hold_state_refer(uint8_t * vm)
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
-    if (1) display_hold_mark(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
-        _Area[_area_idx].width, _Area[_area_idx].height, WHITE, RED, 1, vm);
+    if (1) {
+        display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+            _Area[_area_idx].width, _Area[_area_idx].height, RED, vm);
+        display_N2string(_Area[_area_idx].set_y + 2, _Area[_area_idx].set_x + 2, 
+            ALIGN_SPECIFY, LAYOUT_R11, 0, "HOLD", _MENU_LAST, WHITE, INV_OFF, vm);
+    }
 }
 
 void dmm_rel_val_refer(uint8_t * vm)
@@ -288,8 +295,8 @@ void dmm_ret_val_refer(uint8_t * vm)
     display_N4string(86, 0, ALIGN_RIGHT, LAYOUT_R11, 
         _area_idx, measure_string, _MENU_LAST, WHITE, INV_OFF, vm);
 
-    display_tips(26, 0, 320, WHITE, DARK_BLUE, FONT_N2_PT, &message_tips[0], vm);
-    tips_timing(&message_tips[0]);
+    alerts_refer(26, 0, 320, WHITE, DARK_BLUE, FONT_N2_PT, &alerts[0], vm);
+    alerts_tick_work(&alerts[0]);
 }
 
 void dmm_ret_unit_refer(uint8_t * vm)
@@ -501,7 +508,6 @@ void ctl_tabv_refer(uint8_t * vm)
     itemcolor[lv_tab_get_line_id()] = WHITE;
 
     if (lv_tab_get_page_id() == 0) {
-        display_bookmark(LIST_LINE7_Y, _Area[_area_idx].set_x + 282, 34, 16, RED, 8, vm);
         display_N2string(LIST_LINE7_Y + 1, _Area[_area_idx].set_x + 284, ALIGN_SPECIFY, LAYOUT_R11, 0, list_content[LIST_1_2],         _MENU_LAST, WHITE, INV_OFF, vm);
         display_N2string(LIST_LINE0_Y + 1, _Area[_area_idx].set_x + 18, ALIGN_SPECIFY, LAYOUT_R11,  0, list_content[LIST_SET_TIME],    _MENU_LAST, itemcolor[0], INV_OFF, vm);
         display_N2string(LIST_LINE1_Y + 1, _Area[_area_idx].set_x + 18, ALIGN_SPECIFY, LAYOUT_R11,  0, list_content[LIST_SET_DATE],    _MENU_LAST, itemcolor[1], INV_OFF, vm);
@@ -642,7 +648,6 @@ void ctl_tabv_refer(uint8_t * vm)
     }
 
     if (lv_tab_get_page_id() == 1) {
-        display_bookmark(LIST_LINE7_Y, _Area[_area_idx].set_x + 282, 34, 16, RED, 8, vm);
         display_N2string(LIST_LINE7_Y + 1, _Area[_area_idx].set_x + 284, ALIGN_SPECIFY, LAYOUT_R11, 0, list_content[LIST_2_2],            _MENU_LAST, WHITE, INV_OFF, vm);
         display_N2string(LIST_LINE0_Y + 1, _Area[_area_idx].set_x + 18, ALIGN_SPECIFY, LAYOUT_R11, 0,  list_content[LIST_BACK_LIGHT],     _MENU_LAST, itemcolor[0], INV_OFF, vm);
         display_N2string(LIST_LINE1_Y + 1, _Area[_area_idx].set_x + 18, ALIGN_SPECIFY, LAYOUT_R11, 0,  list_content[LIST_BACK_LIGHT_TIME],_MENU_LAST, itemcolor[1], INV_OFF, vm);
