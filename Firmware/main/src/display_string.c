@@ -187,7 +187,7 @@ uint8_t check_utf8_size(const uint8_t * string, uint8_t bits)
         return 3;
     else if ((string[bits] & 0xf8) == 0xf0)
         return 4;
-    // If the char was invalid tell it's 1 byte long
+    // If the int8_t was invalid tell it's 1 byte long
     return 0;
 }
 

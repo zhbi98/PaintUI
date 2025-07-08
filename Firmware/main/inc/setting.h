@@ -11,8 +11,8 @@
 #include "display_show.h"
 #include "setup.h"
 
-extern void setting_level1_menu(unsigned char key_event, unsigned char * vm);
-extern void setting_level1_key_event(unsigned char key_event);
-extern void setting_level1_key_event_enable(unsigned char key_event);
+extern void setting_level1_menu(uint8_t key_event, uint8_t * vm);
+extern void setting_level1_key_event(uint8_t key_event);
+extern void setting_level1_key_event_enable(uint8_t key_event);
 
 #endif

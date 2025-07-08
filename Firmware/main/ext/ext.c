@@ -1,8 +1,20 @@
+/**
+ * @file ext.c
+ *
+ */
+
+/*********************
+ *      INCLUDES
+ *********************/
 
 #include "display_controller.h"
 #include "display_string.h"
 #include "fontlib.h"
 #include "ext.h"
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 /**
  * When you display a string, you can specify another 

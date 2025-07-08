@@ -4,30 +4,25 @@
 
 #include <stdbool.h>
 #include "key_doing.h"
-#include "display_controller.h"
-#include "menu_str.h"
-#include "log.h"
 
-struct voltage_measure_t {
-    unsigned char type;
+typedef struct {
+    uint8_t state;
+} _volt_t;
+
+enum {
+    VOLT_DC = 0,
+    VOLT_AC,
 };
 
-enum voltage_type {
-    VOLTAGE_DC = 0,
-    VOLTAGE_AC = 1,
+enum {
+    VOLT_CENTER = 0,
+    VOLT_LEFT,
+    VOLT_RIGHT,
 };
 
-enum voltage_page {
-    VOLTAGE_CENTER = 0,
-    VOLTAGE_LEFT   = 1,
-    VOLTAGE_RIGHT  = 2,
-};
-
-extern struct voltage_measure_t voltage_measure;
-
-extern void voltage_level1_menu(unsigned char key_event, unsigned char * vm);
-extern void voltage_level1_key_event(unsigned char key_event);
-extern void voltage_level1_key_event_enable(unsigned char key_event);
-extern void voltage_select();
+void volt_level1_menu(uint8_t key_event, uint8_t * vm);
+void volt_level1_key_event(uint8_t key_event);
+void volt_level1_key_event_enable(uint8_t key_event);
+void volt_select();
 
 #endif

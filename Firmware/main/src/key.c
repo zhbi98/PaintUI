@@ -37,9 +37,9 @@ struct key_event_t key_evt = {
     .active_time = 29,
 };
 
-unsigned char key_drive_code()
+uint8_t key_drive_code()
 {
-    unsigned char t = 0x00;
+    uint8_t t = 0x00;
 
     t = (t << 1) | !F1_KEY_STATUS();
     t = (t << 1) |  F2_KEY_STATUS();
@@ -63,7 +63,7 @@ void key_event_ticks()
     }
 }
 
-unsigned char read_key_event()
+uint8_t read_key_event()
 {
     /**
      * [1110, 1111], <k1, k2, k3, k4, 1, 1, 1, 1>
@@ -74,9 +74,9 @@ unsigned char read_key_event()
      * Key <4> <0xef>
      */
 
-    unsigned char drive_code = 0;
-    unsigned char k = 0;
-    static unsigned char plast = RELEASE;
+    uint8_t drive_code = 0;
+    uint8_t k = 0;
+    static uint8_t plast = RELEASE;
 
     drive_code = key_drive_code();
 

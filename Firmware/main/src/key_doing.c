@@ -15,7 +15,7 @@
  *  STATIC VARIABLES
  **********************/
 
-bool pwd_cal_lock = true;
+bool pwd_lock = true;
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -23,11 +23,11 @@ bool pwd_cal_lock = true;
 
 void pwd_call(void * parm)
 {
-  pwd_cal_lock = (pwd_cal_lock) ? false : true;
+  pwd_lock = (pwd_lock) ? false : true;
   load_activity(NT_ACT_CTL);
 }
 
-nt_pwd_auth_t cal_auth = {
+nt_pwd_auth_t _auth = {
   .auth_data  = {'B', 'C', 'D'},
   .auth_len   = 3,
   .auth_cb = pwd_call,
@@ -79,16 +79,16 @@ void key_event_doing()
   if (event != RELEASE) {
     switch (event) {
     case F1_KEY_EVT:
-      nt_pwd_read(&cal_auth, 'B');
+      nt_pwd_read(&_auth, 'B');
       break;
     case F2_KEY_EVT:
-      nt_pwd_read(&cal_auth, 'C');
+      nt_pwd_read(&_auth, 'C');
       break;
     case F3_KEY_EVT:
-      nt_pwd_read(&cal_auth, 'D');
+      nt_pwd_read(&_auth, 'D');
       break;
     default :
-      nt_pwd_read(&cal_auth, 'x');
+      nt_pwd_read(&_auth, 'x');
       break;
     }
   }

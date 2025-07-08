@@ -43,15 +43,15 @@ struct key_event_t {
     // true : long pressed event
     bool press_long;
     // duration pressed time
-    unsigned int press_duration;
+    uint32_t press_duration;
     // pressed active speed
-    unsigned int active_time;
+    uint32_t active_time;
 };
 
 extern struct key_event_t key_evt;
 
 extern void key_gpio_init();
 extern void key_event_ticks();
-extern unsigned char read_key_event();
+extern uint8_t read_key_event();
 
 #endif

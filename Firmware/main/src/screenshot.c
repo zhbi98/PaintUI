@@ -1,7 +1,7 @@
 
 #include "screenshot.h"
 
-const unsigned char bmp_desc[54] = {
+const uint8_t bmp_desc[54] = {
         /**
          * 0x42, 0x4D,             // BM
          * 0x36, 0x58, 0x02, 0x00, // (320*240*2+54) 颜色 RGB565 的文件长度
@@ -37,18 +37,18 @@ const unsigned char bmp_desc[54] = {
         0x00, 0x00
 };
 
-void bmp_write_desc(unsigned char * desc, unsigned int length)
+void bmp_write_desc(uint8_t * desc, uint32_t length)
 {
-    for (unsigned char send = 0; send < length; send++)
+    for (uint8_t send = 0; send < length; send++)
         BMP_WRITE_DATA(desc[send]);
 }
 
-void bmp_write_color(unsigned char * vm, unsigned int length)
+void bmp_write_color(uint8_t * vm, uint32_t length)
 {
-    unsigned int color;
+    uint32_t color;
 
-    for (unsigned int y = 0; y < TFT_HEIGHT; y++) {
-        for (unsigned int x = 0; x < TFT_WIDTH; x++) {
+    for (uint32_t y = 0; y < TFT_HEIGHT; y++) {
+        for (uint32_t x = 0; x < TFT_WIDTH; x++) {
             color = color_data[vm[y * TFT_WIDTH + x]];
 
             /**
@@ -59,7 +59,7 @@ void bmp_write_color(unsigned char * vm, unsigned int length)
              * send blue -> send green -> send red
              * 
              * example:
-             * for (unsigned int send = 0; send < 320 * 240; send++) {
+             * for (uint32_t send = 0; send < 320 * 240; send++) {
              *     BMP_WRITE_DATA((0xff0000 & 0x0000ff) >> 0);
              *     BMP_WRITE_DATA((0xff0000 & 0x00ff00) >> 8);
              *     BMP_WRITE_DATA((0xff0000 & 0xff0000) >> 16);
@@ -75,6 +75,6 @@ void bmp_write_color(unsigned char * vm, unsigned int length)
 
 void image_shot()
 {
-    bmp_write_desc(bmp_desc, sizeof(bmp_desc) / sizeof(unsigned char));
+    bmp_write_desc(bmp_desc, sizeof(bmp_desc) / sizeof(uint8_t));
     bmp_write_color(tft_buf(), TFT_WIDTH * TFT_HEIGHT);
 }

@@ -30,7 +30,7 @@
 #define logger(fmt, ...)                                    \
     do {                                                    \
         time_t now = time(NULL);                            \
-        char timestr[20];                                   \
+        int8_t timestr[20];                                   \
         strftime(timestr, 20, TIME_FORMAT, localtime(&now));\
         printf("%s " fmt "\n", timestr, ##__VA_ARGS__);     \
     } while (0)

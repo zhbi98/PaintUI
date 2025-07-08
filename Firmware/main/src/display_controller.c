@@ -3,15 +3,15 @@
 
 /*Activity DMM*/
 const key_event_interface * dmm_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {voltage_level1_key_event, NULL},
+    {volt_level1_key_event, NULL},
 };
 
 const key_event_interface * dmm_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {voltage_level1_key_event_enable, NULL},
+    {volt_level1_key_event_enable, NULL},
 };
 
 const menu_content_interface * dmm_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {voltage_level1_menu, NULL},
+    {volt_level1_menu, NULL},
 };
 
 /*Activity CTL*/
