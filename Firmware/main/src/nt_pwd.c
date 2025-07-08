@@ -6,6 +6,7 @@
  *      INCLUDES
  *********************/
 
+#include <string.h>
 #include "nt_pwd.h"
 
 /*********************

@@ -30,7 +30,7 @@ typedef struct {
     const uint32_t buf_size;
 } font_index_t;
 
-// Font size unit point
+/*Font size unit point*/
 enum {
     FONT_N1_PT = 0,
     FONT_N2_PT,

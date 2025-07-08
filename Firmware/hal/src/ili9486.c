@@ -1,6 +1,9 @@
 
 #include "ili9486.h"
 
+static void ili9486_gpio_init();
+static void ili9486_fsmc_init();
+
 static void ili9486_gpio_init()
 {
     GPIO_InitTypeDef gpio_init;
@@ -254,7 +257,7 @@ void ili9486_write_data(uint16_t dat_a)
     * (__IO uint16_t *)(ILI9486_WRITE_DATA) = dat_a;
 }
 
-void ili9486_write_register(unsigned int register_address, unsigned int register_value)
+void ili9486_write_register(uint32_t register_address, uint32_t register_value)
 {
     ili9486_write_command(register_address);
     ili9486_write_data(register_value);
@@ -270,7 +273,7 @@ void ili9486_reset()
     sleep_ms(50);
 }
 
-void ili9486_direction(unsigned char direction)
+void ili9486_direction(uint8_t direction)
 {
     ili9486_write_command(0x36);
 
@@ -392,10 +395,10 @@ void ili9486_init()
     ili9486_clear(white);
 }
 
-void display_position(unsigned int y, unsigned int x)
+void display_position(uint32_t y, uint32_t x)
 {
-    unsigned char seting_x = 0x2a;
-    unsigned char seting_y = 0x2b;
+    uint8_t seting_x = 0x2a;
+    uint8_t seting_y = 0x2b;
 
     y = y - 1;
     x = x - 1;
@@ -413,10 +416,10 @@ void display_position(unsigned int y, unsigned int x)
     ili9486_write_data((y + 1));
 }
 
-void display_region(unsigned int y, unsigned int x, unsigned int width, unsigned int height)
+void display_region(uint32_t y, uint32_t x, uint32_t width, uint32_t height)
 {
-    unsigned char seting_x = 0x2a;
-    unsigned char seting_y = 0x2b;
+    uint8_t seting_x = 0x2a;
+    uint8_t seting_y = 0x2b;
 
     y = y - 1;
     x = x - 1;

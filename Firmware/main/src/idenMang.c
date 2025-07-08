@@ -7,6 +7,7 @@
  *      INCLUDES
  *********************/
 
+#include <stdbool.h>
 #include "idenMang.h"
 
 /**********************

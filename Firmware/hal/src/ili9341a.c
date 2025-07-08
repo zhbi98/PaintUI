@@ -1,9 +1,12 @@
 
 #include "ili9341a.h"
 
+static void ili9341_gpio_init();
+static void ili9341_fsmc_init();
+
 static void ili9341_gpio_init()
 {
-    GPIO_InitTypeDef gpio_init;
+    GPIO_InitTypeDef gpio_init = {0};
 
     RCC_AHB1PeriphClockCmd(ILI9341_RS_CLOCK, ENABLE);
     RCC_AHB1PeriphClockCmd(ILI9341_RD_CLOCK, ENABLE);
@@ -254,7 +257,7 @@ void ili9341_write_data(uint16_t dat_a)
     *(__IO uint16_t *)(ILI9341_WRITE_DATA) = dat_a;
 }
 
-void ili94341_write_register(unsigned int register_address, unsigned int register_value)
+void ili94341_write_register(uint32_t register_address, uint32_t register_value)
 {
     ili9341_write_command(register_address);
     ili9341_write_data(register_value);
@@ -270,15 +273,13 @@ void ili9341_reset()
     sleep_ms(50);
 }
 
-void ili9341_backlight(unsigned char state)
+void ili9341_backlight(uint8_t state)
 {
-    if (state)
-        GPIO_ResetBits(ILI9341_BL_GPIO, ILI9341_BL_PIN);   
-    else
-        GPIO_SetBits(ILI9341_BL_GPIO, ILI9341_BL_PIN);     
+    if (state) GPIO_ResetBits(ILI9341_BL_GPIO, ILI9341_BL_PIN);   
+    else GPIO_SetBits(ILI9341_BL_GPIO, ILI9341_BL_PIN);     
 }
 
-void ili9341_direction(unsigned char direction)
+void ili9341_direction(uint8_t direction)
 {
     ili9341_write_command(0x36);
 
@@ -534,10 +535,10 @@ void ili9341_init()
     ili9341_backlight(1);
 }
 
-void display_position(unsigned int y, unsigned int x)
+void display_position(uint32_t y, uint32_t x)
 {
-    unsigned char seting_x = 0x2a;
-    unsigned char seting_y = 0x2b;
+    uint8_t seting_x = 0x2a;
+    uint8_t seting_y = 0x2b;
 
     y = y - 1;
     x = x - 1;
@@ -555,7 +556,7 @@ void display_position(unsigned int y, unsigned int x)
     ili9341_write_data((y + 1));
 }
 
-void ili9341_display_region(unsigned int y, unsigned int x, unsigned int width, unsigned int height)
+void ili9341_display_region(uint32_t y, uint32_t x, uint32_t width, uint32_t height)
 {
     ili9341_write_command(0x2a);
     ili9341_write_data(x >> 8);

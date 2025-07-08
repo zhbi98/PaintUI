@@ -1,19 +1,28 @@
+/**
+ * @file display_show.h
+ *
+ */
 
 #ifndef __DISPLAY_SHOW_H__
 #define __DISPLAY_SHOW_H__
 
-#include <math.h>
-#include <stdbool.h>
+/*********************
+ *      INCLUDES
+ *********************/
 
-#include "idenMang.h"
-#include "display.h"
-#include "display_string.h"
-#include "display_controller.h"
+#include <stdint.h>
 
-#include "log.h"
-#include "regulator.h"
-#include "setup.h"
-#include "setting.h"
+/*********************
+ *      DEFINES
+ *********************/
+
+/**********************
+ *      TYPEDEFS
+ **********************/
+
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
 
 void dev_topbar_cont_refer(uint8_t * vm);
 void dev_battery_refer(uint8_t * vm);
@@ -45,4 +54,4 @@ void dmm_next_btn_refer(uint8_t * vm);
 void ctl_tabv_cont_refer(uint8_t * vm);
 void ctl_tabv_refer(uint8_t * vm);
 
-#endif
+#endif /*__DISPLAY_SHOW_H__*/

@@ -1,9 +1,21 @@
+/**
+ * @file voltage_v.h
+ *
+ */
 
 #ifndef __VOLTAGE_V_H__
 #define __VOLTAGE_V_H__
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdbool.h>
 #include "key_doing.h"
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 typedef struct {
     uint8_t state;
@@ -19,6 +31,10 @@ enum {
     VOLT_LEFT,
     VOLT_RIGHT,
 };
+
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
 
 void volt_level1_menu(uint8_t key_event, uint8_t * vm);
 void volt_level1_key_event(uint8_t key_event);

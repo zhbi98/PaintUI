@@ -7,8 +7,10 @@
  *      INCLUDES
  *********************/
 
+#include "display.h"
 #include "display_controller.h"
 #include "display_string.h"
+#include "menu_str.h"
 #include "fontlib.h"
 
 /*********************
@@ -113,7 +115,7 @@ void read_font_valid_width(uint8_t font_size, uint8_t finish_character)
         font_width = font_valid_width(en_font[font_size].width, 
             en_font[font_size].height, en_font[font_size].base_char, 
             _char, en_font[font_size].fontdata);
-        logger("/*sym:[%c] width:*/%d,", 
+        printf("/*sym:[%c] width:*/%d,", 
         _char, font_width);
     }
 }

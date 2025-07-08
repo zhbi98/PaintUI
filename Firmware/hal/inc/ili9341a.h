@@ -143,55 +143,16 @@
 #define ILI9341_D15_AF     GPIO_AF_FSMC
 #define ILI9341_D15_SRC    GPIO_PinSource10
 
-#define HORIZONTAL         1
+#define HORIZONTAL 1U
 
-// #if (HORIZONTAL)
-//     #define TFT_WIDTH     (320 + 1)
-//     #define TFT_HEIGH     (240 + 1)
-// #else
-//     #define TFT_WIDTH     (240 + 1)
-//     #define TFT_HEIGH     (320 + 1)
-// #endif
-
-// enum color {
-//     white       = 0xffff,
-//     black       = 0x0000,
-
-//     red         = 0xf800,
-//     green       = 0x07e0,
-//     blue        = 0x001f,
-
-//     purple      = 0x780f,
-//     yellow      = 0xffe0,
-//     orange      = 0xfd20,
-//     orange_red  = 0xfa20,
-//     sun_orange  = 0xfb80,
-//     strong_red  = 0xe000,
-//     hot_pink    = 0xf8b2,
-//     misty_rose  = 0xff3c,
-//     sea_green   = 0x2c4a,
-//     apple_green = 0x8f20,
-//     tomato      = 0xfb08,
-//     brown       = 0xa145,
-//     olive       = 0x8400,
-//     cyan        = 0x07ff,
-//     dimcyan     = 0x03ff,
-//     dimgray     = 0x7bef,
-//     light_gray  = 0xc618,
-//     magenta     = 0xf81f
-// };
-
-static void ili9341_gpio_init();
-static void ili9341_fsmc_init();
-
-extern void ili9341_write_command(uint16_t command);
-extern void ili9341_write_data(uint16_t command);
-extern void ili9341_write_register(unsigned int register_address, unsigned int register_value);
-extern void ili9341_reset();
-extern void ili9341_backlight(unsigned char state);
-extern void ili9341_direction(unsigned char direction);
-extern void ili9341_init();
-extern void display_position(unsigned int y, unsigned int x);
-extern void ili9341_display_region(unsigned int y, unsigned int x, unsigned int width, unsigned int height);
+void ili9341_write_command(uint16_t command);
+void ili9341_write_data(uint16_t command);
+void ili9341_write_register(uint32_t register_address, uint32_t register_value);
+void ili9341_reset();
+void ili9341_backlight(uint8_t state);
+void ili9341_direction(uint8_t direction);
+void ili9341_init();
+void display_position(uint32_t y, uint32_t x);
+void ili9341_display_region(uint32_t y, uint32_t x, uint32_t width, uint32_t height);
 
 #endif

@@ -24,7 +24,7 @@ void sw_module_init()
     act_bar_set_func(&_dmm_actbar, 
         DMM_VOLTAGE_V);
     tft_clear(BLACK);
-    digit_lr_move(0);
+    regu_LR_move(0);
 }
 
 int main()
@@ -34,7 +34,7 @@ int main()
 
     for (;;) {
         key_event_doing();
-        display_flush(display_buf);
-        tft_flush(display_buf);
+        display_flush(req_rendererVM());
+        tft_flush(req_rendererVM());
     }
 }

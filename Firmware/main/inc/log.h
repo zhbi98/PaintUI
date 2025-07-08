@@ -24,7 +24,7 @@
 
 #define logger(fmt, ...)                                    \
     do {                                                    \
-        usart_send_value(CURRENT_USART, fmt "\n", ##__VA_ARGS__); \
+        usart_send_fmt_string(USART1, fmt "\n", ##__VA_ARGS__); \
     } while (0)
 #else
 #define logger(fmt, ...)                                    \

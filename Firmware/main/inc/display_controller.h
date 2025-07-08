@@ -1,22 +1,33 @@
+/**
+ * @file display_controller.c
+ *
+ */
 
 #ifndef __DISPLAY_CONTROLLER_H__
 #define __DISPLAY_CONTROLLER_H__
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "ili9341a.h"
-
-#include "voltage_v.h"
-#include "display_show.h"
+/*********************
+ *      DEFINES
+ *********************/
 
 #define FUNC_TYPE_MAX 16U
 #define DEPTH_MAX  2U
-#define _Area_NUM_MAX    40U
+#define _Area_NUM_MAX 40U
 
-// This is tft region and write data driver interface
+/**This is tft region and write data driver interface*/
 #define TFT_REGION_SETTING_DRV ili9341_display_region
 #define TFT_WRITE_DATA_DRV     ili9341_write_data
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 /**
  * Device display Area
@@ -113,16 +124,13 @@ typedef void key_event_interface(uint8_t key);
 typedef void menu_content_interface(uint8_t key_event, uint8_t * vm);
 typedef void display_show_interface(uint8_t * vm);
 
-typedef void (* tft_region_setting)(uint32_t y, uint32_t x, uint32_t width, uint32_t height);
-typedef void (* tft_write_data)(uint32_t data);
-
-extern const key_event_interface * key_event_controller[][DEPTH_MAX];
-extern const key_event_interface * key_event_enable[][DEPTH_MAX];
-extern const menu_content_interface * menu_str[][DEPTH_MAX];
-
 extern dev_area_t _Area[_Area_NUM_MAX];
 extern dev_actbar_t _dmm_actbar;
 extern dev_actbar_t _ctl_actbar;
+
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
 
 void _Area_init();
 void load_activity(uint8_t _activity);
@@ -158,4 +166,4 @@ void tft_clear(uint8_t color);
 void tft_flush_area(uint8_t area_num, uint8_t * vm);
 void tft_flush(uint8_t * vm);
 
-#endif
+#endif /*__DISPLAY_CONTROLLER_H__*/

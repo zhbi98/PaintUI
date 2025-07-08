@@ -1,16 +1,28 @@
+/**
+ * @file display.h
+ *
+ */
 
 #ifndef __DISPLAY_H__
 #define __DISPLAY_H__
 
-#include "display_string.h"
-#include <math.h>
-#include <string.h>
-#include <stdbool.h>
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdint.h>
+
+/*********************
+ *      DEFINES
+ *********************/
 
 #define TFT_WIDTH 320U
 #define TFT_HEIGHT 240U
-#define DISP_BUF_SIZE (TFT_WIDTH * TFT_HEIGHT)
+#define rendererSIZE (TFT_WIDTH * TFT_HEIGHT)
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 typedef struct {
     uint8_t  width;
@@ -19,39 +31,40 @@ typedef struct {
 } sym_desc_t;
 
 enum {
-	BLUETOOTH = 0,
-	POWEROFF_TIMER,
-	LIGHTING,
-	LO,
-	LOZ,
-	RULER_OVERFLOW,
-	AC_DESC,
-	DC_DESC,
-	AC_DC_DESC,
-	TRUMPET,
+	SYM_BLE = 0,
+	SYM_POFF,
+	SYM_LIGHTING,
+	SYM_LO,
+	SYM_LOZ,
+	SYM_BCHT_OVE,
+	SYM_AC,
+	SYM_DC,
+	SYM_ACDC,
+	SYM_TRUMPET,
+    _SYM_LAST,
 };
 
 typedef uint16_t sym_id_t;
 
 enum {
-	BLACK      = 0,
-	WHITE      = 1,
-	RED        = 2,
-	GRAY       = 3,
-	DARK_GREEN = 4,
-	GREEN      = 5,
-	DARK_BLUE  = 6,
-	COLOR_MAX  = 7,
+	BLACK = 0,
+	WHITE,
+	RED,
+	GRAY,
+	DARK_GREEN,
+	GREEN,
+	DARK_BLUE,
+	COLOR_MAX,
 };
 
 typedef uint16_t disp_color_t;
 
 typedef struct {
-    const uint32_t message_width;
-    const uint32_t message_height;
     uint8_t active;
     uint32_t reside_time;
-    const uint8_t content_num;
+    const uint32_t msg_width;
+    const uint32_t msg_high;
+    const uint8_t stridx;
 } dev_alerts_t;
 
 typedef struct {
@@ -60,10 +73,13 @@ typedef struct {
 } _letter_t;
 
 extern const uint16_t color_data[];
-extern uint8_t display_buf[];
 extern dev_alerts_t message_tips[];
 
-uint8_t * tft_buf();
+/**********************
+ * GLOBAL PROTOTYPES
+ **********************/
+
+uint8_t * req_rendererVM();
 void display_pixel(uint32_t y, uint32_t x, uint8_t color, uint8_t * vm);
 void display_line(uint32_t y1, uint32_t x1, 
     uint32_t y2, uint32_t x2, uint8_t color, uint8_t * vm);

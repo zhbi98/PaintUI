@@ -1,8 +1,43 @@
+/**
+ * @file display.c
+ *
+ */
 
+/*********************
+ *      INCLUDES
+ *********************/
+
+#include <stdbool.h>
+#include <math.h>
+#include "display_string.h"
 #include "menu_str.h"
 #include "display.h"
 
-uint8_t display_buf[DISP_BUF_SIZE] = {0};
+/*********************
+ *      DEFINES
+ *********************/
+
+/**********************
+ *      TYPEDEFS
+ **********************/
+
+typedef struct {
+    uint8_t param_cnt;
+    uint32_t param_incr;
+    uint8_t param_height;
+    uint8_t scale_width;
+    uint8_t scale_height;
+    uint8_t scale_count;
+    uint8_t sigh_len;
+} bar_chart_t;
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
+
+/**********************
+ *  STATIC PROTOTYPES
+ **********************/
 
 const uint16_t color_data[] = {
     /**< Dark color*/
@@ -24,25 +59,20 @@ const uint16_t color_data[] = {
     0x8DFF,/**< Dark Blue*/
 };
 
-typedef struct {
-    uint8_t param_cnt;
-    uint32_t param_incr;
-    uint8_t param_height;
-    uint8_t scale_width;
-    uint8_t scale_height;
-    uint8_t scale_count;
-    uint8_t sigh_len;
-} bar_chart_t;
+static uint8_t rendererVM[rendererSIZE] = {0};
+static const sym_desc_t dmm_logo[];
 
-extern const sym_desc_t dmm_logo[];
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
-uint8_t * tft_buf()
+uint8_t * req_rendererVM()
 {
     /**
      * This parameter is received using an array pointer
-     * uint8_t (* tft_buf())[]
+     * uint8_t (* req_rendererVM())[]
      */
-    return display_buf;
+    return rendererVM;
 }
 
 void display_pixel(uint32_t y, uint32_t x, uint8_t color, uint8_t * vm)
@@ -485,7 +515,7 @@ void display_barchart(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg,
 
     /*Red color progress*/
     if (abs(percentage) <= 100) display_solid_rect(y + bar_chart.param_height + bar_chart.scale_height + 2, x + bar_chart.sigh_len - 1, (bar_chart.scale_width * bar_chart.scale_count) * abs(percentage) / 100 + 3, 6, RED, vm);
-    else display_sym(y + bar_chart.param_height + bar_chart.scale_height + 1, x + bar_chart.sigh_len + (bar_chart.scale_width * bar_chart.scale_count) + 4, WHITE, BLACK, RULER_OVERFLOW, 1, vm);
+    else display_sym(y + bar_chart.param_height + bar_chart.scale_height + 1, x + bar_chart.sigh_len + (bar_chart.scale_width * bar_chart.scale_count) + 4, WHITE, BLACK, SYM_BCHT_OVE, 1, vm);
 }
 
 void display_dock(uint32_t y, uint32_t x, uint32_t width, uint32_t height, 
@@ -534,35 +564,35 @@ const uint8_t * _letter_get_str(_letter_t * _lettr_p)
 
 dev_alerts_t message_tips[5] = {
     {
-        .message_width = 50,
-        .message_height = 30,
+        .msg_width = 50,
+        .msg_high = 30,
         .active = true,
         .reside_time = 300,
-        .content_num = TIPS_BATTERY_LOW_20,
+        .stridx = TIPS_BATTERY_LOW_20,
     },
 
     {
-        .message_width = 50,
-        .message_height = 30,
+        .msg_width = 50,
+        .msg_high = 30,
         .active = true,
         .reside_time = 0,
-        .content_num = TIPS_BATTERY_LOW_10,
+        .stridx = TIPS_BATTERY_LOW_10,
     },
 
     {
-        .message_width = 50,
-        .message_height = 30,
+        .msg_width = 50,
+        .msg_high = 30,
         .active = true,
         .reside_time = 0,
-        .content_num = TIPS_BATTERY_LOW_05,
+        .stridx = TIPS_BATTERY_LOW_05,
     },
 
     {
-        .message_width = 50,
-        .message_height = 30,
+        .msg_width = 50,
+        .msg_high = 30,
         .active = true,
         .reside_time = 0,
-        .content_num = 3,
+        .stridx = 3,
     },
 };
 
@@ -621,9 +651,9 @@ void display_tips(uint32_t y, uint32_t x, uint32_t tft_width,
     for (uint8_t set = 0; set < 4; set++)
         memset(tips_buf[set], '\0', 32);
 
-    for (uint8_t i = 0; i < strlen(tips_content[tips->content_num]); i++) {
-        if (tips_content[tips->content_num][i] != '\n') {
-            tips_buf[line][postion] = tips_content[tips->content_num][i];
+    for (uint8_t i = 0; i < strlen(tips_content[tips->stridx]); i++) {
+        if (tips_content[tips->stridx][i] != '\n') {
+            tips_buf[line][postion] = tips_content[tips->stridx][i];
             postion++;
         } else {
             line++;
@@ -637,67 +667,67 @@ void display_tips(uint32_t y, uint32_t x, uint32_t tft_width,
         if (len > str_length)
             str_length = len;
     }
-    /*str_length = string_valid_width(font_size, (uint8_t *)tips_content[tips->content_num]);*/
-    str_height = string_valid_height(font_size, (uint8_t *)tips_content[tips->content_num]);
+    /*str_length = string_valid_width(font_size, (uint8_t *)tips_content[tips->stridx]);*/
+    str_height = string_valid_height(font_size, (uint8_t *)tips_content[tips->stridx]);
 
     x = (int)((tft_width - str_length) / 2);
 
     display_bevel_rect(y, x, str_length + 4, str_height * line + 4 * line, bg, 1, vm);
 
     for (uint8_t l = 0; l < line; l++) {
-        display_string_align(y + 2, x + 2, ALIGN_SPECIFY, 0, 0, fg, font_size, (uint8_t *)/*tips_content[tips->content_num]*/tips_buf[l], INV_OFF, vm);
+        display_string_align(y + 2, x + 2, ALIGN_SPECIFY, 0, 0, fg, font_size, (uint8_t *)/*tips_content[tips->stridx]*/tips_buf[l], INV_OFF, vm);
         if (l != (line - 1))
             display_dotted_line(y + str_height + 4, x + 2, str_length, 2, 0, WHITE, vm);
         y = y + str_height + 4;
     }
 }
 
-const uint8_t bluetooth[] = {
+const static uint8_t ble_desc[] = {
     0x00,0x00,0x01,0xC0,0x01,0xE0,0x31,0xB0,0x19,0x98,0x0D,0x98,0x07,0xB0,0x03,0xE0,
     0x03,0xE0,0x07,0xB0,0x0D,0x98,0x19,0x98,0x31,0xB0,0x01,0xE0,0x01,0xC0,0x00,0x00,
 };
 
-const uint8_t poweroff_timer[] = {
+const static uint8_t poff_desc[] = {
     0x00,0x00,0x7D,0xBE,0x7D,0xBE,0x61,0x86,0x61,0x86,0x61,0x86,0x61,0x86,0x60,0x00,
     0x60,0xFE,0x60,0x92,0x60,0x92,0x60,0x9E,0x60,0x82,0x7E,0x82,0x7E,0xFE,0x00,0x00,
 };
 
-const uint8_t lighting[] = {
+const static uint8_t lighting_desc[] = {
     0x00,0x00,0x01,0xF0,0x03,0xE0,0x07,0xC0,0x0F,0x80,0x1F,0x00,0x3F,0xFE,0x7F,0xFE,
     0x7F,0xFC,0x00,0xF8,0x01,0xF0,0x03,0xE0,0x07,0xC0,0x0F,0x80,0x1F,0x00,0x00,0x00,
 };
 
-const uint8_t lo[] = {
+const static uint8_t lo_desc[] = {
     0xFF,0xFC,0x00,0x00,0xFF,0xFE,0x00,0x00,0x00,0x03,0x00,0x00,0x60,0x03,0x00,0x00,
     0x60,0x01,0x80,0x00,0x60,0x79,0x80,0x00,0x60,0xFC,0xC0,0x00,0x61,0xCE,0xC0,0x00,
     0x61,0x86,0x60,0x00,0x61,0x86,0x60,0x00,0x61,0x86,0x30,0x00,0x61,0xCE,0x30,0x00,
     0x7E,0xFC,0x18,0x00,0x7E,0x78,0x18,0x00,0x00,0x00,0x00,0x00,
 };
 
-const uint8_t loz[] = {
+const static uint8_t loz_desc[] = {
     0x00,0x00,0x00,0x00,0x60,0x00,0x00,0x00,0x60,0x00,0x00,0x00,0x60,0x00,0x00,0x00,
     0x60,0x00,0x00,0x00,0x60,0x78,0xFC,0x00,0x60,0xFC,0xFC,0x00,0x61,0xCE,0x0C,0x00,
     0x61,0x86,0x18,0x00,0x61,0x86,0x30,0x00,0x61,0x86,0x60,0x00,0x61,0xCE,0xC0,0x00,
     0x7E,0xFC,0xFC,0x00,0x7E,0x78,0xFC,0x00,0x00,0x00,0x00,0x00,
 };
 
-const uint8_t ruler_overflow[] = {
+const static uint8_t bcht_ove_desc[] = {
     0x80,0xc0,0xe0,0xf0,0xf0,0xe0,0xc0,0x80,
 };
 
-const uint8_t ac_desc[] = {
+const static uint8_t ac_desc[] = {
     0x00,0x00,0x00,0x00,0x00,0x00,0x3e,0x00,0x7f,0x06,0xe3,0x8e,0xc1,0xfc,0x00,0xf8,
 };
 
-const uint8_t dc_desc[] = {
+const static uint8_t dc_desc[] = {
     0xff,0xfe,0xff,0xfe,0x00,0x00,0x00,0x00,0xdb,0x6e,0xdb,0x6e,0x00,0x00,0x00,0x00,
 };
 
-const uint8_t ac_dc_desc[] = {
+const static uint8_t ac_dc_desc[] = {
     0xff,0xfe,0xff,0xfe,0x00,0x00,0x3e,0x00,0x7f,0x06,0xe3,0x8e,0xc1,0xfc,0x00,0xf8,
 };
 
-const uint8_t trumpet[] = {
+const static uint8_t trumpet_desc[] = {
     0x00,0x00,0x00,0x00,0x00,0xC8,0x01,0xC4,0x03,0xD2,0x3F,0xCA,0x7F,0xCA,0x7F,0xCA,
     0x7F,0xCA,0x7F,0xCA,0x3F,0xCA,0x03,0xD2,0x01,0xC4,0x00,0xC8,0x00,0x00,0x00,0x00,
 };
@@ -706,37 +736,37 @@ const sym_desc_t dmm_logo[] = {
     {
         .width = 16,
         .height = 16,
-        .data = bluetooth,
+        .data = ble_desc,
     },
 
     {
         .width = 16,
         .height = 16,
-        .data = poweroff_timer,
+        .data = poff_desc,
     },
 
     {
         .width = 16,
         .height = 16,
-        .data = lighting,
+        .data = lighting_desc,
     },
 
     {
         .width = 32,
         .height = 15,
-        .data = lo,
+        .data = lo_desc,
     },
 
     {
         .width = 32,
         .height = 15,
-        .data = loz,
+        .data = loz_desc,
     },
 
     {
         .width = 8,
         .height = 8,
-        .data = ruler_overflow,
+        .data = bcht_ove_desc,
     },
 
     {
@@ -760,7 +790,7 @@ const sym_desc_t dmm_logo[] = {
     {
         .width = 16,
         .height = 16,
-        .data = trumpet,
+        .data = trumpet_desc,
     },
 };
 

@@ -1,35 +1,66 @@
+/**
+ * @file display_controller.c
+ *
+ */
 
+/*********************
+ *      INCLUDES
+ *********************/
+
+#include "setting.h"
 #include "display_controller.h"
+#include "display_show.h"
+#include "voltage_v.h"
+#include "ili9341a.h"
+#include "key.h"
+#include "display.h"
+#include "setup.h"
+
+/**********************
+ *      TYPEDEFS
+ **********************/
+
+typedef void (* tft_region_setting)(uint32_t y, uint32_t x, uint32_t width, uint32_t height);
+typedef void (* tft_write_data)(uint32_t data);
+
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
 
 /*Activity DMM*/
-const key_event_interface * dmm_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
+static const key_event_interface * dmm_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
     {volt_level1_key_event, NULL},
 };
 
-const key_event_interface * dmm_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
+static const key_event_interface * dmm_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
     {volt_level1_key_event_enable, NULL},
 };
 
-const menu_content_interface * dmm_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
+static const menu_content_interface * dmm_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
     {volt_level1_menu, NULL},
 };
 
 /*Activity CTL*/
-const key_event_interface * ctl_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {setting_level1_key_event, NULL},
+static const key_event_interface * ctl_key_event_controller[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {setup_level1_key_event, NULL},
 };
 
-const key_event_interface * ctl_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {setting_level1_key_event_enable, NULL},
+static const key_event_interface * ctl_key_event_enable[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {setup_level1_key_event_enable, NULL},
 };
 
-const menu_content_interface * ctl_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
-    {setting_level1_menu, NULL},
+static const menu_content_interface * ctl_display_menu_content[FUNC_TYPE_MAX][DEPTH_MAX] = {
+    {setup_level1_menu, NULL},
 };
 
 dev_area_t _Area[_Area_NUM_MAX] = {0};
 dev_actbar_t _dmm_actbar = {0};
 dev_actbar_t _ctl_actbar = {0};
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void _Area_init()
 {
@@ -290,6 +321,10 @@ nt_activity_t activity = {
     .last_act = 0xFF,
     .cur_act = 0xFF,
 };
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void load_activity(uint8_t _activity)
 {

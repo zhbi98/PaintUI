@@ -7,6 +7,7 @@
  *      INCLUDES
  *********************/
 
+#include "display_controller.h"
 #include "key_doing.h"
 #include "nt_pwd.h"
 #include "key.h"

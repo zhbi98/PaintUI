@@ -15,7 +15,7 @@
  *********************/
 
 #define REP_TIME 300U /*s*/
-#define PAUSE 15 /*s*/
+#define PAUSE 15U /*s*/
 
 /**********************
  *      TYPEDEFS

@@ -162,61 +162,15 @@
 #define ILI9486_D15_AF     GPIO_AF_FSMC
 #define ILI9486_D15_SRC    GPIO_PinSource10
 
-#define HORIZONTAL         1
+#define HORIZONTAL 1U
 
-#if (HORIZONTAL)
-    #define TFT_WIDTH  	   (480 + 1)
-    #define TFT_HEIGH  	   (320 + 1)
-#else
-    #define TFT_WIDTH      (320 + 1)
-    #define TFT_HEIGH      (480 + 1)
-#endif
-
-enum color {
-    white      = 0xffff,
-    black      = 0x0000,
-
-    red        = 0xf800,
-    green      = 0x07e0,
-    blue       = 0x001f,
-
-    purple     = 0x780f,
-    yellow     = 0xffe0,
-    orange     = 0xfd20,
-    sun_orange = 0xfb80,
-    orange_red = 0xfa20,
-    strong_red = 0xe000,
-    hot_pink   = 0xf8b2,
-    misty_rose = 0xff3c,
-    brown      = 0xa145,
-    sea_green  = 0x2c4a,
-    tomato     = 0xfb08,
-    olive      = 0x8400,
-    cyan       = 0x07ff,
-    dimcyan    = 0x03ff,
-    dimgray    = 0x7bef,
-    light_gray = 0xc618,
-    magenta    = 0xf81f
-};
-
-static void ili9486_gpio_init();
-static void ili9486_fsmc_init();
-
-extern void ili9486_write_command(uint16_t command);
-extern void ili9486_write_data(uint16_t dat_a);
-extern void ili9486_write_register(unsigned int register_address, unsigned int register_value);
-extern void ili9486_reset();
-extern void ili9486_direction(unsigned char direction);
-extern void ili9486_init();
-extern void display_position(unsigned int y, unsigned int x);
-extern void display_region(unsigned int y, unsigned int x, unsigned int width, unsigned int height);
-extern void display_pixel(unsigned int y, unsigned int x, unsigned int color);
-extern void ili9486_clear(unsigned int color);
-extern void display_character(unsigned int y, unsigned int x, unsigned int bg, unsigned int fg, unsigned char character);
-extern void display_character_16x32(unsigned int y, unsigned int x, unsigned int bg, unsigned int fg, unsigned char character);
-extern void display_string(unsigned int y, unsigned int x, unsigned int bg, unsigned int fg, unsigned char *string);
-extern void display_string_16x32(unsigned int y, unsigned int x, unsigned int bg, unsigned int fg, unsigned char *string);
-extern void display_value(unsigned int y, unsigned int x, unsigned int bg, unsigned int fg, unsigned char *format, ...);
-extern void display_value_16x32(unsigned int y, unsigned int x, unsigned int bg, unsigned int fg, unsigned char *format, ...);
+void ili9486_write_command(uint16_t command);
+void ili9486_write_data(uint16_t dat_a);
+void ili9486_write_register(uint32_t register_address, uint32_t register_value);
+void ili9486_reset();
+void ili9486_direction(uint8_t direction);
+void ili9486_init();
+void display_position(uint32_t y, uint32_t x);
+void display_region(uint32_t y, uint32_t x, uint32_t width, uint32_t height);
 
 #endif

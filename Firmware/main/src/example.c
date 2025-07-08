@@ -7,27 +7,22 @@
  *      INCLUDES
  *********************/
 
-#include <stdio.h>
-#include "voltage_v.h"
-#include "setup.h"
+#include "example_v.h"
 #include "display_controller.h"
-#include "display_string.h"
-#include "display.h"
 #include "menu_str.h"
-#include "key.h"
 
-_volt_t _volt = {0};
+_example_t _example = {0};
 
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
-void volt_level1_menu(uint8_t key_event, uint8_t * vm)
+void example_level1_menu(uint8_t key_event, uint8_t * vm)
 {
   uint8_t page = act_bar_get_page(&_dmm_actbar);
 
-  if (_volt.state == VOLT_DC) {
-    if (page == VOLT_LEFT) {
+  if (_example.state == EXAM_DC) {
+    if (page == EXAM_LEFT) {
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
@@ -53,7 +48,7 @@ void volt_level1_menu(uint8_t key_event, uint8_t * vm)
       }
     } 
 
-    if (page == VOLT_CENTER) {
+    if (page == EXAM_CENTER) {
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
@@ -87,7 +82,7 @@ void volt_level1_menu(uint8_t key_event, uint8_t * vm)
       }
     } 
 
-    if (page == VOLT_RIGHT) {
+    if (page == EXAM_RIGHT) {
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
@@ -120,8 +115,8 @@ void volt_level1_menu(uint8_t key_event, uint8_t * vm)
     }
   }
 
-  if (_volt.state == VOLT_AC) {
-    if (page == VOLT_LEFT) {
+  if (_example.state == EXAM_AC) {
+    if (page == EXAM_LEFT) {
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
@@ -151,7 +146,7 @@ void volt_level1_menu(uint8_t key_event, uint8_t * vm)
       }
     }
 
-    if (page == VOLT_CENTER) {
+    if (page == EXAM_CENTER) {
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
@@ -185,7 +180,7 @@ void volt_level1_menu(uint8_t key_event, uint8_t * vm)
       }
     }
 
-    if (page == VOLT_RIGHT) {
+    if (page == EXAM_RIGHT) {
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
@@ -219,12 +214,12 @@ void volt_level1_menu(uint8_t key_event, uint8_t * vm)
   }
 }
 
-void volt_level1_key_event(uint8_t key_event)
+void example_level1_key_event(uint8_t key_event)
 {
   uint8_t page = act_bar_get_page(&_dmm_actbar);
 
-  if (_volt.state == VOLT_DC) {
-    if (page == VOLT_LEFT) {
+  if (_example.state == EXAM_DC) {
+    if (page == EXAM_LEFT) {
       switch (key_event) {
       case F1_KEY_EVT:
         break;
@@ -242,12 +237,12 @@ void volt_level1_key_event(uint8_t key_event)
         break;
 
       case NEXT_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_CENTER);
+        act_bar_set_page(&_dmm_actbar, EXAM_CENTER);
         break;
       }
     }
 
-    if (page == VOLT_CENTER) {
+    if (page == EXAM_CENTER) {
       switch (key_event) {
       case F1_KEY_EVT:
         active_tips(&message_tips[0], STMS_TICKS(100, 500));
@@ -263,16 +258,16 @@ void volt_level1_key_event(uint8_t key_event)
         break;
 
       case PREV_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_LEFT);
+        act_bar_set_page(&_dmm_actbar, EXAM_LEFT);
         break;
 
       case NEXT_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_RIGHT);
+        act_bar_set_page(&_dmm_actbar, EXAM_RIGHT);
         break;
       }
     }
 
-    if (page == VOLT_RIGHT) {
+    if (page == EXAM_RIGHT) {
       switch (key_event) {
       case F1_KEY_EVT:
         break;
@@ -287,7 +282,7 @@ void volt_level1_key_event(uint8_t key_event)
         break;
 
       case PREV_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_CENTER);
+        act_bar_set_page(&_dmm_actbar, EXAM_CENTER);
         break;
 
       case NEXT_KEY_EVT:
@@ -296,8 +291,8 @@ void volt_level1_key_event(uint8_t key_event)
     }
   }
 
-  if (_volt.state == VOLT_AC) {
-    if (page == VOLT_LEFT) {
+  if (_example.state == EXAM_AC) {
+    if (page == EXAM_LEFT) {
       switch (key_event) {
       case F1_KEY_EVT:
         break;
@@ -315,12 +310,12 @@ void volt_level1_key_event(uint8_t key_event)
         break;
 
       case NEXT_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_CENTER);
+        act_bar_set_page(&_dmm_actbar, EXAM_CENTER);
         break;
       }
     }
 
-    if (page == VOLT_CENTER) {
+    if (page == EXAM_CENTER) {
       switch (key_event) {
       case F1_KEY_EVT:
         break;
@@ -335,16 +330,16 @@ void volt_level1_key_event(uint8_t key_event)
         break;
 
       case PREV_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_LEFT);
+        act_bar_set_page(&_dmm_actbar, EXAM_LEFT);
         break;
 
       case NEXT_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_RIGHT);
+        act_bar_set_page(&_dmm_actbar, EXAM_RIGHT);
         break;
       }
     }
 
-    if (page == VOLT_RIGHT) {
+    if (page == EXAM_RIGHT) {
       switch (key_event) {
       case F1_KEY_EVT:
         break;
@@ -359,7 +354,7 @@ void volt_level1_key_event(uint8_t key_event)
         break;
 
       case PREV_KEY_EVT:
-        act_bar_set_page(&_dmm_actbar, VOLT_LEFT);
+        act_bar_set_page(&_dmm_actbar, EXAM_LEFT);
         break;
 
       case NEXT_KEY_EVT:
@@ -369,12 +364,12 @@ void volt_level1_key_event(uint8_t key_event)
   }
 }
 
-void volt_level1_key_event_enable(uint8_t key_event)
+void example_level1_key_event_enable(uint8_t key_event)
 {
   uint8_t page = act_bar_get_page(&_dmm_actbar);
 
-  if (_volt.state == VOLT_DC) {
-    if (page == VOLT_LEFT) {
+  if (_example.state == EXAM_DC) {
+    if (page == EXAM_LEFT) {
       _Area[DMM_F1_BTN].valid = true;
       _Area[DMM_F2_BTN].valid = true;
       _Area[DMM_F3_BTN].valid = true;
@@ -383,7 +378,7 @@ void volt_level1_key_event_enable(uint8_t key_event)
       _Area[DMM_NEXT_BTN].valid = true;
     }
 
-    if (page == VOLT_CENTER) {
+    if (page == EXAM_CENTER) {
       _Area[DMM_F1_BTN].valid = true;
       _Area[DMM_F2_BTN].valid = true;
       _Area[DMM_F3_BTN].valid = true;
@@ -392,7 +387,7 @@ void volt_level1_key_event_enable(uint8_t key_event)
       _Area[DMM_NEXT_BTN].valid = true;
     }
 
-    if (page == VOLT_RIGHT) {
+    if (page == EXAM_RIGHT) {
       _Area[DMM_F1_BTN].valid = true;
       _Area[DMM_F2_BTN].valid = true;
       _Area[DMM_F3_BTN].valid = true;
@@ -402,8 +397,8 @@ void volt_level1_key_event_enable(uint8_t key_event)
     }
   }
 
-  if (_volt.state == VOLT_AC) {
-    if (page == VOLT_LEFT) {
+  if (_example.state == EXAM_AC) {
+    if (page == EXAM_LEFT) {
       _Area[DMM_F1_BTN].valid = true;
       _Area[DMM_F2_BTN].valid = true;
       _Area[DMM_F3_BTN].valid = true;
@@ -412,7 +407,7 @@ void volt_level1_key_event_enable(uint8_t key_event)
       _Area[DMM_NEXT_BTN].valid = true;
     }
 
-    if (page == VOLT_CENTER) {
+    if (page == EXAM_CENTER) {
       _Area[DMM_F1_BTN].valid = true;
       _Area[DMM_F2_BTN].valid = true;
       _Area[DMM_F3_BTN].valid = true;
@@ -421,7 +416,7 @@ void volt_level1_key_event_enable(uint8_t key_event)
       _Area[DMM_NEXT_BTN].valid = true;
     }
 
-    if (page == VOLT_RIGHT) {
+    if (page == EXAM_RIGHT) {
       _Area[DMM_F1_BTN].valid = true;
       _Area[DMM_F2_BTN].valid = true;
       _Area[DMM_F3_BTN].valid = true;
@@ -432,11 +427,11 @@ void volt_level1_key_event_enable(uint8_t key_event)
   }
 }
 
-void volt_select()
+void example_select()
 {
-  if (act_bar_get_func(&_dmm_actbar) != DMM_VOLTAGE_V) return;
-  act_bar_set_page(&_dmm_actbar, VOLT_CENTER);
-  _volt.state++;
-  if (_volt.state > VOLT_AC)
-    _volt.state = VOLT_DC; 
+  if (act_bar_get_func(&_dmm_actbar) != DMM_EXAM_V) return;
+  act_bar_set_page(&_dmm_actbar, EXAM_CENTER);
+  _example.state++;
+  if (_example.state > EXAM_AC)
+    _example.state = EXAM_DC; 
 }
