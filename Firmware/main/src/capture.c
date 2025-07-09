@@ -15,8 +15,14 @@
  *      DEFINES
  *********************/
 
-#define BMP_WRITE_DATA(a_byte) \
-  usart_send_byte(USART1, a_byte)
+#define BMP_WRITE_DATA(a_byte) usart_send_byte(USART1, a_byte)
+
+/**********************
+ *  STATIC PROTOTYPES
+ **********************/
+
+static void _bmpdesc(uint8_t * desc_p, uint32_t _len);
+static void _bmpcolor(uint8_t * vm, uint32_t _len);
 
 /**
  * 0x42, 0x4D,             // BM
@@ -59,6 +65,11 @@ const uint8_t bmp_desc[54] = {
  *   GLOBAL FUNCTIONS
  **********************/
 
+/**
+ * Reads and logs the valid width of each character in a font range.
+ * @param font_size - Index of the font in the en_font array.
+ * @param finish_character - Last character in the range to check.
+ */
 static void _bmpdesc(uint8_t * desc_p, uint32_t _len)
 {
   for (uint8_t i = 0; i < _len; i++)
@@ -95,6 +106,11 @@ static void _bmpcolor(uint8_t * vm, uint32_t _len)
   }
 }
 
+/**
+ * Reads and logs the valid width of each character in a font range.
+ * @param font_size - Index of the font in the en_font array.
+ * @param finish_character - Last character in the range to check.
+ */
 void capture()
 {
   uint16_t _len = sizeof(bmp_desc) / sizeof(uint8_t);

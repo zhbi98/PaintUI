@@ -93,8 +93,8 @@ uint8_t read_key_event()
    * Key <4> <0xef>
    */
 
-  uint8_t drive_code = 0;
   uint8_t k = 0;
+  uint8_t drive_code = 0;
   static uint8_t plast = RELEASE;
 
   drive_code = key_drive_code();

@@ -603,7 +603,7 @@ void ctl_tabv_refer(uint8_t * vm)
 
         if (inverse[0]) {
             regu_disp_get_str(DEV_COMP_MAX);
-            _display_cn_string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35, WHITE, BLACK, FONT_N2_PT, regu.disp_buf[1], regu_cursor_get_pos(), vm);
+            _display_cn_string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35, WHITE, BLACK, FONT_N2_PT, regu.refer[1], regu_cursor_get_pos(), vm);
         } else display_N2string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, _devset.dispstr, _MENU_LAST, WHITE, inverse[0], vm);
 
         if (lv_tab_get_opti_id() == 4) {
@@ -616,7 +616,7 @@ void ctl_tabv_refer(uint8_t * vm)
 
         if (inverse[0]) {
             regu_disp_get_str(DEV_COMP_MIN);
-            _display_cn_string(LIST_LINE4_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35, WHITE, BLACK, FONT_N2_PT, regu.disp_buf[1], regu_cursor_get_pos(), vm);
+            _display_cn_string(LIST_LINE4_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35, WHITE, BLACK, FONT_N2_PT, regu.refer[1], regu_cursor_get_pos(), vm);
         } else display_N2string(LIST_LINE4_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, _devset.dispstr, _MENU_LAST, WHITE, inverse[0], vm);
 
         if (lv_tab_get_opti_id() == 5) {
