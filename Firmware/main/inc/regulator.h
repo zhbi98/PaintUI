@@ -25,25 +25,25 @@
  **********************/
 
 typedef struct {
-    uint8_t cur_movlim;
-    uint8_t start_pos;
-    uint8_t cur_pos;
-    uint8_t pos_change;
-    uint8_t val_type;
-    void * bechg_val;
-    double data;
-    /**When the data value is expressed in standard units, 
-    the character length of the data value, example 
-    In millivolts as the standard unit*/
-    uint8_t std_unit_len;
-    uint8_t displen;
+  uint8_t cur_movlim;
+  uint8_t start_pos;
+  uint8_t cur_pos;
+  uint8_t pos_change;
+  uint8_t val_type;
+  void * bechg_val;
+  double data;
+  /**When the data value is expressed in standard units, 
+  the character length of the data value, example 
+  In millivolts as the standard unit*/
+  uint8_t std_unit_len;
+  uint8_t displen;
 
-    uint8_t valstr[32];
-    uint8_t vallen;
+  uint8_t valstr[32];
+  uint8_t vallen;
 
-    /**refer[0][40] Raw string*/
-    /**refer[1][40] is Display string*/
-    uint8_t refer[2][40];
+  /**refer[0][40] Raw string*/
+  /**refer[1][40] is Display string*/
+  uint8_t refer[2][40];
 } _regu_t;
 
 extern _regu_t regu;
