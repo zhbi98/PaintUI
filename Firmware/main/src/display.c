@@ -695,49 +695,88 @@ void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width,
     uint8_t fg, uint8_t bg, uint8_t font_size, 
     dev_alerts_t * tips, uint8_t * vm)
 {
-    uint8_t str_length = 0;
-    uint8_t str_height = 0;
+    const uint8_t * str_p = NULL;
+    uint8_t str_high = 0;
+    uint8_t str_len = 0;
+    uint8_t line = 1;
+    uint8_t byte = 0;
 
-    uint8_t tips_buf[4][32];
-    uint8_t line    = 0;
-    uint8_t postion = 0;
-    uint8_t len     = 0;
+    if (!tips->active || !tips->reside_time) return;
 
-    if ((tips->active == false) || (tips->_time <= 0)) return;
+    /*Calculates the heigh required for a line 
+    of string to appear on the screen*/
+    str_p = tips_content[tips->content_num];
+    str_high = string_valid_height(font_size, str_p);
 
-    for (uint8_t set = 0; set < 4; set++)
-        memset(tips_buf[set], '\0', 32);
+    while (str_p[byte] != '\0') {
+        if (str_p[byte] == '\n') line++;
+        byte++;
+    }
 
-    for (uint8_t i = 0; i < strlen(tips_content[tips->stridx]); i++) {
-        if (tips_content[tips->stridx][i] != '\n') {
-            tips_buf[line][postion] = tips_content[tips->stridx][i];
-            postion++;
-        } else {
-            line++;
-            postion = 0;
+    uint8_t str[48] = {0};
+    uint16_t _start = 0;
+    uint16_t _end = 0;
+    uint16_t _len = 0;
+    uint16_t len = 0;
+
+    /**
+     * Extract the string line by line, selecting the line 
+     * with the longest length as the final display width
+     */
+    for (uint8_t _line = 0; _line < line; _line++) {
+        if (_line != (line - 1)) {
+            _strchr(&str_p[_start], '\n', 
+                &_end, byte - _start);
+            _end += _start;
+            _len = _end - _start;
+        } else _len = byte - _end;
+
+        memset(str, '\0', 48);
+        strncpy(str, &str_p[_start], _len);
+
+        /*Calculates the width required for a line 
+        of string to appear on the screen*/
+        len = string_valid_width(font_size, str);
+        if (len > str_len) str_len = len;
+        _start = _end + 1;
+    }
+
+    uint16_t bg_high = (str_high + 6) * line;
+    uint16_t bg_wid = str_len + 6;
+
+    /**To color the background*/
+    x += ((tft_width - str_len) / 2);
+    display_bevel_rect(y, x, bg_wid, 
+        bg_high, bg, 4, vm);
+
+    _start = 0; _end = 0; _len = 0;
+
+    /**Extract and display the contents line by 
+     * line according to the carriage return*/
+    for (uint8_t _line = 0; _line < line; _line++) {
+        if (_line != (line - 1)) {
+            _strchr(&str_p[_start], '\n', 
+                &_end, byte - _start);
+            _end += _start;
+            _len = _end - _start;
+        } else _len = byte - _end;
+
+        memset(str, '\0', 48);
+        strncpy(str, &str_p[_start], _len);
+
+        /**Extract and display the contents line by 
+         * line according to the carriage return*/
+        display_string_align(y + 2, x + 3, 
+            MANUAL_ALIGN, 0, 0, fg, font_size, 
+            str, UNSELECT, vm);
+
+        if (_line != (line - 1)) { /*Draw the divider line*/
+            display_dotted_line(y + str_high + 4, 
+                x + 2, str_len, 2, 0, fg, vm);
         }
-    }
-    line++;
 
-    for (uint8_t l = 0; l < line; l++) {
-        len = string_valid_width(font_size, (uint8_t *)tips_buf[l]);
-        if (len > str_length)
-            str_length = len;
-    }
-    /*str_length = string_valid_width(font_size, (uint8_t *)tips_content[tips->stridx]);*/
-    str_height = string_valid_height(font_size, (uint8_t *)tips_content[tips->stridx]);
-
-    x = (int)((tft_width - str_length) / 2);
-
-    display_bevel_rect(y, x, str_length + 4, str_height * line + 4 * line, bg, 1, vm);
-
-    for (uint8_t l = 0; l < line; l++) {
-        display_string_align(y + 2, x + 2, ALIGN_SPECIFY, 0, 0, fg, font_size, 
-            (uint8_t *)tips_buf[l], INV_OFF, vm);
-        if (l != (line - 1))
-            display_dotted_line(y + str_height + 4, x + 2, 
-                str_length, 2, 0, WHITE, vm);
-        y = y + str_height + 4;
+        y += (str_high + 4);
+        _start = _end + 1;
     }
 }
 
