@@ -687,6 +687,27 @@ const uint8_t * _letter_get_str(_letter_t * _lettr_p)
 }
 
 /**
+ * Finds the first occurrence of a character in a string.
+ * @param str pointer to a string.
+ * @param ch pointer to a character.
+ * @param n data size.
+ * @return index.
+ */
+static uint16_t _strchr(const int8_t * str, 
+    int8_t ch, uint16_t * cur_p, uint16_t n)
+{
+    uint16_t i = 0;
+
+    for (i = 0; i < n; i++) {
+        if (str[i] == ch) {
+            *cur_p = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Activates a device alert with specified duration
  * @param alerts_p Pointer to the device alert structure
  * @param _time Duration in ticks for the alert to remain active
