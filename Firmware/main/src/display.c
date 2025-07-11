@@ -70,11 +70,6 @@ uint16_t colorTrue[] = {
 /**
  * Retrieves the pointer to renderer video memory buffer
  * @return uint8_t* Pointer to the renderer's video memory buffer
- * 
- * Note: 
- * - The returned buffer should be treated as read-only in most cases
- * - Buffer size and layout depends on the current display configuration
- * - Can be received either as simple pointer or array pointer (uint8_t (*)[])
  */
 uint8_t * req_rendererVM()
 {
@@ -86,13 +81,9 @@ uint8_t * req_rendererVM()
 }
 
 /**
- * Retrieves the pointer to the true color palette buffer
+ * Retrieves the pointer to the true color palette buffer, Buffer size 
+ * depends on the current color palette configuration
  * @return uint16_t* Pointer to the true color palette array
- * 
- * Note:
- * - The returned buffer contains 16-bit color values (RGB565 format)
- * - Buffer size depends on the current color palette configuration
- * - Caller should not modify the buffer contents directly
  */
 uint16_t * req_colorTrue()
 {
@@ -105,11 +96,6 @@ uint16_t * req_colorTrue()
  * @param x Horizontal coordinate (column) of the pixel 
  * @param color 8-bit color value to write
  * @param vm Pointer to video memory buffer
- * 
- * Note:
- * - Coordinates are zero-based (0,0) is top-left corner
- * - Uses TFT_WIDTH constant for memory offset calculation
- * - No bounds checking is performed on coordinates
  */
 void display_pixel(uint32_t y, uint32_t x, uint8_t color, uint8_t * vm)
 {
@@ -159,12 +145,6 @@ void display_pixel(uint32_t y, uint32_t x, uint8_t color, uint8_t * vm)
  * @param x2 Horizontal coordinate of ending point (column)
  * @param color 8-bit color value for the line
  * @param vm Pointer to video memory buffer
- * 
- * Note:
- * - Uses Bresenham's line algorithm for efficient pixel plotting
- * - Coordinates are zero-based (0,0) is top-left corner
- * - No bounds checking is performed on coordinates
- * - Calls display_pixel() for each pixel in the line
  */
 void display_line(uint32_t y1, uint32_t x1, 
     uint32_t y2, uint32_t x2, uint8_t color, uint8_t * vm)
@@ -592,7 +572,7 @@ void display_barchart(uint32_t y, uint32_t x, uint8_t fg, uint8_t bg,
     for (uint8_t i = 0; i < (bar_chart.param_cnt + 1); i++) {
         sprintf(param_string, "%d", i * bar_chart.param_incr);
         display_N1string(y, x + bar_chart.sigh_len + bar_chart.scale_width * 10 * i - 2, 
-            ALIGN_SPECIFY, 0, 0, param_string, _MENU_LAST, fg, INV_OFF, vm);
+            ALIGN_SPECIFY, 0, 0, param_string, _MENU_LAST, fg, INVE_NONE, vm);
     }
 
     for (uint8_t i = 0; i < bar_chart.scale_count + 1; i++) {
@@ -710,11 +690,11 @@ static uint16_t _strchr(const int8_t * str,
 /**
  * Activates a device alert with specified duration
  * @param alerts_p Pointer to the device alert structure
- * @param _time Duration in ticks for the alert to remain active
+ * @param _tick Duration in ticks for the alert to remain active
  */
 void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width, 
     uint8_t fg, uint8_t bg, uint8_t font_size, 
-    dev_alerts_t * tips, uint8_t * vm)
+    dev_alerts_t * alerts_p, uint8_t * vm)
 {
     const uint8_t * str_p = NULL;
     uint8_t str_high = 0;
@@ -722,11 +702,16 @@ void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width,
     uint8_t line = 1;
     uint8_t byte = 0;
 
-    if (!tips->active || !tips->reside_time) return;
+    if (!alerts_p->active || !alerts_p->_tick) return;
+    uint16_t _spec = strlen(alerts_p->specify);
+
+    /*If a special display is specified, 
+    the specified content is executed*/
+    if (_spec > 0) str_p = alerts_p->specify;
+    else str_p = tips_content[alerts_p->stridx];
 
     /*Calculates the heigh required for a line 
     of string to appear on the screen*/
-    str_p = tips_content[tips->content_num];
     str_high = string_valid_height(font_size, str_p);
 
     while (str_p[byte] != '\0') {
@@ -766,7 +751,7 @@ void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width,
     uint16_t bg_wid = str_len + 6;
 
     /**To color the background*/
-    x += ((tft_width - str_len) / 2);
+    x += ((tft_width - bg_wid) / 2);
     display_bevel_rect(y, x, bg_wid, 
         bg_high, bg, 4, vm);
 
@@ -788,8 +773,8 @@ void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width,
         /**Extract and display the contents line by 
          * line according to the carriage return*/
         display_string_align(y + 2, x + 3, 
-            MANUAL_ALIGN, 0, 0, fg, font_size, 
-            str, UNSELECT, vm);
+            ALIGN_SPECIFY, 0, 0, fg, font_size, 
+            str, INVE_NONE, vm);
 
         if (_line != (line - 1)) { /*Draw the divider line*/
             display_dotted_line(y + str_high + 4, 
@@ -804,11 +789,17 @@ void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width,
 /**
  * Activates a device alert with specified duration
  * @param alerts_p Pointer to the device alert structure
- * @param _time Duration in ticks for the alert to remain active
+ * @param _tick Duration in ticks for the alert to remain active
  */
-void alerts_active(dev_alerts_t * alerts_p, uint32_t _time)
+void alerts_call(dev_alerts_t * alerts_p, 
+    const uint8_t * str_p, uint32_t _tick)
 {
-    alerts_p->_time = _time;
+    if (str_p != NULL) {
+        memset(alerts_p->specify, '\0', 64);
+        strcpy(alerts_p->specify, str_p);
+    }
+
+    alerts_p->_tick = _tick;
     alerts_p->active = true;
 }
 
@@ -816,24 +807,25 @@ void alerts_active(dev_alerts_t * alerts_p, uint32_t _time)
  * Deactivates a single device alert
  * @param alerts_p Pointer to the device alert structure to deactivate
  */
-void alerts_inactive(dev_alerts_t * alerts_p)
+void alerts_off(dev_alerts_t * alerts_p)
 {
-    alerts_p->_time = 0;
+    memset(alerts_p->specify, '\0', 64);
     alerts_p->active = false;
+    alerts_p->_tick = 0;
 }
 
 /**
- * Deactivates all device alerts in an array
- * @param alerts Array of device alert structures to deactivate
+ * Deactivates all device _alerts in an array
+ * @param _alerts Array of device alert structures to deactivate
  * Note: Array size is determined at runtime using sizeof
  */
-void alerts_inactAll(dev_alerts_t alerts[])
+void alerts_offAll(dev_alerts_t _alerts[])
 {
-    uint8_t nr = sizeof(alerts) / sizeof(dev_alerts_t);
-
-    for (uint8_t i = 0; i < nr; i++) {
-        alerts[i]._time = 0;
-        alerts[i].active = false;
+    uint8_t _cnt = sizeof(_alerts) / sizeof(dev_alerts_t);
+    for (uint8_t i = 0; i < _cnt; i++) {
+        memset(_alerts[i].specify, '\0', 64);
+        _alerts[i].active = false;
+        _alerts[i]._tick = 0;
     }
 }
 
@@ -844,25 +836,49 @@ void alerts_inactAll(dev_alerts_t alerts[])
  */
 void alerts_tick_work(dev_alerts_t * alerts_p)
 {
-    if (alerts_p->_time > 0)
-        alerts_p->_time--;
+    if (alerts_p->_tick > 0)
+        alerts_p->_tick--;
 }
 
 /**
- * Decrements timers for all active alerts in an array
- * @param alerts Array of device alert structures to process
+ * Decrements timers for all active _alerts in an array
+ * @param _alerts Array of device alert structures to process
  * Note: Array size is determined at runtime using sizeof
  */
-void alertsAll_tick_work(dev_alerts_t alerts[])
+void alerts_tick_workAll(dev_alerts_t _alerts[])
 {
-    uint8_t n = sizeof(alerts) / sizeof(dev_alerts_t);
+    uint8_t _all = sizeof(_alerts) / sizeof(dev_alerts_t);
 
-    for (uint8_t i = 0; i < n; i++) {
-        if (alerts[i]._time > 0)
-            alerts[i]._time--;
+    for (uint8_t i = 0; i < _all; i++) {
+        if (_alerts[i]._tick > 0)
+            _alerts[i]._tick--;
     }
 }
 
+/**
+ * Decrements timers for all active _alerts in an array
+ * @param _alerts Array of device alert structures to process
+ * Note: Array size is determined at runtime using sizeof
+ */
+bool alerts_get_state(dev_alerts_t * alerts_p)
+{
+    if (!alerts_p->active) return false;
+    if (!alerts_p->_tick) return false;
+    return true;
+}
+
+/**
+ * Decrements timers for all active _alerts in an array
+ * @param _alerts Array of device alert structures to process
+ * Note: Array size is determined at runtime using sizeof
+ */
+bool alerts_is_active(dev_alerts_t _alerts[])
+{
+    uint8_t _all = sizeof(_alerts) / sizeof(dev_alerts_t);
+    for (uint8_t i = 0; i < _all; i++)
+        if (_alerts[i]._tick > 0) return true;
+    return false;
+}
 
 /**********************
  *  STATIC VARIABLES
@@ -898,7 +914,7 @@ static const uint8_t loz_desc[] = {
 };
 
 static const uint8_t bcht_ove_desc[] = {
-    0x80,0xc0,0xe0,0xf0,0xf0,0xe0,0xc0,0x80,
+0x80,0xc0,0xe0,0xf0,0xf0,0xe0,0xc0,0x80,
 };
 
 static const uint8_t ac_desc[] = {

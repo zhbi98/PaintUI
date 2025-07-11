@@ -32,8 +32,8 @@ enum {
 typedef uint8_t _align_t;
 
 enum {
-    INV_OFF = 0,
-    INV_ON,
+    INVE_NONE = 0,
+    INVE_EN,
     _INV_LAST,
 };
 
@@ -219,7 +219,7 @@ void display_string_align(uint32_t y, uint32_t x, uint8_t align,
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -235,7 +235,7 @@ void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -251,7 +251,7 @@ void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -267,7 +267,7 @@ void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).

@@ -10,6 +10,7 @@
  *      INCLUDES
  *********************/
 
+#include <stdbool.h>
 #include <stdint.h>
 #include "alerts.h"
 
@@ -89,10 +90,12 @@ void alerts_refer(uint32_t y, uint32_t x, uint32_t tft_width, uint8_t fg, uint8_
 void _letter_refer(_letter_t * _lettr_p, const uint8_t * str_p, uint8_t _offs);
 const uint8_t * _letter_get_str(_letter_t * _lettr_p);
 sym_desc_t sym_req_desc(uint8_t _sym);
-void alerts_active(dev_alerts_t * alerts_p, uint32_t _time);
-void alerts_inactive(dev_alerts_t * alerts_p);
-void alerts_inactAll(dev_alerts_t alerts[]);
+void alerts_call(dev_alerts_t * alerts_p, const uint8_t * str_p, uint32_t _time);
+void alerts_off(dev_alerts_t * alerts_p);
+void alerts_offAll(dev_alerts_t _alerts[]);
 void alerts_tick_work(dev_alerts_t * alerts_p);
-void alertsAll_tick_work(dev_alerts_t alerts[]);
+void alerts_tick_workAll(dev_alerts_t _alerts[]);
+bool alerts_get_state(dev_alerts_t * alerts_p);
+bool alerts_is_active(dev_alerts_t _alerts[]);
 
 #endif

@@ -17,34 +17,26 @@
 
 dev_alerts_t alerts[5] = {
   {
-    .msg_width = 50,
-    .msg_high = 30,
     .active = true,
-    ._time = 300,
+    ._tick = 300,
     .stridx = TIPS_BATTERY_LOW_20,
   },
 
   {
-    .msg_width = 50,
-    .msg_high = 30,
     .active = true,
-    ._time = 0,
+    ._tick = 0,
     .stridx = TIPS_BATTERY_LOW_10,
   },
 
   {
-    .msg_width = 50,
-    .msg_high = 30,
     .active = true,
-    ._time = 0,
+    ._tick = 0,
     .stridx = TIPS_BATTERY_LOW_05,
   },
 
   {
-    .msg_width = 50,
-    .msg_high = 30,
     .active = true,
-    ._time = 0,
+    ._tick = 0,
     .stridx = 3,
   },
 };

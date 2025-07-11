@@ -458,10 +458,10 @@ void _display_cn_string(uint32_t y, uint32_t x, uint32_t fg, uint32_t bg,
  */
 uint32_t string_valid_width(uint8_t font_size, uint8_t * string)
 {
-    uint8_t bits = 0;
     uint32_t valid_width = 0;
     uint8_t utf8_size = 0;
     uint32_t index = 0;
+	  uint8_t bits = 0;
 
     while (string[bits] != '\0') {
         utf8_size = check_utf8_size(string, bits);
@@ -650,7 +650,7 @@ void display_string_align(uint32_t y, uint32_t x, uint8_t align,
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -660,12 +660,12 @@ void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
     const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
     /*Display predefined menu string from content table*/
-    if (str_id != _MENU_LAST) {
-        display_string_align(y, x, align, row, _area_idx, color, FONT_N1_PT, 
-            (uint8_t *)menu_content[str_id], _invert, vm);
-    } else {
+    if (str_p != NULL) {
         display_string_align(y, x, align, row, _area_idx, color, FONT_N1_PT, 
             str_p, _invert, vm);
+    } else {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N1_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     }
 }
 
@@ -676,7 +676,7 @@ void display_N1string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -686,12 +686,12 @@ void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
     const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
     /*Display predefined menu string from content table*/
-    if (str_id != _MENU_LAST) {
-        display_string_align(y, x, align, row, _area_idx, color, FONT_N2_PT, 
-            (uint8_t *)menu_content[str_id], _invert, vm);
-    } else {
+    if (str_p != NULL) {
         display_string_align(y, x, align, row, _area_idx, color, FONT_N2_PT, 
             str_p, _invert, vm);
+    } else {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N2_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     }
 }
 
@@ -702,7 +702,7 @@ void display_N2string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -712,12 +712,12 @@ void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
     const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
     /*Display predefined menu string from content table*/
-    if (str_id != _MENU_LAST) {
-        display_string_align(y, x, align, row, _area_idx, color, FONT_N3_PT, 
-            (uint8_t *)menu_content[str_id], _invert, vm);
-    } else {
+    if (str_p != NULL) {
         display_string_align(y, x, align, row, _area_idx, color, FONT_N3_PT, 
             str_p, _invert, vm);
+    } else {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N3_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     }
 }
 
@@ -728,7 +728,7 @@ void display_N3string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
  * @param align Text alignment (CENTER/LEFT/RIGHT/MANUAL).
  * @param row Layout row configuration (LAYOUT_R11 to LAYOUT_R44).
  * @param _area_idx Index of the display area in _Area array.
- * @param str_p Pointer to direct string content (used when str_id=_MENU_LAST).
+ * @param str_p Pointer to direct string content (used when str_p!=NULL).
  * @param str_id Menu content ID from predefined strings.
  * @param color Text display color.
  * @param _invert Inversion flag (1=inverted colors).
@@ -738,11 +738,11 @@ void display_N4string(uint32_t y, uint32_t x, uint8_t align, uint8_t row, uint32
     const uint8_t * str_p, uint32_t str_id, uint8_t color, uint8_t _invert, uint8_t * vm)
 {
     /*Display predefined menu string from content table*/
-    if (str_id != _MENU_LAST) {
-        display_string_align(y, x, align, row, _area_idx, color, FONT_N4_PT, 
-            (uint8_t *)menu_content[str_id], _invert, vm);
-    } else {
+    if (str_p != NULL) {
         display_string_align(y, x, align, row, _area_idx, color, FONT_N4_PT, 
             (uint8_t *)str_p, _invert, vm);
+    } else {
+        display_string_align(y, x, align, row, _area_idx, color, FONT_N4_PT, 
+            (uint8_t *)menu_content[str_id], _invert, vm);
     }
 }

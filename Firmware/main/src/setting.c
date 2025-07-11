@@ -24,32 +24,32 @@ void setup_level1_menu(uint8_t key_event, uint8_t * vm)
   switch (key_event) {
   case F1_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F1_BTN, NULL, MENU_MINUS, WHITE, INV_OFF, vm);
+      DMM_F1_BTN, NULL, MENU_MINUS, WHITE, INVE_NONE, vm);
     break;
 
   case F2_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F2_BTN, NULL, MENU_UP, WHITE, INV_OFF, vm);
+      DMM_F2_BTN, NULL, MENU_UP, WHITE, INVE_NONE, vm);
     break;
 
   case F3_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F3_BTN, NULL, MENU_DOWN, WHITE, INV_OFF, vm);
+      DMM_F3_BTN, NULL, MENU_DOWN, WHITE, INVE_NONE, vm);
     break;
 
   case F4_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F4_BTN, NULL, MENU_ADD, WHITE, INV_OFF, vm);
+      DMM_F4_BTN, NULL, MENU_ADD, WHITE, INVE_NONE, vm);
     break;
 
   case PREV_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, INV_OFF, vm);
+      DMM_PREV_BTN, NULL, MENU_LEFT, WHITE, INVE_NONE, vm);
     break;
 
   case NEXT_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, INV_OFF, vm);
+      DMM_NEXT_BTN, NULL, MENU_RIGHT, WHITE, INVE_NONE, vm);
     break;
   }
 }

@@ -11,11 +11,10 @@
  **********************/
 
 typedef struct {
-    uint8_t active;
-    uint32_t _time;
-    const uint32_t msg_width;
-    const uint32_t msg_high;
     const uint8_t stridx;
+    uint8_t specify[64];
+    uint8_t active;
+    uint32_t _tick;
 } dev_alerts_t;
 
 /**********************
