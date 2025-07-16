@@ -56,7 +56,7 @@ enum {
 	DARK_GREEN,
 	GREEN,
 	DARK_BLUE,
-	COLOR_MAX,
+	_COLOR_LAST,
 };
 
 typedef uint16_t disp_color_t;
@@ -92,10 +92,10 @@ const uint8_t * _letter_get_str(_letter_t * _lettr_p);
 sym_desc_t sym_req_desc(uint8_t _sym);
 void alerts_call(dev_alerts_t * alerts_p, const uint8_t * str_p, uint32_t _time);
 void alerts_off(dev_alerts_t * alerts_p);
-void alerts_offAll(dev_alerts_t _alerts[]);
+void alerts_offAll(dev_alerts_t _alerts[], uint8_t nr);
 void alerts_tick_work(dev_alerts_t * alerts_p);
-void alerts_tick_workAll(dev_alerts_t _alerts[]);
+void alerts_tick_workAll(dev_alerts_t _alerts[], uint8_t nr);
 bool alerts_get_state(dev_alerts_t * alerts_p);
-bool alerts_is_active(dev_alerts_t _alerts[]);
+bool alerts_is_active(dev_alerts_t _alerts[], uint8_t nr);
 
 #endif

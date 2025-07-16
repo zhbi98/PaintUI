@@ -37,6 +37,7 @@ void dmm_rec_refer(uint8_t * vm);
 void dmm_hold_state_refer(uint8_t * vm);
 void dmm_rel_val_refer(uint8_t * vm);
 void dmm_ret_cont_refer(uint8_t * vm);
+void dev_alerts_refer(uint8_t * vm);
 void dmm_ret_val_refer(uint8_t * vm);
 void dmm_ret_unit_refer(uint8_t * vm);
 void dmm_bcht_cont_refer(uint8_t * vm);

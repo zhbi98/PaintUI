@@ -56,8 +56,8 @@ const list_content[] = {
 
 const uint8_t * 
 const tips_content[] = {
-    "Battery < 20%\nPlease Recharge",/**000*/
-    "Battery < 15%",                 /**001*/
-    "Battery < 10%",                 /**002*/
-    "Dmm Version 1.00",              /**003*/
+    "Battery Below 20%", /**000*/
+    "Battery Below 15%", /**001*/
+    "Battery Below 10%", /**002*/
+    "Dev Ver 1.0.0",  /**003*/
 };

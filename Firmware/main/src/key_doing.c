@@ -25,6 +25,7 @@ bool pwd_lock = true;
 void pwd_call(void * parm)
 {
   pwd_lock = (pwd_lock) ? false : true;
+  ctl_actbar_cont_flush_enable();
   load_activity(NT_ACT_CTL);
 }
 
@@ -79,13 +80,13 @@ void key_event_doing()
 
   if (event != RELEASE) {
     switch (event) {
-    case F1_KEY_EVT:
+    case F2_KEY_EVT:
       nt_pwd_read(&_auth, 'B');
       break;
-    case F2_KEY_EVT:
+    case F3_KEY_EVT:
       nt_pwd_read(&_auth, 'C');
       break;
-    case F3_KEY_EVT:
+    case F4_KEY_EVT:
       nt_pwd_read(&_auth, 'D');
       break;
     default :

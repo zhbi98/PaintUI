@@ -179,11 +179,11 @@ void dev_realtim_refer(uint8_t * vm)
     snprintf(_time_p, 9, _TIME_, 
         hour, min, sec);
 
-    display_N1string(0, 270, ALIGN_SPECIFY, 
+    display_N1string(4, 192, ALIGN_SPECIFY, 
         LAYOUT_R11, _area_idx, _date_p, 
         _MENU_LAST, WHITE, INVE_NONE, vm);
 
-    display_N1string(0, 270 + 120, ALIGN_SPECIFY, 
+    display_N1string(4, 192 + 75, ALIGN_SPECIFY, 
         LAYOUT_R11, _area_idx, _time_p, 
         _MENU_LAST, WHITE, INVE_NONE, vm);
 }
@@ -203,6 +203,7 @@ void dmm_mea_mod_refer(uint8_t * vm)
     uint16_t _area_idx = DMM_RUN_STATE;
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_RET_CONT].valid)) return;
+    if (alerts_is_active(alerts, 5)) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
@@ -220,6 +221,7 @@ void dmm_rec_refer(uint8_t * vm)
     uint16_t _area_idx = DMM_REC;
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_ZONE_CONT].valid)) return;
+    if (alerts_is_active(alerts, 5)) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
@@ -235,6 +237,7 @@ void dmm_hold_state_refer(uint8_t * vm)
     uint16_t _area_idx = DMM_HOLD;
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_ZONE_CONT].valid)) return;
+    if (alerts_is_active(alerts, 5)) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
@@ -251,6 +254,7 @@ void dmm_rel_val_refer(uint8_t * vm)
     uint16_t _area_idx = DMM_REL_VAL;
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_ZONE_CONT].valid)) return;
+    if (alerts_is_active(alerts, 5)) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
@@ -294,8 +298,16 @@ void dmm_ret_val_refer(uint8_t * vm)
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
     display_N4string(86, 0, ALIGN_RIGHT, LAYOUT_R11, 
         _area_idx, measure_string, _MENU_LAST, WHITE, INVE_NONE, vm);
+}
 
-    alerts_refer(26, 0, 320, WHITE, DARK_BLUE, FONT_N2_PT, &alerts[0], vm);
+void dev_alerts_refer(unsigned char * vm)
+{
+    uint16_t _area_idx = DEV_ALERTS;
+
+    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ZONE_CONT].valid)) return;
+
+    alerts_refer(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
+        TFT_WIDTH, WHITE, GRAY, FONT_N2_PT, &alerts[0], vm);
     alerts_tick_work(&alerts[0]);
 }
 
@@ -364,6 +376,7 @@ void dmm_run_state_refer(uint8_t * vm)
     uint16_t _area_idx = DMM_RANGE_STATUS;
 
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_RET_CONT].valid)) return;
+    if (alerts_is_active(alerts, 5)) return;
 
     if (0) {
         display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
@@ -573,23 +586,23 @@ void ctl_tabv_refer(uint8_t * vm)
             break;
         case 1:
             display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "15", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 2:
             display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "30", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 3:
             display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "60", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 4:
             display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "120", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 5:
             display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "180", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         }
 
@@ -624,8 +637,8 @@ void ctl_tabv_refer(uint8_t * vm)
             inverse[lv_tab_get_hidx()] = INVE_EN;
         } else memset(inverse, INVE_NONE, 3);
 
-        if (lv_comp_get_type_val() == 0) display_N2string(LIST_LINE5_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "INNER", _MENU_LAST, WHITE, inverse[0], vm);
-        else display_N2string(LIST_LINE5_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "OUTER", _MENU_LAST, WHITE, inverse[0], vm);
+        if (lv_comp_get_type_val() == 0) display_N2string(LIST_LINE5_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Inner", _MENU_LAST, WHITE, inverse[0], vm);
+        else display_N2string(LIST_LINE5_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Outer", _MENU_LAST, WHITE, inverse[0], vm);
 
         if (lv_tab_get_opti_id() == 6) {
             memset(inverse, INVE_NONE, 3);
@@ -643,8 +656,8 @@ void ctl_tabv_refer(uint8_t * vm)
             inverse[lv_tab_get_hidx()] = INVE_EN;
         } else memset(inverse, INVE_NONE, 3);
 
-        if (lv_mem_get_val() == 0) display_N2string(LIST_LINE7_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "FIX", _MENU_LAST, WHITE, inverse[0], vm);
-        else display_N2string(LIST_LINE7_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "COVER", _MENU_LAST, WHITE, inverse[0], vm);
+        if (lv_mem_get_val() == 0) display_N2string(LIST_LINE7_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Fix", _MENU_LAST, WHITE, inverse[0], vm);
+        else display_N2string(LIST_LINE7_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Cover", _MENU_LAST, WHITE, inverse[0], vm);
     }
 
     if (lv_tab_get_page_id() == 1) {
@@ -676,19 +689,19 @@ void ctl_tabv_refer(uint8_t * vm)
             break;
         case 1:
             display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "15", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 2:
             display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "30", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 3:
             display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "60", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         case 4:
             display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "120", _MENU_LAST, WHITE, inverse[0], vm);
-            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "minute", _MENU_LAST, WHITE, INVE_NONE, vm);
+            display_N2string(LIST_LINE1_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 30, ALIGN_SPECIFY, LAYOUT_R11, 0, "Min", _MENU_LAST, WHITE, INVE_NONE, vm);
             break;
         }
 
@@ -697,24 +710,24 @@ void ctl_tabv_refer(uint8_t * vm)
             inverse[lv_tab_get_hidx()] = INVE_EN;
         } else memset(inverse, INVE_NONE, 3);
         
-        if (lv_voice_get_state_val()) display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "ON", _MENU_LAST, WHITE, inverse[0], vm);
-        else display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "OFF", _MENU_LAST, WHITE, inverse[0], vm);
+        if (lv_voice_get_state_val()) display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "On", _MENU_LAST, WHITE, inverse[0], vm);
+        else display_N2string(LIST_LINE2_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Off", _MENU_LAST, WHITE, inverse[0], vm);
     
         if (lv_tab_get_opti_id() == 11) {
             memset(inverse, INVE_NONE, 3);
             inverse[lv_tab_get_hidx()] = INVE_EN;
         } else memset(inverse, INVE_NONE, 3);
         
-        if (lv_dark_get_val()) display_N2string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "LIGHT", _MENU_LAST, WHITE, inverse[0], vm);
-        else display_N2string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "DARK", _MENU_LAST, WHITE, inverse[0], vm);
+        if (lv_dark_get_val()) display_N2string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Light", _MENU_LAST, WHITE, inverse[0], vm);
+        else display_N2string(LIST_LINE3_Y, _Area[_area_idx].set_x + _Area[_area_idx].width + 35 + 0, ALIGN_SPECIFY, LAYOUT_R11, 0, "Dark", _MENU_LAST, WHITE, inverse[0], vm);
     }
 }
 
 void ctl_actbar_cont_fefer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_ACTBAR_CONT;
+    uint16_t _area_idx = CTL_ACTBAR_CONT;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
@@ -722,10 +735,10 @@ void ctl_actbar_cont_fefer(uint8_t * vm)
 
 void ctl_f1_btn_refer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_F1_BTN;
+    uint16_t _area_idx = CTL_F1_BTN;
     uint8_t color = WHITE;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     if (_Area[_area_idx].pressed) color = DARK_GREEN;
     else color = GRAY;
@@ -737,10 +750,10 @@ void ctl_f1_btn_refer(uint8_t * vm)
 
 void ctl_f2_btn_refer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_F2_BTN;
+    uint16_t _area_idx = CTL_F2_BTN;
     uint8_t color = WHITE;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     if (_Area[_area_idx].pressed) color = DARK_GREEN;
     else color = GRAY;
@@ -752,10 +765,10 @@ void ctl_f2_btn_refer(uint8_t * vm)
 
 void ctl_f3_btn_refer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_F3_BTN;
+    uint16_t _area_idx = CTL_F3_BTN;
     uint8_t color = WHITE;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     if (_Area[_area_idx].pressed) color = DARK_GREEN;
     else color = GRAY;
@@ -767,10 +780,10 @@ void ctl_f3_btn_refer(uint8_t * vm)
 
 void ctl_f4_btn_refer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_F4_BTN;
+    uint16_t _area_idx = CTL_F4_BTN;
     uint8_t color = WHITE;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     if (_Area[_area_idx].pressed) color = DARK_GREEN;
     else color = GRAY;
@@ -782,10 +795,10 @@ void ctl_f4_btn_refer(uint8_t * vm)
 
 void ctl_prev_btn_refer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_PREV_BTN;
+    uint16_t _area_idx = CTL_PREV_BTN;
     uint8_t color = WHITE;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     if (_Area[_area_idx].pressed) color = DARK_GREEN;
     else color = RED;
@@ -797,10 +810,10 @@ void ctl_prev_btn_refer(uint8_t * vm)
 
 void ctl_next_btn_refer(uint8_t * vm)
 {
-    uint16_t _area_idx = DMM_NEXT_BTN;
+    uint16_t _area_idx = CTL_NEXT_BTN;
     uint8_t color = WHITE;
 
-    if ((!_Area[_area_idx].refer) || (!_Area[DMM_ACTBAR_CONT].valid)) return;
+    if ((!_Area[_area_idx].refer) || (!_Area[CTL_ACTBAR_CONT].valid)) return;
 
     if (_Area[_area_idx].pressed) color = DARK_GREEN;
     else color = RED;

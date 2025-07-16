@@ -48,7 +48,7 @@ uint16_t colorTrue[] = {
     0x0000,/**< Black Color*/
     0xFFFF,/**< White Color*/
     0xF965,/**< Red Color*/
-    0x2965,/**< Gray Color*/
+    0x5AEB,/**< Gray Color*/
     0x4AA9,/**< Dark Green Color*/
     0x07E0,/**< Green*/
     0x5351,/**< Dark Blue*/
@@ -57,7 +57,7 @@ uint16_t colorTrue[] = {
     0xFFFF,/**< White Color*/
     0x0000,/**< Black Color*/
     0xFA49,/**< Red Color*/
-    0x94B2,/**< Gray Color*/
+    0x5AEB,/**< Gray Color*/
     0x4208,/**< Dark Brown Color*/
     0x07E0,/**< Green*/
     0x8DFF,/**< Dark Blue*/
@@ -819,10 +819,10 @@ void alerts_off(dev_alerts_t * alerts_p)
  * @param _alerts Array of device alert structures to deactivate
  * Note: Array size is determined at runtime using sizeof
  */
-void alerts_offAll(dev_alerts_t _alerts[])
+void alerts_offAll(dev_alerts_t _alerts[], uint8_t nr)
 {
-    uint8_t _cnt = sizeof(_alerts) / sizeof(dev_alerts_t);
-    for (uint8_t i = 0; i < _cnt; i++) {
+    uint8_t _all = nr;
+    for (uint8_t i = 0; i < _all; i++) {
         memset(_alerts[i].specify, '\0', 64);
         _alerts[i].active = false;
         _alerts[i]._tick = 0;
@@ -845,9 +845,9 @@ void alerts_tick_work(dev_alerts_t * alerts_p)
  * @param _alerts Array of device alert structures to process
  * Note: Array size is determined at runtime using sizeof
  */
-void alerts_tick_workAll(dev_alerts_t _alerts[])
+void alerts_tick_workAll(dev_alerts_t _alerts[], uint8_t nr)
 {
-    uint8_t _all = sizeof(_alerts) / sizeof(dev_alerts_t);
+    uint8_t _all = nr;
 
     for (uint8_t i = 0; i < _all; i++) {
         if (_alerts[i]._tick > 0)
@@ -872,9 +872,9 @@ bool alerts_get_state(dev_alerts_t * alerts_p)
  * @param _alerts Array of device alert structures to process
  * Note: Array size is determined at runtime using sizeof
  */
-bool alerts_is_active(dev_alerts_t _alerts[])
+bool alerts_is_active(dev_alerts_t _alerts[], uint8_t nr)
 {
-    uint8_t _all = sizeof(_alerts) / sizeof(dev_alerts_t);
+    uint8_t _all = nr;
     for (uint8_t i = 0; i < _all; i++)
         if (_alerts[i]._tick > 0) return true;
     return false;

@@ -183,6 +183,13 @@ void _Area_init()
     _Area[DMM_LOZ].valid = true;
     _Area[DMM_LOZ].refer = true;
 
+    _Area[DEV_ALERTS].set_y = 32;
+    _Area[DEV_ALERTS].set_x = 0;
+    _Area[DEV_ALERTS].width = 0;
+    _Area[DEV_ALERTS].height = 0;
+    _Area[DEV_ALERTS].valid = true;
+    _Area[DEV_ALERTS].refer = true;
+
     _Area[DMM_BCHT_CONT].set_y = 162;
     _Area[DMM_BCHT_CONT].set_x = 0;
     _Area[DMM_BCHT_CONT].width = 320;
@@ -591,6 +598,7 @@ void dmm_zone_flush(uint8_t * vm)
         _Area[DMM_REC].refer = true;
         _Area[DMM_HOLD].refer = true;
         _Area[DMM_REL_VAL].refer = true;
+        _Area[DEV_ALERTS].refer = true;
     }
 
     dmm_mea_mod_refer(vm);
@@ -604,6 +612,9 @@ void dmm_zone_flush(uint8_t * vm)
 
     dmm_rel_val_refer(vm);
     _Area[DMM_REL_VAL].refer = false;
+
+    dev_alerts_refer(vm);
+    _Area[DEV_ALERTS].refer = false;
 }
 
 void dmm_zone_cont_flush_enable()
@@ -802,6 +813,22 @@ const tft_region_setting tft_region = \
 const tft_write_data tft_write = \
     (const tft_write_data)TFT_WRITE_DATA_DRV;
 
+void tft_flush(uint8_t * vm)
+{
+    uint8_t _dark = _devset.display.dark * _COLOR_LAST;
+    uint16_t * colorTrue = req_colorTrue();
+    uint16_t colorVM = BLACK;
+
+    tft_region(0, 0, TFT_WIDTH, TFT_HEIGHT);
+
+    for (uint32_t y = 0; y < TFT_HEIGHT; y++) {
+        for (uint32_t x = 0; x < TFT_WIDTH; x++) {
+            colorVM = vm[y * TFT_WIDTH + x];
+            tft_write(colorTrue[colorVM + _dark]);
+        }
+    }
+}
+
 void tft_clear(uint8_t color)
 {
     uint16_t * colorTrue = req_colorTrue();
@@ -812,109 +839,4 @@ void tft_clear(uint8_t color)
 
     for (uint32_t i = 0; i < buf_size; i++)
         tft_write(colorTrue[color]);
-}
-
-void tft_flush_area(uint8_t area_num, uint8_t * vm)
-{
-    uint32_t area_y;
-    uint32_t area_x;
-    uint32_t area_width;
-    uint32_t area_height;
-    uint32_t area_yend;
-
-    uint8_t color;
-    uint8_t * arr;
-
-    if (area_num == 0) {
-        area_y      = _Area[DEV_TOPBAR_CONT].set_y;
-        area_x      = _Area[DEV_TOPBAR_CONT].set_x;
-        area_width  = _Area[DEV_TOPBAR_CONT].width;
-        area_height = _Area[DEV_TOPBAR_CONT].height;
-        area_yend   = area_y + area_height;
-    } else if (area_num == 1) {
-        area_y      = _Area[DMM_ZONE_CONT].set_y;
-        area_x      = _Area[DMM_ZONE_CONT].set_x;
-        area_width  = _Area[DMM_ZONE_CONT].width;
-        area_height = _Area[DMM_ZONE_CONT].height;
-        area_yend   = area_y + area_height;
-    } else if (area_num == 2) {
-        area_y      = _Area[DMM_RET_CONT].set_y;
-        area_x      = _Area[DMM_RET_CONT].set_x;
-        area_width  = _Area[DMM_RET_CONT].width;
-        area_height = _Area[DMM_RET_CONT].height;
-        area_yend   = area_y + area_height;
-    } else if (area_num == 3) {
-        area_y      = _Area[DMM_BCHT_CONT].set_y;
-        area_x      = _Area[DMM_BCHT_CONT].set_x;
-        area_width  = _Area[DMM_BCHT_CONT].width;
-        area_height = _Area[DMM_BCHT_CONT].height;
-        area_yend   = area_y + area_height;
-    } else if (area_num == 4) {
-        area_y      = _Area[DMM_ACTBAR_CONT].set_y;
-        area_x      = _Area[DMM_ACTBAR_CONT].set_x;
-        area_width  = _Area[DMM_ACTBAR_CONT].width;
-        area_height = _Area[DMM_ACTBAR_CONT].height;
-        area_yend   = area_y + area_height;
-    } else if (area_num == 5) {
-        area_y      = _Area[CTL_TABV_CONT].set_y;
-        area_x      = _Area[CTL_TABV_CONT].set_x;
-        area_width  = _Area[CTL_TABV_CONT].width;
-        area_height = _Area[CTL_TABV_CONT].height;
-        area_yend   = area_y + area_height;
-    }
-
-    tft_region(area_y, area_x, area_width, area_height);
-
-    uint8_t theme = _devset.display.dark * COLOR_MAX;
-    uint16_t * colorTrue = req_colorTrue();
-
-    for (uint32_t y = area_y; y < area_yend; y++) {
-        for (uint32_t x = 0; x < area_width; x++) {
-            tft_write(colorTrue[vm[y * TFT_WIDTH + x] + theme]);
-        }
-    }
-}
-
-void tft_flush(uint8_t * vm)
-{
-    uint8_t _func = act_bar_get_func(&_dmm_actbar);
-    uint8_t _act = read_cur_activity();
-
-    if (_Area[DEV_TOPBAR_CONT].refer) {
-        tft_flush_area(0, vm);
-        _Area[DEV_TOPBAR_CONT].refer = false;
-    }
-
-    if (_Area[DMM_ZONE_CONT].refer && 
-        (_act != NT_ACT_CTL)
-    ) {
-        tft_flush_area(1, vm);
-        _Area[DMM_ZONE_CONT].refer = false;
-    }
-
-    if (_Area[DMM_RET_CONT].refer && 
-        (_act != NT_ACT_CTL)
-    ) {
-        tft_flush_area(2, vm);
-        _Area[DMM_RET_CONT].refer = false;
-    }
-
-    if (_Area[DMM_BCHT_CONT].refer && 
-        (_act != NT_ACT_CTL)
-    ) {
-        tft_flush_area(3, vm);
-        _Area[DMM_BCHT_CONT].refer = false;
-    }
-
-    if (_Area[DMM_ACTBAR_CONT].refer) {
-        tft_flush_area(4, vm);
-        _Area[DMM_ACTBAR_CONT].refer = false;
-    }
-
-    if (_Area[CTL_TABV_CONT].refer && 
-        (_act == NT_ACT_CTL)
-    ) {
-        tft_flush_area(5, vm);
-        _Area[CTL_TABV_CONT].refer = false;
-    }
 }

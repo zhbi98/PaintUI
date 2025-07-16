@@ -74,6 +74,7 @@ enum {
     DMM_RET_CONT,
     DMM_RET_VAL,
     DMM_RET_UNIT,
+    DEV_ALERTS,
 
     DMM_BCHT_CONT,
     DMM_MEA_LPF,
@@ -163,7 +164,6 @@ void ctl_tabv_flush(uint8_t * vm);
 void ctl_tabv_cont_flush_enable();
 void display_flush(uint8_t * vm);
 void tft_clear(uint8_t color);
-void tft_flush_area(uint8_t area_num, uint8_t * vm);
 void tft_flush(uint8_t * vm);
 
 #endif /*__DISPLAY_CONTROLLER_H__*/
