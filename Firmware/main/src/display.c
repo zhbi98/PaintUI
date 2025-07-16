@@ -49,18 +49,18 @@ uint16_t colorTrue[] = {
     0xFFFF,/**< White Color*/
     0xF965,/**< Red Color*/
     0x5AEB,/**< Gray Color*/
-    0x4AA9,/**< Dark Green Color*/
-    0x07E0,/**< Green*/
-    0x5351,/**< Dark Blue*/
+    0x630C,/**< Dark Gray*/
+    0x67EC,/**< Green*/
+    0x647E,/**< Blue*/
 
     /**< Light color*/
-    0xFFFF,/**< White Color*/
-    0x0000,/**< Black Color*/
-    0xFA49,/**< Red Color*/
-    0x5AEB,/**< Gray Color*/
-    0x4208,/**< Dark Brown Color*/
-    0x07E0,/**< Green*/
-    0x8DFF,/**< Dark Blue*/
+    0xFFFF,/**< Black Color*/
+    0x0000,/**< White Color*/
+    0xECF3,/**< Red Color*/
+    0xAD55,/**< Gray Color*/
+    0x630C,/**< Dark Gray*/
+    0x67EC,/**< Green*/
+    0x647E,/**< Blue*/
 };
 
 /**********************

@@ -41,17 +41,17 @@ const list_content[] = {
     "1/2",            /**000*/
     "Set Time",       /**001*/
     "Set Date",       /**002*/
-    "Auto Shtdwn",    /**003*/
+    "Auto Power Off",    /**003*/
     "Compare Max",    /**004*/
     "Compare Min",    /**005*/
     "Compare Type",   /**006*/
     "Record Rate",    /**007*/
     "Memory Mode",    /**008*/
     "2/2",            /**009*/
-    "Back Light",     /**010*/
-    "Back Light Time",/**011*/
-    "Sound",          /**012*/
-    "Color",          /**013*/
+    "Brightness",     /**010*/
+    "Display On",/**011*/
+    "Voice",          /**012*/
+    "Display Mode", /**013*/
 };
 
 const uint8_t * 

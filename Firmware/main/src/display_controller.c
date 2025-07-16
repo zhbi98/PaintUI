@@ -477,76 +477,81 @@ void actbar_btn_pressed(uint8_t key_event)
 {
     if (!_Area[DMM_ACTBAR_CONT].valid) return;
 
+    _Area[DMM_F1_BTN].pressed = false;
+    _Area[DMM_F2_BTN].pressed = false;
+    _Area[DMM_F3_BTN].pressed = false;
+    _Area[DMM_F4_BTN].pressed = false;
+    _Area[DMM_PREV_BTN].pressed = false;
+    _Area[DMM_NEXT_BTN].pressed = false;
+
     switch (key_event) {
     case F1_KEY_EVT:
         _Area[DMM_F1_BTN].pressed = true;
-        _Area[DMM_F2_BTN].pressed = false;
-        _Area[DMM_F3_BTN].pressed = false;
-        _Area[DMM_F4_BTN].pressed = false;
-        _Area[DMM_PREV_BTN].pressed = false;
-        _Area[DMM_NEXT_BTN].pressed = false;
         dmm_actbar_cont_flush_enable();
         break;
-
     case F2_KEY_EVT:
-        _Area[DMM_F1_BTN].pressed = false;
         _Area[DMM_F2_BTN].pressed = true;
-        _Area[DMM_F3_BTN].pressed = false;
-        _Area[DMM_F4_BTN].pressed = false;
-        _Area[DMM_PREV_BTN].pressed = false;
-        _Area[DMM_NEXT_BTN].pressed = false;
         dmm_actbar_cont_flush_enable();
         break;
-
     case F3_KEY_EVT:
-        _Area[DMM_F1_BTN].pressed = false;
-        _Area[DMM_F2_BTN].pressed = false;
         _Area[DMM_F3_BTN].pressed = true;
-        _Area[DMM_F4_BTN].pressed = false;
-        _Area[DMM_PREV_BTN].pressed = false;
-        _Area[DMM_NEXT_BTN].pressed = false;
         dmm_actbar_cont_flush_enable();
         break;
-
     case F4_KEY_EVT:
-        _Area[DMM_F1_BTN].pressed = false;
-        _Area[DMM_F2_BTN].pressed = false;
-        _Area[DMM_F3_BTN].pressed = false;
         _Area[DMM_F4_BTN].pressed = true;
-        _Area[DMM_PREV_BTN].pressed = false;
-        _Area[DMM_NEXT_BTN].pressed = false;
         dmm_actbar_cont_flush_enable();
         break;
-
     case PREV_KEY_EVT:
-        _Area[DMM_F1_BTN].pressed = false;
-        _Area[DMM_F2_BTN].pressed = false;
-        _Area[DMM_F3_BTN].pressed = false;
-        _Area[DMM_F4_BTN].pressed = false;
         _Area[DMM_PREV_BTN].pressed = true;
-        _Area[DMM_NEXT_BTN].pressed = false;
         dmm_actbar_cont_flush_enable();
         break;
-
     case NEXT_KEY_EVT:
-        _Area[DMM_F1_BTN].pressed = false;
-        _Area[DMM_F2_BTN].pressed = false;
-        _Area[DMM_F3_BTN].pressed = false;
-        _Area[DMM_F4_BTN].pressed = false;
-        _Area[DMM_PREV_BTN].pressed = false;
         _Area[DMM_NEXT_BTN].pressed = true;
         dmm_actbar_cont_flush_enable();
         break;
-
     case RELEASE:
         dmm_function_key_event_enable(F1_KEY_EVT);
-        _Area[DMM_F1_BTN].pressed = false;
-        _Area[DMM_F2_BTN].pressed = false;
-        _Area[DMM_F3_BTN].pressed = false;
-        _Area[DMM_F4_BTN].pressed = false;
-        _Area[DMM_PREV_BTN].pressed = false;
-        _Area[DMM_NEXT_BTN].pressed = false;
         dmm_actbar_cont_flush_enable();
+        break;
+    }
+
+    if (!_Area[CTL_ACTBAR_CONT].valid) return;
+
+    _Area[CTL_F1_BTN].pressed = false;
+    _Area[CTL_F2_BTN].pressed = false;
+    _Area[CTL_F3_BTN].pressed = false;
+    _Area[CTL_F4_BTN].pressed = false;
+    _Area[CTL_PREV_BTN].pressed = false;
+    _Area[CTL_NEXT_BTN].pressed = false;
+
+    switch (key_event) {
+    case F1_KEY_EVT:
+        _Area[CTL_F1_BTN].pressed = true;
+        ctl_actbar_cont_flush_enable();
+        break;
+    case F2_KEY_EVT:
+        _Area[CTL_F2_BTN].pressed = true;
+        ctl_actbar_cont_flush_enable();
+        break;
+    case F3_KEY_EVT:
+        _Area[CTL_F3_BTN].pressed = true;
+        ctl_actbar_cont_flush_enable();
+        break;
+    case F4_KEY_EVT:
+        _Area[CTL_F4_BTN].pressed = true;
+        ctl_actbar_cont_flush_enable();
+        break;
+    case PREV_KEY_EVT:
+        _Area[CTL_PREV_BTN].pressed = true;
+        ctl_actbar_cont_flush_enable();
+        break;
+    case NEXT_KEY_EVT:
+        _Area[CTL_NEXT_BTN].pressed = true;
+        ctl_actbar_cont_flush_enable();
+        break;
+    case RELEASE:
+        ctl_function_key_event_enable(F1_KEY_EVT);
+        ctl_actbar_cont_flush_enable();
         break;
     }
 }

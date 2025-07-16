@@ -381,7 +381,7 @@ void lv_tran_set_val(int8_t val)
     uint8_t opt_idx = lv_tab_get_opti_id();
     uint8_t hidx = lv_tab_get_hidx();
 
-    if (opt_idx != DEV_DATE_TRAN) return;
+    /*if (opt_idx != DEV_TRAN) return;*/
 
     int8_t tran = _devset.date.tran;
 
@@ -477,8 +477,8 @@ void lv_dark_set_val(int8_t val)
 
     _val += val;
 
-    _val = _MAP1(_val, 0, 2);
-    _val = _MAP2(_val, 0, 2);
+    _val = _MAP1(_val, 0, 1);
+    _val = _MAP2(_val, 0, 1);
 
     _devset.display.dark = _val;
 }

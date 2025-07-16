@@ -24,22 +24,22 @@ void setup_level1_menu(uint8_t key_event, uint8_t * vm)
   switch (key_event) {
   case F1_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F1_BTN, NULL, MENU_MINUS, WHITE, INVE_NONE, vm);
+      DMM_F1_BTN, NULL, MENU_UP, WHITE, INVE_NONE, vm);
     break;
 
   case F2_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F2_BTN, NULL, MENU_UP, WHITE, INVE_NONE, vm);
+      DMM_F2_BTN, NULL, MENU_DOWN, WHITE, INVE_NONE, vm);
     break;
 
   case F3_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F3_BTN, NULL, MENU_DOWN, WHITE, INVE_NONE, vm);
+      DMM_F3_BTN, NULL, MENU_ADD, WHITE, INVE_NONE, vm);
     break;
 
   case F4_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F4_BTN, NULL, MENU_ADD, WHITE, INVE_NONE, vm);
+      DMM_F4_BTN, NULL, MENU_MINUS, WHITE, INVE_NONE, vm);
     break;
 
   case PREV_KEY_EVT:
@@ -58,39 +58,16 @@ void setup_level1_key_event(uint8_t key_event)
 {
   switch (key_event) {
   case F1_KEY_EVT:
-    dev_topbar_cont_flush_enable();
-    ctl_tabv_cont_flush_enable();
-    lv_time_set_val(-1);
-    lv_date_set_val(-1);
-    lv_apoff_set_val(-1);
-    lv_comp_set_type_val(-1);
-    lv_mem_set_val(-1);
-    lv_bright_set_val(-1);
-    lv_dispoff_set_val(-1);
-    lv_voice_set_val(-1);
-    lv_dark_set_val(-1);
-
-    if (lv_tab_get_opti_id() == DEV_COMP_MAX) {
-      regu_val_set_type(DEV_COMP_MAX);
-      regu_UD_move(-1);
-    }
-    if (lv_tab_get_opti_id() == DEV_COMP_MIN) {
-      regu_val_set_type(DEV_COMP_MIN);
-      regu_UD_move(-1);
-    }
-    break;
-
-  case F2_KEY_EVT:
     lv_tab_set_line(-1);
     ctl_tabv_cont_flush_enable();
     break;
 
-  case F3_KEY_EVT:
+  case F2_KEY_EVT:
     lv_tab_set_line(1);
     ctl_tabv_cont_flush_enable();
     break;
 
-  case F4_KEY_EVT:
+  case F3_KEY_EVT:
     dev_topbar_cont_flush_enable();
     ctl_tabv_cont_flush_enable();
     lv_time_set_val(1);
@@ -110,6 +87,29 @@ void setup_level1_key_event(uint8_t key_event)
     if (lv_tab_get_opti_id() == DEV_COMP_MIN) {
       regu_val_set_type(DEV_COMP_MIN);
       regu_UD_move(1);
+    }
+    break;
+
+  case F4_KEY_EVT:
+    dev_topbar_cont_flush_enable();
+    ctl_tabv_cont_flush_enable();
+    lv_time_set_val(-1);
+    lv_date_set_val(-1);
+    lv_apoff_set_val(-1);
+    lv_comp_set_type_val(-1);
+    lv_mem_set_val(-1);
+    lv_bright_set_val(-1);
+    lv_dispoff_set_val(-1);
+    lv_voice_set_val(-1);
+    lv_dark_set_val(-1);
+
+    if (lv_tab_get_opti_id() == DEV_COMP_MAX) {
+      regu_val_set_type(DEV_COMP_MAX);
+      regu_UD_move(-1);
+    }
+    if (lv_tab_get_opti_id() == DEV_COMP_MIN) {
+      regu_val_set_type(DEV_COMP_MIN);
+      regu_UD_move(-1);
     }
     break;
 

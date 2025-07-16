@@ -53,9 +53,9 @@ enum {
 	WHITE,
 	RED,
 	GRAY,
-	DARK_GREEN,
+	DARK_GRAY,
 	GREEN,
-	DARK_BLUE,
+	BLUE,
 	_COLOR_LAST,
 };
 

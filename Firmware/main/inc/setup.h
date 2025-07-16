@@ -30,7 +30,7 @@
 enum {
     DEV_TIM = 0,
     DEV_DATE,
-    DEV_DATE_TRAN,
+    /*DEV_TRAN,*/
     DEV_APOFF,
     DEV_COMP_MAX,
     DEV_COMP_MIN,
