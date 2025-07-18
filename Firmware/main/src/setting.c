@@ -39,7 +39,7 @@ void setup_level1_menu(uint8_t key_event, uint8_t * vm)
 
   case F4_KEY_EVT:
     display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-      DMM_F4_BTN, NULL, MENU_MINUS, WHITE, INVE_NONE, vm);
+      DMM_F4_BTN, NULL, MENU_DEC, WHITE, INVE_NONE, vm);
     break;
 
   case PREV_KEY_EVT:

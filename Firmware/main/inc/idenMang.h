@@ -16,7 +16,7 @@
  *      DEFINES
  *********************/
 
-#define MAX_LOGO_NUM 5
+#define MAX_LOGO_NUM 5U
 
 /**********************
  *      TYPEDEFS

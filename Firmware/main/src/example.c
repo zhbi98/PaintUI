@@ -26,7 +26,7 @@ void example_level1_menu(uint8_t key_event, uint8_t * vm)
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F1_BTN, NULL, MENU_AC_DC, WHITE, INVE_NONE, vm);
+          DMM_F1_BTN, NULL, MENU_ACDC, WHITE, INVE_NONE, vm);
         break;
 
       case F2_KEY_EVT:
@@ -57,7 +57,7 @@ void example_level1_menu(uint8_t key_event, uint8_t * vm)
 
       case F2_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F2_BTN, NULL, MENU_MAX_MIN, WHITE, INVE_NONE, vm);
+          DMM_F2_BTN, NULL, MENU_MAX, WHITE, INVE_NONE, vm);
         break;
 
       case F3_KEY_EVT:
@@ -91,17 +91,17 @@ void example_level1_menu(uint8_t key_event, uint8_t * vm)
 
       case F2_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F2_BTN, NULL, MENU_AUTO_SAVE, WHITE, INVE_NONE, vm);
+          DMM_F2_BTN, NULL, MENU_REC, WHITE, INVE_NONE, vm);
         break;
 
       case F3_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F3_BTN, NULL, MENU_MANUAL_SAVE, WHITE, INVE_NONE, vm);
+          DMM_F3_BTN, NULL, MENU_SAVE, WHITE, INVE_NONE, vm);
         break;
 
       case F4_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F4_BTN, NULL, MENU_VIEW_DATA, WHITE, INVE_NONE, vm);
+          DMM_F4_BTN, NULL, MENU_LOG, WHITE, INVE_NONE, vm);
         break;
 
       case PREV_KEY_EVT:
@@ -120,7 +120,7 @@ void example_level1_menu(uint8_t key_event, uint8_t * vm)
       switch (key_event) {
       case F1_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F1_BTN, NULL, MENU_AC_DC, WHITE, INVE_NONE, vm);
+          DMM_F1_BTN, NULL, MENU_ACDC, WHITE, INVE_NONE, vm);
         break;
 
       case F2_KEY_EVT:
@@ -155,7 +155,7 @@ void example_level1_menu(uint8_t key_event, uint8_t * vm)
 
       case F2_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F2_BTN, NULL, MENU_MAX_MIN, WHITE, INVE_NONE, vm);
+          DMM_F2_BTN, NULL, MENU_MAX, WHITE, INVE_NONE, vm);
         break;
 
       case F3_KEY_EVT:
@@ -189,17 +189,17 @@ void example_level1_menu(uint8_t key_event, uint8_t * vm)
 
       case F2_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F2_BTN, NULL, MENU_AUTO_SAVE, WHITE, INVE_NONE, vm);
+          DMM_F2_BTN, NULL, MENU_REC, WHITE, INVE_NONE, vm);
         break;
 
       case F3_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F3_BTN, NULL, MENU_MANUAL_SAVE, WHITE, INVE_NONE, vm);
+          DMM_F3_BTN, NULL, MENU_SAVE, WHITE, INVE_NONE, vm);
         break;
 
       case F4_KEY_EVT:
         display_N1string(0, 0, ALIGN_CENTER, LAYOUT_R11, 
-          DMM_F4_BTN, NULL, MENU_VIEW_DATA, WHITE, INVE_NONE, vm);
+          DMM_F4_BTN, NULL, MENU_LOG, WHITE, INVE_NONE, vm);
         break;
 
       case PREV_KEY_EVT:

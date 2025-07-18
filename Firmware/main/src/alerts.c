@@ -19,19 +19,19 @@ dev_alerts_t alerts[5] = {
   {
     .active = true,
     ._tick = 300,
-    .stridx = TIPS_BATTERY_LOW_20,
+    .stridx = TIPS_BAT_LOW20,
   },
 
   {
     .active = true,
     ._tick = 0,
-    .stridx = TIPS_BATTERY_LOW_10,
+    .stridx = TIPS_BAT_LOW10,
   },
 
   {
     .active = true,
     ._tick = 0,
-    .stridx = TIPS_BATTERY_LOW_05,
+    .stridx = TIPS_BAT_LOW05,
   },
 
   {

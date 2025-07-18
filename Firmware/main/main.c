@@ -1,12 +1,20 @@
+/**
+ * @file main.c
+ *
+ */
+
+/*********************
+ *      INCLUDES
+ *********************/
 
 #include "display_controller.h"
-#include "stm32f4xx.h"
 #include "key_doing.h"
-#include "setting.h"
 #include "display.h"
 #include "usart.h"
-#include "key.h"
-#include "time.h"
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 int32_t main()
 {
