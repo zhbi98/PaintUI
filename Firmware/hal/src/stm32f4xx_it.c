@@ -42,6 +42,8 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
+extern uint8_t rxbuf[];
+
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -142,6 +144,20 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   // TimingDelay_Decrement();
+}
+
+/**
+  * @brief  This function handles SysTick Handler.
+  * @param  None
+  * @retval None
+  */
+void USART1_IRQHandler()
+{
+  static uint8_t i = 0;
+  if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
+      rxbuf[i] = USART_ReceiveData(USART1);
+      i++;
+  }
 }
 
 /******************************************************************************/

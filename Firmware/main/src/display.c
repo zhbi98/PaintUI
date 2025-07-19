@@ -642,6 +642,29 @@ void display_dock(uint32_t y, uint32_t x, uint32_t width, uint32_t height,
  * @param alerts_p Pointer to the device alert structure
  * @param _time Duration in ticks for the alert to remain active
  */
+void display_index(uint32_t y, uint32_t x, uint8_t size, uint8_t fg, uint8_t bg, 
+    uint8_t nr, uint8_t gap, uint8_t _cur, uint8_t * vm)
+{
+    uint16_t _w = nr * size + (nr - 1) * gap;
+    uint16_t _h = size;
+
+    uint16_t color = WHITE;
+    uint8_t _i = nr;
+
+    for (; _i > 0; _i--) {
+        if (_i == (nr - _cur)) color = fg;
+        else color = bg;
+        display_bevel_rect(y, x, size, 
+            size, color, 0, vm);
+        x = x + size + gap;
+    }
+}
+
+/**
+ * Activates a device alert with specified duration
+ * @param alerts_p Pointer to the device alert structure
+ * @param _time Duration in ticks for the alert to remain active
+ */
 void _letter_refer(_letter_t * _lettr_p, const uint8_t * str_p, uint8_t _offs)
 {
     if ((!_lettr_p) || (!str_p)) return;

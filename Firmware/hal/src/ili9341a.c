@@ -1,11 +1,39 @@
 
 #include "ili9341a.h"
 
-static void ili9341_gpio_init();
-static void ili9341_fsmc_init();
-
-static void ili9341_gpio_init()
+static void ili9341_fsmc_init()
 {
+    FSMC_NORSRAMInitTypeDef  fsmc_norsram_init;
+    FSMC_NORSRAMTimingInitTypeDef  fsmc_norsramtiming_init;     
+    
+    RCC_AHB3PeriphClockCmd(FSMC_CLOCK, ENABLE);
+
+    fsmc_norsramtiming_init.FSMC_AddressSetupTime      = 0x09;
+    fsmc_norsramtiming_init.FSMC_DataSetupTime         = 0x08;
+    fsmc_norsramtiming_init.FSMC_AccessMode            = FSMC_AccessMode_A; 
+    fsmc_norsramtiming_init.FSMC_AddressHoldTime       = 0x00;
+    fsmc_norsramtiming_init.FSMC_BusTurnAroundDuration = 0x00;
+    fsmc_norsramtiming_init.FSMC_CLKDivision           = 0x00;
+    fsmc_norsramtiming_init.FSMC_DataLatency           = 0x00;  
+
+    fsmc_norsram_init.FSMC_Bank                  = FSMC_BANK1_NORSRAM;
+    fsmc_norsram_init.FSMC_DataAddressMux        = FSMC_DataAddressMux_Disable;
+    fsmc_norsram_init.FSMC_MemoryType            = FSMC_MemoryType_SRAM;
+    fsmc_norsram_init.FSMC_MemoryDataWidth       = FSMC_MemoryDataWidth_16b;
+    fsmc_norsram_init.FSMC_BurstAccessMode       = FSMC_BurstAccessMode_Disable;
+    fsmc_norsram_init.FSMC_WaitSignalPolarity    = FSMC_WaitSignalPolarity_Low;
+    fsmc_norsram_init.FSMC_WrapMode              = FSMC_WrapMode_Disable;
+    fsmc_norsram_init.FSMC_WaitSignalActive      = FSMC_WaitSignalActive_BeforeWaitState;
+    fsmc_norsram_init.FSMC_WriteOperation        = FSMC_WriteOperation_Enable;
+    fsmc_norsram_init.FSMC_WaitSignal            = FSMC_WaitSignal_Disable;
+    fsmc_norsram_init.FSMC_ExtendedMode          = FSMC_ExtendedMode_Disable;
+    fsmc_norsram_init.FSMC_WriteBurst            = FSMC_WriteBurst_Disable;
+    fsmc_norsram_init.FSMC_ReadWriteTimingStruct = &fsmc_norsramtiming_init;
+    fsmc_norsram_init.FSMC_WriteTimingStruct     = &fsmc_norsramtiming_init;  
+    
+    FSMC_NORSRAMInit (&fsmc_norsram_init); 
+    FSMC_NORSRAMCmd (FSMC_BANK1_NORSRAM, ENABLE);    
+
     GPIO_InitTypeDef gpio_init = {0};
 
     RCC_AHB1PeriphClockCmd(ILI9341_RS_CLOCK, ENABLE);
@@ -206,41 +234,7 @@ static void ili9341_gpio_init()
     gpio_init.GPIO_OType = GPIO_OType_PP;
     gpio_init.GPIO_PuPd  = GPIO_PuPd_UP;
     gpio_init.GPIO_Speed = GPIO_Speed_100MHz;
-    GPIO_Init(ILI9341_D15_GPIO, &gpio_init);
-}
-
-static void ili9341_fsmc_init()
-{
-    FSMC_NORSRAMInitTypeDef  fsmc_norsram_init;
-    FSMC_NORSRAMTimingInitTypeDef  fsmc_norsramtiming_init;     
-    
-    RCC_AHB3PeriphClockCmd(FSMC_CLOCK, ENABLE);
-
-    fsmc_norsramtiming_init.FSMC_AddressSetupTime      = 0x09;
-    fsmc_norsramtiming_init.FSMC_DataSetupTime         = 0x08;
-    fsmc_norsramtiming_init.FSMC_AccessMode            = FSMC_AccessMode_A; 
-    fsmc_norsramtiming_init.FSMC_AddressHoldTime       = 0x00;
-    fsmc_norsramtiming_init.FSMC_BusTurnAroundDuration = 0x00;
-    fsmc_norsramtiming_init.FSMC_CLKDivision           = 0x00;
-    fsmc_norsramtiming_init.FSMC_DataLatency           = 0x00;  
-
-    fsmc_norsram_init.FSMC_Bank                  = FSMC_BANK1_NORSRAM;
-    fsmc_norsram_init.FSMC_DataAddressMux        = FSMC_DataAddressMux_Disable;
-    fsmc_norsram_init.FSMC_MemoryType            = FSMC_MemoryType_SRAM;
-    fsmc_norsram_init.FSMC_MemoryDataWidth       = FSMC_MemoryDataWidth_16b;
-    fsmc_norsram_init.FSMC_BurstAccessMode       = FSMC_BurstAccessMode_Disable;
-    fsmc_norsram_init.FSMC_WaitSignalPolarity    = FSMC_WaitSignalPolarity_Low;
-    fsmc_norsram_init.FSMC_WrapMode              = FSMC_WrapMode_Disable;
-    fsmc_norsram_init.FSMC_WaitSignalActive      = FSMC_WaitSignalActive_BeforeWaitState;
-    fsmc_norsram_init.FSMC_WriteOperation        = FSMC_WriteOperation_Enable;
-    fsmc_norsram_init.FSMC_WaitSignal            = FSMC_WaitSignal_Disable;
-    fsmc_norsram_init.FSMC_ExtendedMode          = FSMC_ExtendedMode_Disable;
-    fsmc_norsram_init.FSMC_WriteBurst            = FSMC_WriteBurst_Disable;
-    fsmc_norsram_init.FSMC_ReadWriteTimingStruct = &fsmc_norsramtiming_init;
-    fsmc_norsram_init.FSMC_WriteTimingStruct     = &fsmc_norsramtiming_init;  
-    
-    FSMC_NORSRAMInit (&fsmc_norsram_init); 
-    FSMC_NORSRAMCmd (FSMC_BANK1_NORSRAM, ENABLE);       
+    GPIO_Init(ILI9341_D15_GPIO, &gpio_init);   
 }
 
 void ili9341_write_command(uint16_t command)
@@ -309,7 +303,6 @@ void ili9341_direction(uint8_t direction)
 
 void ili9341_init()
 {
-    ili9341_gpio_init();
     ili9341_fsmc_init();
     sleep_ms(200);
     ili9341_reset();

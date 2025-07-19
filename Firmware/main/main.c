@@ -11,6 +11,7 @@
 #include "key_doing.h"
 #include "display.h"
 #include "usart.h"
+#include "gpio.h"
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -18,9 +19,9 @@
 
 int32_t main()
 {
+  dev_gpio_init();
   ili9341_init();
   usart_init();
-  key_gpio_init();
 
   _Area_init();
   act_bar_set_func(&_dmm_actbar, 

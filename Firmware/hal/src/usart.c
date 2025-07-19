@@ -3,37 +3,10 @@
 
 uint8_t rxbuf[64] = {0};
 
-static void usart_gpio_init()
-{
-    GPIO_InitTypeDef gpio_init;
-
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | 
-        RCC_AHB1Periph_GPIOA, ENABLE);
-
-    GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
-    GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
-
-    gpio_init.GPIO_Pin   = GPIO_Pin_9;
-    gpio_init.GPIO_Mode  = GPIO_Mode_AF;
-    gpio_init.GPIO_OType = GPIO_OType_PP;
-    gpio_init.GPIO_PuPd  = GPIO_PuPd_UP;
-    gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &gpio_init);
-
-    gpio_init.GPIO_Pin   = GPIO_Pin_10;
-    gpio_init.GPIO_Mode  = GPIO_Mode_AF;
-    gpio_init.GPIO_OType = GPIO_OType_PP;
-    gpio_init.GPIO_PuPd  = GPIO_PuPd_UP;
-    gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &gpio_init);
-}
-
 void usart_init()
 {
     USART_InitTypeDef usart_init = {0};
     NVIC_InitTypeDef nvic_init = {0};
-
-    usart_gpio_init();
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 
@@ -55,6 +28,28 @@ void usart_init()
 
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
     USART_Cmd(USART1, ENABLE);
+
+    GPIO_InitTypeDef gpio_init;
+
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | 
+        RCC_AHB1Periph_GPIOA, ENABLE);
+
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_USART1);
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_USART1);
+
+    gpio_init.GPIO_Pin   = GPIO_Pin_9;
+    gpio_init.GPIO_Mode  = GPIO_Mode_AF;
+    gpio_init.GPIO_OType = GPIO_OType_PP;
+    gpio_init.GPIO_PuPd  = GPIO_PuPd_UP;
+    gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &gpio_init);
+
+    gpio_init.GPIO_Pin   = GPIO_Pin_10;
+    gpio_init.GPIO_Mode  = GPIO_Mode_AF;
+    gpio_init.GPIO_OType = GPIO_OType_PP;
+    gpio_init.GPIO_PuPd  = GPIO_PuPd_UP;
+    gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &gpio_init);
 }
 
 void usart_send_byte(USART_TypeDef * usart_p, uint8_t a_byte)
@@ -87,13 +82,4 @@ void usart_send_fmt_string(USART_TypeDef * usart_p, uint8_t * format, ...)
     va_end(parameter_pointer);
 
     usart_send_string(usart_p, value);
-}
-
-void USART1_IRQHandler()
-{
-    static uint8_t i = 0;
-    if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
-        rxbuf[i] = USART_ReceiveData(USART1);
-        i++;
-    }
 }

@@ -180,7 +180,7 @@ void ctl_key_doing(uint8_t event)
 
 void key_event_doing()
 {
-  uint8_t event = read_key_event();
+  uint8_t event = key_get_event();
   uint8_t _act = read_cur_activity();
 
   if (event != RELEASE) {

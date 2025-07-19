@@ -11,16 +11,16 @@
  *********************/
 
 #include <stdbool.h>
-#include "stm32f4xx.h"
+#include "gpio.h"
 
 /*********************
  *      DEFINES
  *********************/
 
-#define F1_KEY_STATUS() GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)
-#define F2_KEY_STATUS() GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_2)
-#define F3_KEY_STATUS() GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_3)
-#define F4_KEY_STATUS() GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_4)
+#define key0_level() (!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)) << 7
+#define key1_level() GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_2) << 6
+#define key2_level() GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_3) << 5
+#define key3_level() GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_4) << 4
 
 #define F1_KEY_EVT   ('1')
 #define F2_KEY_EVT   ('2')
@@ -35,9 +35,9 @@
  **********************/
 
 typedef struct {
-  uint32_t press_duration;
-  uint32_t active_time;
-  bool press_long;
+  bool phold;
+  uint32_t dura; /**< duration pressed time*/
+  uint32_t interval; /**< pressed active speed*/
 } key_event_t;
 
 /**********************
@@ -45,7 +45,6 @@ typedef struct {
  **********************/
 
 void key_gpio_init();
-void key_event_ticks();
-uint8_t read_key_event();
+uint8_t key_get_event();
 
 #endif
