@@ -296,23 +296,24 @@ void dmm_ret_val_refer(uint8_t * vm)
 {
     uint16_t _area_idx = DMM_RET_VAL;
 
+    static uint8_t refer = 0;
+    static float _value = 0.0f;
+    uint8_t _str[12] = {0};
+
     if ((!_Area[_area_idx].refer) || (!_Area[DMM_RET_CONT].valid)) return;
 
-    static float measure_value = 225.55;
-    uint8_t measure_string[8];
-    static uint8_t speed;
-
-    if (speed % 10 == 0) {
-        if (measure_value < 255.55) measure_value += 1;
-        else measure_value = 0.55;
+    refer++;
+    if (refer % 10 == 0) {
+        _value += 1.0f;
     }
-    speed++;
-    sprintf(measure_string, "%06.2f", measure_value);
 
+    if (_value > 999.0f) _value = 0.0f;
+
+    sprintf(_str, "%06.2f", _value);
     display_solid_rect(_Area[_area_idx].set_y, _Area[_area_idx].set_x, 
         _Area[_area_idx].width, _Area[_area_idx].height, BLACK, vm);
     display_N4string(86, 0, ALIGN_RIGHT, LAYOUT_R11, 
-        _area_idx, measure_string, _MENU_LAST, WHITE, INVE_NONE, vm);
+        _area_idx, _str, _MENU_LAST, WHITE, INVE_NONE, vm);
 }
 
 void dmm_ret_unit_refer(uint8_t * vm)
